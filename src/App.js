@@ -25,9 +25,26 @@ useEffect(() => {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>React and Flask</h1>
-        <p>{data.date}</p>
-        <p>{data.programming}</p>
+        <div class="dinA4">
+          <h1>{"Invoice".toUpperCase()}</h1>
+          <p class="underline">Biller name, Street, Postcode and Location</p>
+          <p>Invoice recipient</p>
+          <p>Street</p>
+          <p>Postcode and Location</p>
+          <p>Invoice number</p>
+          <p>Date</p>
+          <br /><br />
+          <p>Pos</p>
+          <p>Qty</p>
+          <p>Item</p>
+          <p>Unit price</p>
+          <p>Amount</p>
+          <p>Subtotal</p>
+          <p>Tax</p>
+          <p>Total</p>
+          <p>{data.date}</p>
+          <p>{data.programming}</p>
+        </div>
       </header>
     </div>
   );
