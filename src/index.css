@@ -1,6 +1,8 @@
+@import url('https://fonts.cdnfonts.com/css/cmu-bright');
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'CMU Bright', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -12,7 +14,9 @@ code {
     monospace;
 }
 
-*{
+* {
+ font-family: 'CMU Bright';
+ font-size: 11pt;
  margin: 0;
  padding: 0;
 }

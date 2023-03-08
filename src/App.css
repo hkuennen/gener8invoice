@@ -2,18 +2,71 @@
   text-align: center;
 }
 
-.App-header {
+.wrapper {
   background-color: #282c34;
-  color: grey;
 }
 
-.dinA4 {
+h1 {
+  padding-bottom: 40px;
+  font-size: 18pt;
+}
+
+.page {
   width: 794px;
   height: 1122px;
   margin: 0 auto;
+  padding: 80px;
   background-color: #FFFFFF;
 }
 
 .underline {
   text-decoration: underline;
+  font-size: 8pt;
+}
+
+.two-col {
+  display: flex;
+  justify-content: space-around;
+  border: 1px solid red;
+  align-items: center;
+  height: 300px;
+  width: auto;
+}
+
+.contact-info {
+  display: block;
+  text-align: start;
+  align-content: space-between;
+  border: 1px solid blue;
+}
+
+.invoice-info {
+  padding: 20px;
+  margin: 0 auto;
+  border: 1px solid orange;
+}
+
+.sender {
+  border: 1px solid purple;
+  margin: 50px 0;
+}
+
+.receiver {
+  border: 1px solid yellow;
+}
+
+.right {
+  float: right;
+}
+
+.left {
+  float: left;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.inv-number {
+  margin-top: 40px;
 }
