@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import './App.css';
+import Positions from './Positions.js';
 
 function App() {
   const [data, setData] = useState({
@@ -40,20 +41,13 @@ useEffect(() => {
                 <p>Postcode and Location</p>
               </div>
             </div>
-            <div className="invoice-info">
-            </div>
+            <div className="invoice-info"></div>
           </div>
-          <p class="right">Date: {moment().format('L')}</p>
-          <p class="left bold inv-number">Invoice number: </p>
+          <p class="right">Date: {moment().format('DD.MM.YYYY')}</p>
+          <p class="bold inv-number">Invoice number: 1</p>
           <br /><br /><br /><br />
-          <p>Pos</p>
-          <p>Qty</p>
-          <p>Item</p>
-          <p>Unit price</p>
-          <p>Amount</p>
-          <p>Subtotal</p>
-          <p>Tax</p>
-          <p>Total</p>
+          <Positions />
+          <br /><br /><br /><br />
           <p>{data.date}</p>
           <p>{data.programming}</p>
         </div>

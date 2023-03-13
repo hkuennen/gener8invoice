@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  text-align: left;
 }
 
 .wrapper {
@@ -21,52 +21,40 @@ h1 {
 
 .underline {
   text-decoration: underline;
-  font-size: 8pt;
+  font-size: 9pt;
 }
 
 .two-col {
   display: flex;
   justify-content: space-around;
-  border: 1px solid red;
   align-items: center;
-  height: 300px;
+  height: 250px;
   width: auto;
+  margin-bottom: 30px;
 }
 
 .contact-info {
   display: block;
-  text-align: start;
   align-content: space-between;
-  border: 1px solid blue;
 }
 
 .invoice-info {
   padding: 20px;
   margin: 0 auto;
-  border: 1px solid orange;
 }
 
 .sender {
-  border: 1px solid purple;
   margin: 50px 0;
-}
-
-.receiver {
-  border: 1px solid yellow;
 }
 
 .right {
   float: right;
 }
 
-.left {
-  float: left;
-}
-
 .bold {
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .inv-number {
-  margin-top: 40px;
+  margin-top: 80px;
 }

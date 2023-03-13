@@ -1,0 +1,29 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tr {
+  border-bottom: 1pt solid #EEEEEE;
+  line-height: 24px;
+}
+
+.grey {
+  background-color: #EEEEEE;
+  border-bottom: 1pt solid #FFFFFF;
+}
+
+.bold {
+  font-weight: 600;
+  border-bottom: 1pt solid #FFFFFF;
+}
+
+#subtotal {
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+}
+
+#total {
+  text-decoration-line: underline;
+  text-decoration-style: double;
+}
