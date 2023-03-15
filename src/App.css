@@ -7,7 +7,7 @@
 }
 
 h1 {
-  padding-bottom: 40px;
+  padding-bottom: 20px;
   font-size: 18pt;
 }
 
@@ -26,21 +26,23 @@ h1 {
 
 .two-col {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start;
   height: 250px;
   width: auto;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 .contact-info {
+  padding-top: 20px;
+  align-self: center;
   display: block;
   align-content: space-between;
+  line-height: 1.3em;
 }
 
 .invoice-info {
-  padding: 20px;
-  margin: 0 auto;
+  line-height: 1.3em;
 }
 
 .sender {
@@ -49,12 +51,4 @@ h1 {
 
 .right {
   float: right;
-}
-
-.bold {
-  font-weight: 600;
-}
-
-.inv-number {
-  margin-top: 80px;
 }

@@ -1,6 +1,6 @@
 import './Positions.css';
 
-export default function Positions() {
+const Positions = () => {
 
   return (
     <table>
@@ -52,3 +52,5 @@ export default function Positions() {
     </table>
   );
 }
+
+export default Positions;

@@ -3,7 +3,7 @@ import moment from "moment";
 import './App.css';
 import Positions from './Positions.js';
 
-function App() {
+const App = () => {
   const [data, setData] = useState({
     date: "",
     programming: "",
@@ -36,18 +36,22 @@ useEffect(() => {
                 <p className="underline">Biller name, Street, Postcode and Location</p>
               </div>
               <div className="receiver">
-                <p>Invoice recipient</p>
+                <p>Recipient name</p>
                 <p>Street</p>
                 <p>Postcode and Location</p>
               </div>
             </div>
-            <div className="invoice-info"></div>
+            <div className="invoice-info">
+              <p>Biller name</p>
+              <p>Street</p>
+              <p>Postcode and Location</p>
+              <p class="bold">Invoice number: #</p>
+            </div>
           </div>
           <p class="right">Date: {moment().format('DD.MM.YYYY')}</p>
-          <p class="bold inv-number">Invoice number: 1</p>
-          <br /><br /><br /><br />
+          <br /><br /><br /><br /><br />
           <Positions />
-          <br /><br /><br /><br />
+          <br /><br /><br /><br /><br />
           <p>{data.date}</p>
           <p>{data.programming}</p>
         </div>
