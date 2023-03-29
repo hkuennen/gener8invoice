@@ -1,4 +1,4 @@
 # invoice-generator
 
-`npm start` to start the React frontend <br />
-`npm run server` to start the Flask backend
+`npm start` to start the React app <br />
+`npm run server` to start the Flask server
