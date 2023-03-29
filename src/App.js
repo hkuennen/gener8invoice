@@ -14,9 +14,25 @@ const App = () => {
     setInputs(values => ({...values, [name]: value}))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(inputs);
+    console.log(inputs);
+
+    const settings = {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(inputs)
+    }
+    const fetchResponse = await fetch("/api/data", settings);
+    const data = await fetchResponse.json();
+    console.log(data);
+  }
+
+  const addPosition = () => {
+    alert("button clicked");
   }
 
 useEffect(() => {
@@ -37,57 +53,58 @@ useEffect(() => {
   return (
     <div className="App">
       <header className="App-header"></header>
-      <div className="wrapper">
         <form onSubmit={handleSubmit}>
-          <div class="page">
+        <div className="wrapper">
+          <div className="page">
                 <h1>{"Invoice".toUpperCase()}</h1>
             <div className="two-col">
               <div className="contact-info">
                 <div className="sender">
-                  <p className="underline">{inputs.biller_name || "Biller Name"}, {inputs.b_street || "Street"}, {inputs.location || "Postcode and Location"}</p>
+                  <p className="underline">{inputs.biller_name || "Biller Name"}, {inputs.biller_street || "Street"}, {inputs.biller_location || "Postcode and Location"}</p>
                 </div>
                 <div className="receiver">
                   <input type="text" name="recipient_name" placeholder="Recipient Name" onChange={handleChange}/><br />
-                  <input type="text" name="r_street" placeholder="Street" onChange={handleChange}/><br />
-                  <input type="text" name="location" placeholder="Postcode and Location" onChange={handleChange}/>
+                  <input type="text" name="recipient_street" placeholder="Street" onChange={handleChange}/><br />
+                  <input type="text" name="recipient_location" placeholder="Postcode and Location" onChange={handleChange}/>
                 </div>
               </div>
               <div className="invoice-info">
                 <input type="text" name="biller_name" placeholder="Biller Name" onChange={handleChange}/><br />
-                <input type="text" name="b_street" placeholder="Street" onChange={handleChange}/><br />
-                <input type="text" name="location" placeholder="Postcode and Location" onChange={handleChange}/><br /><br />
+                <input type="text" name="biller_street" placeholder="Street" onChange={handleChange}/><br />
+                <input type="text" name="biller_location" placeholder="Postcode and Location" onChange={handleChange}/><br /><br />
                 <input type="text" name="inv_number" placeholder="Invoice Number" onChange={handleChange}/><br />
                 <input type="text" name="po_number" placeholder="PO Number" onChange={handleChange}/>
               </div>
             </div>
-            <div class="right">
-              <label class="bold">Date: </label>
+            <div className="right">
+              <label className="bold">Date: </label>
               <input type="date" name="date" onChange={handleChange}/>
             </div>
             <br /><br /><br /><br /><br />
             <table>
-              <tr class="grey">
+              <tr className="grey">
                 <th>Pos</th>
                 <th>Qty</th>
-                <th class="item">Item</th>
+                <th className="item">Item</th>
                 <th>Unit price</th>
                 <th>Amount</th>
               </tr>
               <tr>
                 <td>1</td>
-                <td><input type="number" name="qty" placeholder="1" class="number" onChange={handleChange} /* value={inputs.qty === undefined ? 1 : inputs.qty} *//></td>
-                <td><input type="textarea" name="item" class="use-up-space" placeholder="Description of service or product..." onChange={handleChange}/></td>
+                <td><input type="number" name="qty" placeholder="1" className="number" onChange={handleChange} /></td>
+                <td><input type="textarea" name="item" className="use-up-space" placeholder="Description of service or product..." onChange={handleChange}/></td>
                 <td>
                   <label>€ </label>
-                  <input type="number" name="price" placeholder="1" class="number" onChange={handleChange} /* value={inputs.price === undefined ? 0 : inputs.price} *//>
+                  <input type="number" name="price" placeholder="1" className="number" onChange={handleChange} />
                 </td>
-                <td class="amount">
+                <td className="amount">
                   <label>€ </label>
                   {isNaN(parseInt(inputs.qty)) || isNaN(parseInt(inputs.price)) ? (0).toFixed(2) : (inputs.qty * inputs.price).toFixed(2)}
                 </td>
               </tr>
+              <button id="add" onClick={addPosition}>+</button>
               <br />
-              <tr class="grey">
+              <tr className="grey">
                 <td>Subtotal</td>
                 <td></td>
                 <td></td>
@@ -103,7 +120,7 @@ useEffect(() => {
                 <td>€ 19</td>
               </tr>
               <br />
-              <tr class="bold">
+              <tr className="bold">
                 <td>Total</td>
                 <td></td>
                 <td></td>
@@ -115,8 +132,9 @@ useEffect(() => {
             <p>{data.date}</p>
             <p>{data.programming}</p>
           </div>
-        </form>
-      </div>
+          <input type="submit" value="Create PDF" />
+        </div>
+      </form>
     </div>
   );
 }
