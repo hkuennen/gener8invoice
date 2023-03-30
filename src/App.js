@@ -6,12 +6,20 @@ const App = () => {
     date: "",
     programming: "",
   });
+  //const [amounts, setAmounts] = useState([]);
   const [inputs, setInputs] = useState({});
+  const [positions, setPositions] = useState([{}]);
 
-  const handleChange = (e) => {
+  const handleChange = (e, idx=1) => {
     const name = e.target.name;
     const value = e.target.value;
+    let newArr = [...positions];
+    newArr[idx]["pos"] = idx+1
+    newArr[idx]["amount"] = "";
+    newArr[idx][name] = value;
     setInputs(values => ({...values, [name]: value}))
+    setPositions(newArr);
+    console.log(positions);
   }
 
   const handleSubmit = async (e) => {
@@ -31,24 +39,31 @@ const App = () => {
     console.log(data);
   }
 
-  const addPosition = () => {
-    alert("button clicked");
+  const handleAddPosition = () => {
+    const row = {
+      pos: "",
+      qty: "",
+      item: "",
+      price: "",
+      amount: ""
+    };
+    setPositions(rows => ([...rows, row]));
   }
 
-useEffect(() => {
-  fetch('/api/data')
-    .then((res) => res.json())
-    .then((data) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchResponse = await fetch('/api/data');
+      const data = await fetchResponse.json();
       setData({
         date: data.Date,
         programming: data.programming,
       });
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    })
-  }, []);
+    }
+    fetchData()
+      .catch((error) => {
+        console.error('Error:', error);
+      })
+    }, []);
 
   return (
     <div className="App">
@@ -63,22 +78,22 @@ useEffect(() => {
                   <p className="underline">{inputs.biller_name || "Biller Name"}, {inputs.biller_street || "Street"}, {inputs.biller_location || "Postcode and Location"}</p>
                 </div>
                 <div className="receiver">
-                  <input type="text" name="recipient_name" placeholder="Recipient Name" onChange={handleChange}/><br />
-                  <input type="text" name="recipient_street" placeholder="Street" onChange={handleChange}/><br />
-                  <input type="text" name="recipient_location" placeholder="Postcode and Location" onChange={handleChange}/>
+                  <input type="text" name="recipient_name" placeholder="Recipient Name" onChange={(e) => handleChange(e)}/><br />
+                  <input type="text" name="recipient_street" placeholder="Street" onChange={(e) => handleChange(e)}/><br />
+                  <input type="text" name="recipient_location" placeholder="Postcode and Location" onChange={(e) => handleChange(e)}/>
                 </div>
               </div>
               <div className="invoice-info">
-                <input type="text" name="biller_name" placeholder="Biller Name" onChange={handleChange}/><br />
-                <input type="text" name="biller_street" placeholder="Street" onChange={handleChange}/><br />
-                <input type="text" name="biller_location" placeholder="Postcode and Location" onChange={handleChange}/><br /><br />
-                <input type="text" name="inv_number" placeholder="Invoice Number" onChange={handleChange}/><br />
-                <input type="text" name="po_number" placeholder="PO Number" onChange={handleChange}/>
+                <input type="text" name="biller_name" placeholder="Biller Name" onChange={(e) => handleChange(e)}/><br />
+                <input type="text" name="biller_street" placeholder="Street" onChange={(e) => handleChange(e)}/><br />
+                <input type="text" name="biller_location" placeholder="Postcode and Location" onChange={(e) => handleChange(e)}/><br /><br />
+                <input type="text" name="inv_number" placeholder="Invoice Number" onChange={(e) => handleChange(e)}/><br />
+                <input type="text" name="po_number" placeholder="PO Number" onChange={(e) => handleChange(e)}/>
               </div>
             </div>
             <div className="right">
               <label className="bold">Date: </label>
-              <input type="date" name="date" onChange={handleChange}/>
+              <input type="date" name="date" onChange={(e) => handleChange(e)}/>
             </div>
             <br /><br /><br /><br /><br />
             <table>
@@ -89,20 +104,22 @@ useEffect(() => {
                 <th>Unit price</th>
                 <th>Amount</th>
               </tr>
-              <tr>
-                <td>1</td>
-                <td><input type="number" name="qty" placeholder="1" className="number" onChange={handleChange} /></td>
-                <td><input type="textarea" name="item" className="use-up-space" placeholder="Description of service or product..." onChange={handleChange}/></td>
+              {positions.map((row, idx) => (
+              <tr key={idx+1}>
+                <td>{idx+1}</td>
+                <td><input type="number" name="qty" placeholder="1" className="number" onChange={(e) => handleChange(e, idx)} /></td>
+                <td><input type="textarea" name="item" className="use-up-space" placeholder="Description of service or product..." onChange={(e) => handleChange(e, idx)}/></td>
                 <td>
                   <label>€ </label>
-                  <input type="number" name="price" placeholder="1" className="number" onChange={handleChange} />
+                  <input type="number" name="price" placeholder="1" className="number" onChange={(e) => handleChange(e, idx)} />
                 </td>
                 <td className="amount">
                   <label>€ </label>
-                  {isNaN(parseInt(inputs.qty)) || isNaN(parseInt(inputs.price)) ? (0).toFixed(2) : (inputs.qty * inputs.price).toFixed(2)}
+                  {isNaN(parseInt(row.qty)) || isNaN(parseInt(row.price)) ? (0).toFixed(2) : (row.qty * row.price).toFixed(2)}
                 </td>
               </tr>
-              <button id="add" onClick={addPosition}>+</button>
+              ))}
+              <button id="add" onClick={handleAddPosition}>+</button>
               <br />
               <tr className="grey">
                 <td>Subtotal</td>

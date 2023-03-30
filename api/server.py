@@ -11,7 +11,7 @@ def index():
     if request.method == "GET":
         return {
             "Date":x, 
-            "programming":"python"
+            "programming":"Python"
         }
     if request.method == "POST":
         data = json.loads(request.data)
