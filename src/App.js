@@ -6,7 +6,6 @@ const App = () => {
     date: "",
     programming: "",
   });
-  //const [amounts, setAmounts] = useState([]);
   const [inputs, setInputs] = useState({});
   const [positions, setPositions] = useState([{}]);
 
@@ -15,8 +14,15 @@ const App = () => {
     const value = e.target.value;
     let newArr = [...positions];
     newArr[idx]["pos"] = idx+1
-    newArr[idx]["amount"] = "";
     newArr[idx][name] = value;
+    if (newArr[idx]["qty"] !== undefined) { newArr[idx]["qty"] = parseInt(newArr[idx]["qty"]) };
+    if (newArr[idx]["price"] !== undefined) { newArr[idx]["price"] = parseInt(newArr[idx]["price"]) };
+    
+    const qty = parseInt(newArr[idx]["qty"]);
+    const price = parseInt(newArr[idx]["price"]);
+    const amount = isNaN(qty) || isNaN(price) ? 0 : (qty * price);
+    newArr[idx]["amount"] = amount;
+
     setInputs(values => ({...values, [name]: value}))
     setPositions(newArr);
     console.log(positions);
