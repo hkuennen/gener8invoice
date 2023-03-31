@@ -8,6 +8,7 @@ const App = () => {
   });
   const [inputs, setInputs] = useState({});
   const [positions, setPositions] = useState([{}]);
+  const [subtotal, setSubtotal] = useState(0);
 
   const handleChange = (e, idx=1) => {
     const name = e.target.name;
@@ -15,8 +16,8 @@ const App = () => {
     let newArr = [...positions];
     newArr[idx]["pos"] = idx+1
     newArr[idx][name] = value;
-    if (newArr[idx]["qty"] !== undefined) { newArr[idx]["qty"] = parseInt(newArr[idx]["qty"]) };
-    if (newArr[idx]["price"] !== undefined) { newArr[idx]["price"] = parseInt(newArr[idx]["price"]) };
+    if (newArr[idx]["qty"] !== undefined && newArr[idx]["qty"] !== "") { newArr[idx]["qty"] = parseInt(newArr[idx]["qty"]) };
+    if (newArr[idx]["price"] !== undefined && newArr[idx]["price"] !== "") { newArr[idx]["price"] = parseInt(newArr[idx]["price"]) };
     
     const qty = parseInt(newArr[idx]["qty"]);
     const price = parseInt(newArr[idx]["price"]);
@@ -55,6 +56,17 @@ const App = () => {
     };
     setPositions(rows => ([...rows, row]));
   }
+
+  useEffect(() => {
+    const calcSubtotal = () => {
+      const amounts = [];
+      positions.forEach((position) => {
+        amounts.push(parseInt(position.amount));
+      })
+      return amounts.reduce((prevValue, currentValue) => prevValue + currentValue, 0);
+    }
+    setSubtotal(() => calcSubtotal());
+  }, [positions]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -121,7 +133,7 @@ const App = () => {
                 </td>
                 <td className="amount">
                   <label>€ </label>
-                  {isNaN(parseInt(row.qty)) || isNaN(parseInt(row.price)) ? (0).toFixed(2) : (row.qty * row.price).toFixed(2)}
+                  {row.amount !== undefined && row.amount !== "" ? row.amount.toFixed(2) : (0).toFixed(2)}
                 </td>
               </tr>
               ))}
@@ -132,7 +144,7 @@ const App = () => {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td id="subtotal">€ 100</td>
+                <td id="subtotal">€ {isNaN(subtotal) ? (0).toFixed(2) : subtotal.toFixed(2)}</td>
               </tr>
               <br />
               <tr>
@@ -140,7 +152,7 @@ const App = () => {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>€ 19</td>
+                <td>€ {isNaN(subtotal) ? (0).toFixed(2) : (subtotal * 0.19).toFixed(2)}</td>
               </tr>
               <br />
               <tr className="bold">
@@ -148,14 +160,14 @@ const App = () => {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td id="total">€ 119</td>
+                <td id="total">€ {isNaN(subtotal) ? (0).toFixed(2) : (subtotal + subtotal * 0.19).toFixed(2)}</td>
               </tr>
             </table>
             <br /><br /><br /><br /><br />
             <p>{data.date}</p>
             <p>{data.programming}</p>
           </div>
-          <input type="submit" value="Create PDF" />
+          <input type="submit" value="Create PDF" className="right" />
         </div>
       </form>
     </div>
