@@ -10,12 +10,20 @@ const App = () => {
   const [positions, setPositions] = useState([{}]);
   const [subtotal, setSubtotal] = useState(0);
 
-  const handleChange = (e, idx=1) => {
+  const handleInputsChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setInputs(values => ({...values, [name]: value}))
+    console.log(inputs);
+  }
+
+  const handlePositionsChange = (e, idx) => {
     const name = e.target.name;
     const value = e.target.value;
     let newArr = [...positions];
     newArr[idx]["pos"] = idx+1
     newArr[idx][name] = value;
+
     if (newArr[idx]["qty"] !== undefined && newArr[idx]["qty"] !== "") { newArr[idx]["qty"] = parseInt(newArr[idx]["qty"]) };
     if (newArr[idx]["price"] !== undefined && newArr[idx]["price"] !== "") { newArr[idx]["price"] = parseInt(newArr[idx]["price"]) };
     
@@ -23,27 +31,34 @@ const App = () => {
     const price = parseInt(newArr[idx]["price"]);
     const amount = isNaN(qty) || isNaN(price) ? 0 : (qty * price);
     newArr[idx]["amount"] = amount;
-
-    setInputs(values => ({...values, [name]: value}))
     setPositions(newArr);
     console.log(positions);
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(inputs);
+    const values = {
+      inputs,
+      positions,
+      amount: {
+        subtotal,
+        tax: (subtotal * 0.19),
+        total: (subtotal * 1.19)
+      }
+    };
 
-    const settings = {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(inputs)
-    }
-    const fetchResponse = await fetch("/api/data", settings);
-    const data = await fetchResponse.json();
-    console.log(data);
+    console.log(values);
+    // const settings = {
+    //   method: "POST",
+    //   headers: {
+    //     "Accept": "application/json",
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify(inputs)
+    // }
+    // const fetchResponse = await fetch("/api/data", settings);
+    // const data = await fetchResponse.json();
+    // console.log(data);
   }
 
   const handleAddPosition = () => {
@@ -55,6 +70,12 @@ const App = () => {
       amount: ""
     };
     setPositions(rows => ([...rows, row]));
+  }
+
+  const handleRemovePosition = (idx) => {
+    const rows = [...positions];
+    rows.splice(idx, 1);
+    setPositions(() => rows);
   }
 
   useEffect(() => {
@@ -96,22 +117,22 @@ const App = () => {
                   <p className="underline">{inputs.biller_name || "Biller Name"}, {inputs.biller_street || "Street"}, {inputs.biller_location || "Postcode and Location"}</p>
                 </div>
                 <div className="receiver">
-                  <input type="text" name="recipient_name" placeholder="Recipient Name" onChange={(e) => handleChange(e)}/><br />
-                  <input type="text" name="recipient_street" placeholder="Street" onChange={(e) => handleChange(e)}/><br />
-                  <input type="text" name="recipient_location" placeholder="Postcode and Location" onChange={(e) => handleChange(e)}/>
+                  <input type="text" name="recipient_name" placeholder="Recipient Name" onChange={(e) => handleInputsChange(e)}/><br />
+                  <input type="text" name="recipient_street" placeholder="Street" onChange={(e) => handleInputsChange(e)}/><br />
+                  <input type="text" name="recipient_location" placeholder="Postcode and Location" onChange={(e) => handleInputsChange(e)}/>
                 </div>
               </div>
               <div className="invoice-info">
-                <input type="text" name="biller_name" placeholder="Biller Name" onChange={(e) => handleChange(e)}/><br />
-                <input type="text" name="biller_street" placeholder="Street" onChange={(e) => handleChange(e)}/><br />
-                <input type="text" name="biller_location" placeholder="Postcode and Location" onChange={(e) => handleChange(e)}/><br /><br />
-                <input type="text" name="inv_number" placeholder="Invoice Number" onChange={(e) => handleChange(e)}/><br />
-                <input type="text" name="po_number" placeholder="PO Number" onChange={(e) => handleChange(e)}/>
+                <input type="text" name="biller_name" placeholder="Biller Name" onChange={(e) => handleInputsChange(e)}/><br />
+                <input type="text" name="biller_street" placeholder="Street" onChange={(e) => handleInputsChange(e)}/><br />
+                <input type="text" name="biller_location" placeholder="Postcode and Location" onChange={(e) => handleInputsChange(e)}/><br /><br />
+                <input type="text" name="inv_number" placeholder="Invoice Number" onChange={(e) => handleInputsChange(e)}/><br />
+                <input type="text" name="po_number" placeholder="PO Number" onChange={(e) => handleInputsChange(e)}/>
               </div>
             </div>
             <div className="right">
               <label className="bold">Date: </label>
-              <input type="date" name="date" onChange={(e) => handleChange(e)}/>
+              <input type="date" name="date" onChange={(e) => handleInputsChange(e)}/>
             </div>
             <br /><br /><br /><br /><br />
             <table>
@@ -125,15 +146,18 @@ const App = () => {
               {positions.map((row, idx) => (
               <tr key={idx+1}>
                 <td>{idx+1}</td>
-                <td><input type="number" name="qty" placeholder="1" className="number" onChange={(e) => handleChange(e, idx)} /></td>
-                <td><input type="textarea" name="item" className="use-up-space" placeholder="Description of service or product..." onChange={(e) => handleChange(e, idx)}/></td>
+                <td><input type="number" name="qty" placeholder="1" className="number" onChange={(e) => handlePositionsChange(e, idx)} /></td>
+                <td><input type="textarea" name="item" className="use-up-space" placeholder="Description of service or product..." onChange={(e) => handlePositionsChange(e, idx)}/></td>
                 <td>
                   <label>€ </label>
-                  <input type="number" name="price" placeholder="1" className="number" onChange={(e) => handleChange(e, idx)} />
+                  <input type="number" name="price" placeholder="1" className="number" onChange={(e) => handlePositionsChange(e, idx)} />
                 </td>
                 <td className="amount">
                   <label>€ </label>
                   {row.amount !== undefined && row.amount !== "" ? row.amount.toFixed(2) : (0).toFixed(2)}
+                </td>
+                <td>
+                  <button onClick={() => handleRemovePosition(idx)}>X</button>
                 </td>
               </tr>
               ))}
@@ -160,7 +184,7 @@ const App = () => {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td id="total">€ {isNaN(subtotal) ? (0).toFixed(2) : (subtotal + subtotal * 0.19).toFixed(2)}</td>
+                <td id="total">€ {isNaN(subtotal) ? (0).toFixed(2) : (subtotal * 1.19).toFixed(2)}</td>
               </tr>
             </table>
             <br /><br /><br /><br /><br />
