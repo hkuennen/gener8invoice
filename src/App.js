@@ -14,7 +14,6 @@ const App = () => {
     const name = e.target.name;
     const value = e.target.value;
     setInputs(values => ({...values, [name]: value}))
-    console.log(inputs);
   }
 
   const handlePositionsChange = (e, idx) => {
@@ -32,7 +31,6 @@ const App = () => {
     const amount = isNaN(qty) || isNaN(price) ? 0 : (qty * price);
     newArr[idx]["amount"] = amount;
     setPositions(newArr);
-    console.log(positions);
   }
 
   const handleSubmit = async (e) => {
@@ -146,11 +144,11 @@ const App = () => {
               {positions.map((row, idx) => (
               <tr key={idx+1}>
                 <td>{idx+1}</td>
-                <td><input type="number" name="qty" placeholder="1" className="number" onChange={(e) => handlePositionsChange(e, idx)} /></td>
-                <td><input type="textarea" name="item" className="use-up-space" placeholder="Description of service or product..." onChange={(e) => handlePositionsChange(e, idx)}/></td>
+                <td><input type="number" name="qty" placeholder="1" className="number" value={(row.qty !== undefined && row.qty !== "") ? row.qty : "" } onChange={(e) => handlePositionsChange(e, idx)} /></td>
+                <td><input type="textarea" name="item" className="use-up-space" placeholder="Description of service or product..." value={(row.item !== undefined && row.item !== "") ? row.item : "" } onChange={(e) => handlePositionsChange(e, idx)}/></td>
                 <td>
                   <label>€ </label>
-                  <input type="number" name="price" placeholder="1" className="number" onChange={(e) => handlePositionsChange(e, idx)} />
+                  <input type="number" name="price" placeholder="1" className="number" value={(row.price !== undefined && row.price !== "") ? row.price : "" } onChange={(e) => handlePositionsChange(e, idx)} />
                 </td>
                 <td className="amount">
                   <label>€ </label>
@@ -190,6 +188,9 @@ const App = () => {
             <br /><br /><br /><br /><br />
             <p>{data.date}</p>
             <p>{data.programming}</p>
+            {positions.map((pos) => (
+              <p>{pos.item}</p>
+            ))}
           </div>
           <input type="submit" value="Create PDF" className="right" />
         </div>
