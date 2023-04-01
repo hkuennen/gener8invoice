@@ -7,7 +7,13 @@ const App = () => {
     programming: "",
   });
   const [inputs, setInputs] = useState({});
-  const [positions, setPositions] = useState([{}]);
+  const [positions, setPositions] = useState([{
+      pos: "",
+      qty: "",
+      item: "",
+      price: "",
+      amount: parseFloat(0).toFixed(2)
+    }]);
   const [subtotal, setSubtotal] = useState(0);
 
   const handleInputsChange = (e) => {
@@ -22,13 +28,14 @@ const App = () => {
     let newArr = [...positions];
     newArr[idx]["pos"] = idx+1
     newArr[idx][name] = value;
-
-    if (newArr[idx]["qty"] !== undefined && newArr[idx]["qty"] !== "") { newArr[idx]["qty"] = parseInt(newArr[idx]["qty"]) };
-    if (newArr[idx]["price"] !== undefined && newArr[idx]["price"] !== "") { newArr[idx]["price"] = parseInt(newArr[idx]["price"]) };
+    const { qty, price } = newArr[idx];
     
-    const qty = parseInt(newArr[idx]["qty"]);
-    const price = parseInt(newArr[idx]["price"]);
-    const amount = isNaN(qty) || isNaN(price) ? 0 : (qty * price);
+    if (newArr[idx]["qty"] !== undefined && newArr[idx]["qty"] !== "") { newArr[idx]["qty"] = qty };
+    if (newArr[idx]["price"] !== undefined && newArr[idx]["price"] !== "") { newArr[idx]["price"] = price };
+    
+    const q = parseInt(newArr[idx]["qty"]);
+    const p = parseFloat(newArr[idx]["price"]).toFixed(2);
+    const amount = (isNaN(q) || isNaN((p))) ? 0 : (qty * price);
     newArr[idx]["amount"] = amount;
     setPositions(newArr);
   }
@@ -65,7 +72,7 @@ const App = () => {
       qty: "",
       item: "",
       price: "",
-      amount: ""
+      amount: parseFloat(0).toFixed(2)
     };
     setPositions(rows => ([...rows, row]));
   }
@@ -144,15 +151,15 @@ const App = () => {
               {positions.map((row, idx) => (
               <tr key={idx+1}>
                 <td>{idx+1}</td>
-                <td><input type="number" name="qty" placeholder="1" className="number" value={(row.qty !== undefined && row.qty !== "") ? row.qty : "" } onChange={(e) => handlePositionsChange(e, idx)} /></td>
-                <td><input type="textarea" name="item" className="use-up-space" placeholder="Description of service or product..." value={(row.item !== undefined && row.item !== "") ? row.item : "" } onChange={(e) => handlePositionsChange(e, idx)}/></td>
+                <td><input type="number" name="qty" placeholder="1" className="number" value={row.qty} onChange={(e) => handlePositionsChange(e, idx)} /></td>
+                <td><input type="textarea" name="item" className="use-up-space" placeholder="Description of service or product..." value={row.item} onChange={(e) => handlePositionsChange(e, idx)}/></td>
                 <td>
                   <label>€ </label>
-                  <input type="number" name="price" placeholder="1" className="number" value={(row.price !== undefined && row.price !== "") ? row.price : "" } onChange={(e) => handlePositionsChange(e, idx)} />
+                  <input type="number" step="0.01" name="price" placeholder="0.00" className="number" value={row.price} onBlur={(e) => e.target.value = parseFloat(e.target.value).toFixed(2)} onChange={(e) => handlePositionsChange(e, idx)} />
                 </td>
                 <td className="amount">
                   <label>€ </label>
-                  {row.amount !== undefined && row.amount !== "" ? row.amount.toFixed(2) : (0).toFixed(2)}
+                  {parseFloat(row.amount).toFixed(2)}
                 </td>
                 <td>
                   <button onClick={() => handleRemovePosition(idx)}>X</button>
@@ -188,9 +195,6 @@ const App = () => {
             <br /><br /><br /><br /><br />
             <p>{data.date}</p>
             <p>{data.programming}</p>
-            {positions.map((pos) => (
-              <p>{pos.item}</p>
-            ))}
           </div>
           <input type="submit" value="Create PDF" className="right" />
         </div>
