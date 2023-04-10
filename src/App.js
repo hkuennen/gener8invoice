@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import GenericPdfDownloader from "./components/PdfDownloader";
 
 const App = () => {
   const [data, setData] = useState({
@@ -53,17 +54,19 @@ const App = () => {
     };
 
     console.log(values);
-    // const settings = {
-    //   method: "POST",
-    //   headers: {
-    //     "Accept": "application/json",
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify(inputs)
-    // }
-    // const fetchResponse = await fetch("/api/data", settings);
-    // const data = await fetchResponse.json();
-    // console.log(data);
+    const settings = {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(values)
+    }
+    const fetchResponse = await fetch("/api/data", settings);
+    const data = await fetchResponse.json();
+    if(data.status === 200) {
+      console.log(data);
+    }
   }
 
   const handleAddPosition = () => {
@@ -114,7 +117,7 @@ const App = () => {
       <header className="App-header"></header>
         <form onSubmit={handleSubmit}>
         <div className="wrapper">
-          <div className="page">
+          <div id="layout" className="page">
                 <h1>{"Invoice".toUpperCase()}</h1>
             <div className="two-col">
               <div className="contact-info">
@@ -162,11 +165,11 @@ const App = () => {
                   {parseFloat(row.amount).toFixed(2)}
                 </td>
                 <td>
-                  <button onClick={() => handleRemovePosition(idx)}>X</button>
+                  <button onClick={() => handleRemovePosition(idx)} data-html2canvas-ignore="true">X</button>
                 </td>
               </tr>
               ))}
-              <button id="add" onClick={handleAddPosition}>+</button>
+              <button id="add" onClick={handleAddPosition} data-html2canvas-ignore="true">+</button>
               <br />
               <tr className="grey">
                 <td>Subtotal</td>
@@ -197,6 +200,10 @@ const App = () => {
             <p>{data.programming}</p>
           </div>
           <input type="submit" value="Create PDF" className="right" />
+          <GenericPdfDownloader 
+            rootElementId="layout"
+            downloadFileName={`Invoice No. ${2}`}
+          />
         </div>
       </form>
     </div>
