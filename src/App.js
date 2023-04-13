@@ -53,17 +53,19 @@ const App = () => {
     };
 
     console.log(values);
-    // const settings = {
-    //   method: "POST",
-    //   headers: {
-    //     "Accept": "application/json",
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify(inputs)
-    // }
-    // const fetchResponse = await fetch("/api/data", settings);
-    // const data = await fetchResponse.json();
-    // console.log(data);
+    const settings = {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(values)
+    }
+    const fetchResponse = await fetch("/api/data", settings);
+    const data = await fetchResponse.json();
+    if(data.status === 200) {
+      console.log(data);
+    }
   }
 
   const handleAddPosition = () => {
@@ -114,7 +116,7 @@ const App = () => {
       <header className="App-header"></header>
         <form onSubmit={handleSubmit}>
         <div className="wrapper">
-          <div className="page">
+          <div id="layout" className="page">
                 <h1>{"Invoice".toUpperCase()}</h1>
             <div className="two-col">
               <div className="contact-info">
