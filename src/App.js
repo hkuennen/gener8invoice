@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import GenericPdfDownloader from "./components/PdfDownloader";
 
 const App = () => {
   const [data, setData] = useState({
@@ -165,11 +164,11 @@ const App = () => {
                   {parseFloat(row.amount).toFixed(2)}
                 </td>
                 <td>
-                  <button onClick={() => handleRemovePosition(idx)} data-html2canvas-ignore="true">X</button>
+                  <button onClick={() => handleRemovePosition(idx)}>X</button>
                 </td>
               </tr>
               ))}
-              <button id="add" onClick={handleAddPosition} data-html2canvas-ignore="true">+</button>
+              <button id="add" onClick={handleAddPosition}>+</button>
               <br />
               <tr className="grey">
                 <td>Subtotal</td>
@@ -200,10 +199,6 @@ const App = () => {
             <p>{data.programming}</p>
           </div>
           <input type="submit" value="Create PDF" className="right" />
-          <GenericPdfDownloader 
-            rootElementId="layout"
-            downloadFileName={`Invoice No. ${2}`}
-          />
         </div>
       </form>
     </div>
