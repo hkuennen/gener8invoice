@@ -1,7 +1,6 @@
 import json
 import datetime
 from flask import Flask, request
-from pdf_generation.download import download_pdf
 from pdf_generation.create import create_pdf
   
 x = datetime.datetime.now()

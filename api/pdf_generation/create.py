@@ -4,10 +4,9 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from pdf_generation.download import download_pdf
 
 def create_pdf(data):
-  doc = SimpleDocTemplate("Invoice.pdf",pagesize=A4,
+  doc = SimpleDocTemplate(f"Invoice No. {data['inputs']['inv_number']}.pdf",pagesize=A4,
                       rightMargin=1*cm, leftMargin=1*cm,
                       topMargin=1*cm, bottomMargin=1*cm
                       )
@@ -71,5 +70,4 @@ def create_pdf(data):
 
   doc.build(Story)
 
-  pdf = download_pdf(data['inputs']['inv_number'])
-  return pdf
+  print("PDF created successfully")
