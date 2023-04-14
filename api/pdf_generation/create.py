@@ -1,3 +1,4 @@
+from io import BytesIO
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -6,7 +7,8 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
 def create_pdf(data):
-  doc = SimpleDocTemplate(f"Invoice No. {data['inputs']['inv_number']}.pdf",pagesize=A4,
+  buffer = BytesIO()
+  doc = SimpleDocTemplate(buffer, pagesize=A4,
                       rightMargin=1*cm, leftMargin=1*cm,
                       topMargin=1*cm, bottomMargin=1*cm
                       )
@@ -70,4 +72,7 @@ def create_pdf(data):
 
   doc.build(Story)
 
+  pdf_value = buffer.getvalue()
+  buffer.close()
   print("PDF created successfully")
+  return pdf_value
