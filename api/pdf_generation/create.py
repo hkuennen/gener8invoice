@@ -72,7 +72,5 @@ def create_pdf(data):
 
   doc.build(Story)
 
-  pdf_value = buffer.getvalue()
-  buffer.close()
   print("PDF created successfully")
-  return pdf_value
+  return buffer

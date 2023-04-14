@@ -52,7 +52,6 @@ const App = () => {
       }
     };
 
-    console.log(values);
     const settings = {
       method: "POST",
       headers: {
@@ -62,10 +61,14 @@ const App = () => {
       body: JSON.stringify(values)
     }
     const fetchResponse = await fetch("/api/data", settings);
-    const data = await fetchResponse.json();
-    if(data.status === 200) {
-      console.log(data);
-    }
+    const data = await fetchResponse.blob();
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(data);
+    link.download = `Invoice No. ${inputs.inv_number}.pdf`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 2000);
   }
 
   const handleAddPosition = () => {

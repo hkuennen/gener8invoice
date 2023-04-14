@@ -1,6 +1,7 @@
 import json
 import datetime
-from flask import Flask, make_response, request, send_file
+from PyPDF2 import PdfReader, PdfWriter
+from flask import Flask, request, send_file
 from pdf_generation.create import create_pdf
   
 x = datetime.datetime.now()
@@ -21,12 +22,7 @@ def index():
       print(f"{key}:", value)
 
     print(data["inputs"]["inv_number"])
-    pdf_value = create_pdf(data)
-    #f"Invoice No. {data['inputs']['inv_number']}.pdf"
-    response = make_response(pdf_value)
-    response.headers['Content-Disposition'] = "attachment; filename='test.pdf"
-    response.mimetype = 'application/pdf'
-  
-    return response
-    # return send_file(pdf_value, mimetype='application/pdf', download_name='test.pdf', as_attachment=True)
-#    return json.dumps({'success':True, 'status': 200, 'ContentType':'application/json', 'response': data})
+    buffer = create_pdf(data)
+    buffer.seek(0)
+
+    return send_file(buffer, mimetype='application/pdf', download_name='Invoice.pdf', as_attachment=True)
