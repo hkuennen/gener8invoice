@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import ContactInfo from "./components/ContactInfo";
+import InvoicePositions from "./components/InvoicePositions";
 
 const App = () => {
   const [data, setData] = useState({
@@ -71,7 +73,8 @@ const App = () => {
     setTimeout(() => URL.revokeObjectURL(link.href), 2000);
   }
 
-  const handleAddPosition = () => {
+  const handleAddPosition = (e) => {
+    e.preventDefault();
     const row = {
       pos: "",
       qty: "",
@@ -82,7 +85,8 @@ const App = () => {
     setPositions(rows => ([...rows, row]));
   }
 
-  const handleRemovePosition = (idx) => {
+  const handleRemovePosition = (e, idx) => {
+    e.preventDefault();
     const rows = [...positions];
     rows.splice(idx, 1);
     setPositions(() => rows);
@@ -120,83 +124,18 @@ const App = () => {
         <form onSubmit={handleSubmit}>
         <div className="wrapper">
           <div id="layout" className="page">
-                <h1>{"Invoice".toUpperCase()}</h1>
-            <div className="two-col">
-              <div className="contact-info">
-                <div className="sender">
-                  <p className="underline">{inputs.biller_name || "Biller Name"}, {inputs.biller_street || "Street"}, {inputs.biller_location || "Postcode and Location"}</p>
-                </div>
-                <div className="receiver">
-                  <input type="text" name="recipient_name" placeholder="Recipient Name" onChange={(e) => handleInputsChange(e)}/><br />
-                  <input type="text" name="recipient_street" placeholder="Street" onChange={(e) => handleInputsChange(e)}/><br />
-                  <input type="text" name="recipient_location" placeholder="Postcode and Location" onChange={(e) => handleInputsChange(e)}/>
-                </div>
-              </div>
-              <div className="invoice-info">
-                <input type="text" name="biller_name" placeholder="Biller Name" onChange={(e) => handleInputsChange(e)}/><br />
-                <input type="text" name="biller_street" placeholder="Street" onChange={(e) => handleInputsChange(e)}/><br />
-                <input type="text" name="biller_location" placeholder="Postcode and Location" onChange={(e) => handleInputsChange(e)}/><br /><br />
-                <input type="text" name="inv_number" placeholder="Invoice Number" onChange={(e) => handleInputsChange(e)}/><br />
-                <input type="text" name="po_number" placeholder="PO Number" onChange={(e) => handleInputsChange(e)}/>
-              </div>
-            </div>
-            <div className="right">
-              <label className="bold">Date: </label>
-              <input type="date" name="date" onChange={(e) => handleInputsChange(e)}/>
-            </div>
+            <ContactInfo 
+              inputs={inputs}
+              handleInputsChange={handleInputsChange}
+            />
             <br /><br /><br /><br /><br />
-            <table>
-              <tr className="grey">
-                <th>Pos</th>
-                <th>Qty</th>
-                <th className="item">Item</th>
-                <th>Unit price</th>
-                <th>Amount</th>
-              </tr>
-              {positions.map((row, idx) => (
-              <tr key={idx+1}>
-                <td>{idx+1}</td>
-                <td><input type="number" name="qty" placeholder="1" className="number" value={row.qty} onChange={(e) => handlePositionsChange(e, idx)} /></td>
-                <td><input type="textarea" name="item" className="use-up-space" placeholder="Description of service or product..." value={row.item} onChange={(e) => handlePositionsChange(e, idx)}/></td>
-                <td>
-                  <label>€ </label>
-                  <input type="number" step="0.01" name="price" placeholder="0.00" className="number" value={row.price} onBlur={(e) => e.target.value = parseFloat(e.target.value).toFixed(2)} onChange={(e) => handlePositionsChange(e, idx)} />
-                </td>
-                <td className="amount">
-                  <label>€ </label>
-                  {parseFloat(row.amount).toFixed(2)}
-                </td>
-                <td>
-                  <button onClick={() => handleRemovePosition(idx)}>X</button>
-                </td>
-              </tr>
-              ))}
-              <button id="add" onClick={handleAddPosition}>+</button>
-              <br />
-              <tr className="grey">
-                <td>Subtotal</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td id="subtotal">€ {isNaN(subtotal) ? (0).toFixed(2) : subtotal.toFixed(2)}</td>
-              </tr>
-              <br />
-              <tr>
-                <td>19% Tax</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>€ {isNaN(subtotal) ? (0).toFixed(2) : (subtotal * 0.19).toFixed(2)}</td>
-              </tr>
-              <br />
-              <tr className="bold">
-                <td>Total</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td id="total">€ {isNaN(subtotal) ? (0).toFixed(2) : (subtotal * 1.19).toFixed(2)}</td>
-              </tr>
-            </table>
+            <InvoicePositions 
+              positions={positions}
+              subtotal={subtotal}
+              handlePositionsChange={handlePositionsChange}
+              handleAddPosition={handleAddPosition}
+              handleRemovePosition={handleRemovePosition}
+            />
             <br /><br /><br /><br /><br />
             <p>{data.date}</p>
             <p>{data.programming}</p>
