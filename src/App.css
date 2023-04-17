@@ -6,102 +6,10 @@
   background-color: #282c34;
 }
 
-h1 {
-  padding-bottom: 20px;
-  font-size: 18pt;
-}
-
 .page {
   width: 794px;
   height: 1122px;
   margin: 0 auto;
   padding: 80px;
   background-color: #FFFFFF;
-}
-
-.underline {
-  text-decoration: underline;
-  font-size: 9pt;
-}
-
-.two-col {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  height: 250px;
-  width: auto;
-  margin-bottom: 50px;
-}
-
-.contact-info {
-  padding-top: 20px;
-  align-self: center;
-  display: block;
-  align-content: space-between;
-  line-height: 1.3em;
-}
-
-.invoice-info {
-  line-height: 1.3em;
-}
-
-.sender {
-  margin: 50px 0;
-}
-
-.right {
-  float: right;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-tr {
-  border-bottom: 1pt solid #EEEEEE;
-  line-height: 24px;
-}
-
-.grey {
-  background-color: #EEEEEE;
-  border-bottom: 1pt solid #FFFFFF;
-}
-
-.bold {
-  font-weight: 600;
-  border-bottom: 1pt solid #FFFFFF;
-}
-
-.number {
-  width: 50%;
-}
-
-.item {
-  width: 65%;
-}
-
-.use-up-space {
-  width: 95%;
-}
-
-.amount {
-  width: 10%;
-}
-
-#add {
-  padding: 3px 5px;
-  color: white;
-  background-color: #04AA6D;
-  border-radius: 50%;
-}
-
-#subtotal {
-  text-decoration-line: underline;
-  text-decoration-style: solid;
-}
-
-#total {
-  text-decoration-line: underline;
-  text-decoration-style: double;
 }

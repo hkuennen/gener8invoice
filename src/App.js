@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
 import ContactInfo from "./components/ContactInfo";
 import InvoicePositions from "./components/InvoicePositions";
+import "./App.css";
+import "./components/ContactInfo.css";
+import "./components/InvoicePositions.css";
 
 const App = () => {
   const [data, setData] = useState({
