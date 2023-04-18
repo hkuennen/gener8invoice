@@ -1,0 +1,43 @@
+h1 {
+  padding-bottom: 20px;
+  font-size: 18pt;
+}
+
+.two-col {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 250px;
+  width: auto;
+  margin-bottom: 50px;
+}
+
+.contact-info {
+  padding-top: 20px;
+  align-self: center;
+  display: block;
+  align-content: space-between;
+  line-height: 1.3em;
+}
+
+.sender {
+  margin: 50px 0;
+}
+
+.underline {
+  text-decoration: underline;
+  font-size: 9pt;
+}
+
+.invoice-info {
+  line-height: 1.3em;
+}
+
+.right {
+  float: right;
+}
+
+.bold {
+  font-weight: 600;
+  border-bottom: 1pt solid #FFFFFF;
+}
