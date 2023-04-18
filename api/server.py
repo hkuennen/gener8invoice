@@ -21,7 +21,6 @@ def index():
     for key, value in data.items():
       print(f"{key}:", value)
 
-    print(data["inputs"]["inv_number"])
     buffer = create_pdf(data)
     buffer.seek(0)
 

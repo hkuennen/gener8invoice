@@ -1,6 +1,7 @@
 from io import BytesIO
+import datetime
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.pdfbase import pdfmetrics
@@ -78,7 +79,7 @@ def create_pdf(data):
 
   Story.append(s)
 
-  date = f"Date: {data['inputs']['date']}"
+  date = f"Date: {datetime.datetime.strptime(data['inputs']['date'], '%Y-%m-%d').strftime('%d.%m.%Y')}"
 
   d_style = ParagraphStyle('date',
                           fontName="CMU Bright SemiBold",
@@ -87,6 +88,43 @@ def create_pdf(data):
                           )
   p4 = Paragraph(date, d_style)
   Story.append(p4)
+
+  Story.append(s)
+
+  table_data = [["Pos", "Qty", "Item", "Unit Price", "Amount"]]
+  for idx in range(len(data["positions"])):
+    arr = []
+    for key, value in data["positions"][idx].items():
+      if key in ("price", "amount"):
+        value = f"€ {format(float(value), '.2f')}"
+      arr.append(value)
+    table_data.append(arr)
+
+  table_data.append(["", "", "", "", ""])
+  table_data.append(["Subtotal", "", "", "", f"€ {data['amount']['subtotal']:.2f}"])
+  table_data.append(["", "", "", "", ""])
+  table_data.append(["19% Tax", "", "", "", f"€ {data['amount']['tax']:.2f}"])
+  table_data.append(["", "", "", "", ""])
+  table_data.append(["Total", "", "", "", f"€ {data['amount']['total']:.2f}"])
+  
+  c_width = [1.3*cm, 1.4*cm, 11.5*cm, 1.8*cm, 1.8*cm]
+  t = Table(table_data, colWidths=c_width)
+
+  TABLE_STYLE = TableStyle([
+    ('FONT', (0,0), (-1,0), 'CMU Bright SemiBold'),
+    ('FONT', (0,1), (-1,-1), 'CMU Bright'),
+    ('BACKGROUND', (0,0), (-1,0), '#EEEEEE'),      
+    ('BACKGROUND', (0,-5), (-1,-5), '#EEEEEE'),
+    ('LINEBELOW', (0,-3), (-1,-3), 0.5, '#EEEEEE'),
+    ('FONT', (0,-1), (-1,-1), 'CMU Bright SemiBold'),
+  ])
+
+  for idx in range(len(data["positions"])):
+    TABLE_STYLE.add('LINEBELOW', (0,idx+1), (-1,idx+1), 0.5, '#EEEEEE')
+
+  t.setStyle(TABLE_STYLE)
+
+  Story.append(t)
 
   doc.build(Story)
 
