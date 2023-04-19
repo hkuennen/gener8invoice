@@ -1,6 +1,5 @@
 import json
 import datetime
-from PyPDF2 import PdfReader, PdfWriter
 from flask import Flask, request, send_file
 from pdf_generation.create import create_pdf
   
@@ -10,11 +9,6 @@ app = Flask(__name__)
 
 @app.route('/api/data', methods = ['GET', 'POST'])
 def index():
-  if request.method == "GET":
-    return {
-      "Date":x, 
-      "programming":"Python"
-    }
   if request.method == "POST":
     data = json.loads(request.data)
 

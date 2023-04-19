@@ -34,22 +34,50 @@ def create_pdf(data):
 
   Story.append(s)
 
-  biller = f"""{data['inputs']['biller_name']}\n
-  {data['inputs']['biller_street']}\n
-  {data['inputs']['biller_location']}\n
+  biller_address = f"""\n
   \n
-  {data['inputs']['inv_number']}\n
-  {data['inputs']['po_number']}\n
+  \n
+  \n
+  <u>{data['inputs']['biller_name']}, {data['inputs']['biller_street']}, {data['inputs']['biller_location']}</u>\n
   """
 
-  b_style = ParagraphStyle('biller',
-                          fontName="CMU Bright",
-                          fontSize=10,
+  ba_style = ParagraphStyle('biller_address',
+                        fontName="CMU Bright",
+                        fontSize=7,
+                        parent=style['Normal'],
+                        alignment=0
+                        )
+
+  def check_for_po_number(arg):
+    if 'po_number' in data['inputs']:
+      if len(data['inputs']['po_number']) != 0:
+        if arg == "key":
+          return "PO number" + '\n'
+        else:
+          return data['inputs']['po_number'] + '\n'
+      else: 
+        return '\n'
+    else:
+      return '\n'
+    
+
+  biller_key = f"""Biller:\n
+  \n
+  \n
+  \n
+  Date:\n
+  Invoice No.:\n
+  {check_for_po_number("key")}
+  """
+
+  bk_style = ParagraphStyle('biller_key',
+                          fontName="CMU Bright SemiBold",
+                          fontSize=9,
                           parent=style['Normal'],
-                          alignment=0,
+                          alignment=2,
                           leading=7,
                           borderPadding=0,
-                          leftIndent=13.5*cm,
+                          leftIndent=0*cm,
                           rightIndent=0,
                           spaceAfter=0,
                           spaceBefore=0,
@@ -58,10 +86,33 @@ def create_pdf(data):
                           wordWrap = "LTR",
                           allowWidows=1
                           )
-  p2 = Paragraph(biller.replace("\n", "<br />"), b_style)
-  Story.append(p2)
 
-  Story.append(s)
+  biller_value = f"""{data['inputs']['biller_name']}\n
+  {data['inputs']['biller_street']}\n
+  {data['inputs']['biller_location']}\n
+  \n
+  {datetime.datetime.strptime(data['inputs']['date'], '%Y-%m-%d').strftime('%d.%m.%Y')}\n
+  {data['inputs']['inv_number']}\n
+  {check_for_po_number("value")}
+  """
+
+  bv_style = ParagraphStyle('biller_value',
+                          parent=bk_style,
+                          fontName="CMU Bright",
+                          alignment=0,
+                          leftIndent=0
+                          )
+
+  col_width = [6.3*cm, 8*cm, 3.5*cm]
+  two_para = [
+    [Paragraph(biller_address.replace("\n", "<br />"), style=ba_style),
+     Paragraph(biller_key.replace("\n", "<br />"), style=bk_style), 
+     Paragraph(biller_value.replace("\n", "<br />"), style=bv_style)]
+  ]
+
+  table = Table(two_para, colWidths=col_width)
+
+  Story.append(table)
 
   recipient = f"""{data['inputs']['recipient_name']}\n
   {data['inputs']['recipient_street']}\n
@@ -69,8 +120,8 @@ def create_pdf(data):
   """
 
   r_style = ParagraphStyle('recipient',
-                          parent=b_style,
-                          alignment=4,
+                          parent=bv_style,
+                          alignment=0,
                           borderPadding=0,
                           leftIndent=0
                           )
@@ -78,17 +129,6 @@ def create_pdf(data):
   Story.append(p3)
 
   Story.append(s)
-
-  date = f"Date: {datetime.datetime.strptime(data['inputs']['date'], '%Y-%m-%d').strftime('%d.%m.%Y')}"
-
-  d_style = ParagraphStyle('date',
-                          fontName="CMU Bright SemiBold",
-                          parent=b_style,
-                          leftIndent=14.5*cm
-                          )
-  p4 = Paragraph(date, d_style)
-  Story.append(p4)
-
   Story.append(s)
 
   table_data = [["Pos", "Qty", "Item", "Unit Price", "Amount"]]

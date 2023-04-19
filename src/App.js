@@ -6,10 +6,6 @@ import "./components/ContactInfo.css";
 import "./components/InvoicePositions.css";
 
 const App = () => {
-  const [data, setData] = useState({
-    date: "",
-    programming: "",
-  });
   const [inputs, setInputs] = useState({});
   const [positions, setPositions] = useState([{
       pos: "",
@@ -105,21 +101,6 @@ const App = () => {
     setSubtotal(() => calcSubtotal());
   }, [positions]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const fetchResponse = await fetch('/api/data');
-      const data = await fetchResponse.json();
-      setData({
-        date: data.Date,
-        programming: data.programming,
-      });
-    }
-    fetchData()
-      .catch((error) => {
-        console.error('Error:', error);
-      })
-    }, []);
-
   return (
     <div className="App">
       <header className="App-header"></header>
@@ -139,8 +120,6 @@ const App = () => {
               handleRemovePosition={handleRemovePosition}
             />
             <br /><br /><br /><br /><br />
-            <p>{data.date}</p>
-            <p>{data.programming}</p>
           </div>
           <input type="submit" value="Create PDF" className="right" />
         </div>
