@@ -1,4 +1,8 @@
+import { useRef } from "react";
+
 const ContactInfo = ({inputs, handleInputsChange}) => {
+  const ref = useRef();
+
   return (
     <>
       <h1>{"Invoice".toUpperCase()}</h1>
@@ -17,13 +21,10 @@ const ContactInfo = ({inputs, handleInputsChange}) => {
           <input type="text" name="biller_name" placeholder="Biller Name" onChange={(e) => handleInputsChange(e)} required /><br />
           <input type="text" name="biller_street" placeholder="Street" onChange={(e) => handleInputsChange(e)} required /><br />
           <input type="text" name="biller_location" placeholder="Postcode and Location" onChange={(e) => handleInputsChange(e)} required /><br /><br />
+          <input type="text" name="date" ref={ref} placeholder="Date" onFocus={() => {ref.current.type = "date"}} onChange={(e) => handleInputsChange(e)} required /><br />
           <input type="text" name="inv_number" placeholder="Invoice Number" onChange={(e) => handleInputsChange(e)} required /><br />
           <input type="text" name="po_number" placeholder="PO Number" onChange={(e) => handleInputsChange(e)}/>
         </div>
-      </div>
-      <div className="right">
-        <label className="bold">Date: </label>
-        <input type="date" name="date" onChange={(e) => handleInputsChange(e)} required />
       </div>
     </>
   );

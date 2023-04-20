@@ -13,20 +13,36 @@ tr {
   border-bottom: 1pt solid #FFFFFF;
 }
 
-.item {
+#th_qty {
+  width: 9%;
+}
+
+#th_item {
   width: 65%;
 }
 
-.number {
+#th_price {
+  width: 15%;
+}
+
+#th_amount {
+  width: 15%;
+}
+
+#td_qty {
   width: 50%;
 }
 
-.use-up-space {
+#td_item {
   width: 95%;
 }
 
-.amount {
-  width: 10%;
+#td_price {
+  width: 60%;
+}
+
+#td_amount {
+  width: 70%;
 }
 
 .bold {
@@ -39,6 +55,10 @@ tr {
   color: white;
   background-color: #04AA6D;
   border-radius: 50%;
+}
+
+#delete {
+  cursor: pointer;
 }
 
 #subtotal {

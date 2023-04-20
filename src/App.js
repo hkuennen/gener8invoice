@@ -121,7 +121,9 @@ const App = () => {
             />
             <br /><br /><br /><br /><br />
           </div>
-          <input type="submit" value="Create PDF" className="right" />
+          <div className="button">
+            <input type="submit" value="Generate PDF" id="submit" />
+          </div>
         </div>
       </form>
     </div>

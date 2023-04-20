@@ -1,29 +1,32 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+
 const InvoicePositions = ({positions, subtotal, handlePositionsChange, handleAddPosition, handleRemovePosition}) => {
   return (
     <>
       <table>
         <tr className="grey">
           <th>Pos</th>
-          <th>Qty</th>
-          <th className="item">Item</th>
-          <th>Unit price</th>
-          <th>Amount</th>
+          <th id="th_qty">Qty</th>
+          <th id="th_item">Item</th>
+          <th id="th_price">Unit price</th>
+          <th id="th_amount">Amount</th>
         </tr>
         {positions.map((row, idx) => (
         <tr key={idx+1}>
           <td>{idx+1}</td>
-          <td><input type="number" name="qty" placeholder="1" className="number" value={row.qty} onChange={(e) => handlePositionsChange(e, idx)} required /></td>
-          <td><input type="textarea" name="item" className="use-up-space" placeholder="Description of service or product..." value={row.item} onChange={(e) => handlePositionsChange(e, idx)} required /></td>
+          <td><input type="number" name="qty" placeholder="1" id="td_qty" value={row.qty} onChange={(e) => handlePositionsChange(e, idx)} required /></td>
+          <td><input type="textarea" name="item" id="td_item" placeholder="Description of service or product..." value={row.item} onChange={(e) => handlePositionsChange(e, idx)} required /></td>
           <td>
             <label>€ </label>
-            <input type="number" step="0.01" name="price" placeholder="0.00" className="number" value={row.price} onBlur={(e) => e.target.value = parseFloat(e.target.value).toFixed(2)} onChange={(e) => handlePositionsChange(e, idx)} required />
+            <input type="number" step="0.01" name="price" placeholder="0.00" id="td_price" value={row.price} onFocus={(e) => e.target.value = parseFloat(e.target.value).toFixed(2)} onBlur={(e) => e.target.value = parseFloat(e.target.value).toFixed(2)} onChange={(e) => handlePositionsChange(e, idx)} required />
           </td>
-          <td className="amount">
+          <td id="td_amount">
             <label>€ </label>
             {parseFloat(row.amount).toFixed(2)}
           </td>
           <td>
-            <button onClick={(e) => handleRemovePosition(e, idx)}>X</button>
+            <button id="delete" onClick={(e) => handleRemovePosition(e, idx)}><FontAwesomeIcon icon={faTrashCan} /></button>
           </td>
         </tr>
         ))}

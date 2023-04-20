@@ -13,3 +13,20 @@
   padding: 80px;
   background-color: #FFFFFF;
 }
+
+.button {
+  position: fixed;
+  bottom: 330px;
+  right: 80px;
+}
+
+#submit {
+  padding: 6px 13px;
+  color: white;
+  background-color: #04AA6D;
+  border-radius: 2%;
+}
+
+#submit:hover {
+  background-color: #1e7354;
+}

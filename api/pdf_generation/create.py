@@ -103,7 +103,7 @@ def create_pdf(data):
                           leftIndent=0
                           )
 
-  col_width = [6.3*cm, 8*cm, 3.5*cm]
+  col_width = [7.3*cm, 6*cm, 4.5*cm]
   two_para = [
     [Paragraph(biller_address.replace("\n", "<br />"), style=ba_style),
      Paragraph(biller_key.replace("\n", "<br />"), style=bk_style), 
@@ -147,7 +147,8 @@ def create_pdf(data):
   table_data.append(["", "", "", "", ""])
   table_data.append(["Total", "", "", "", f"€ {data['amount']['total']:.2f}"])
   
-  c_width = [1.3*cm, 1.4*cm, 11.5*cm, 1.8*cm, 1.8*cm]
+  c_width = [1.3*cm, 1.5*cm, 10.5*cm, 2.3*cm, 2.1*cm]
+  #c_width = [7.5%, 8.5%, 59%, 14%, 11%]
   t = Table(table_data, colWidths=c_width)
 
   TABLE_STYLE = TableStyle([
