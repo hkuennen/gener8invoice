@@ -29,19 +29,19 @@ tr {
   width: 15%;
 }
 
-#td_qty {
+.td_qty {
   width: 50%;
 }
 
-#td_item {
+.td_item {
   width: 95%;
 }
 
-#td_price {
+.td_price {
   width: 60%;
 }
 
-#td_amount {
+.td_amount {
   width: 70%;
 }
 

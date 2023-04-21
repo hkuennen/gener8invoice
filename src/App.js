@@ -6,7 +6,7 @@ import "./components/ContactInfo.css";
 import "./components/InvoicePositions.css";
 
 const App = () => {
-  const [inputs, setInputs] = useState({});
+  const [infos, setInfos] = useState({});
   const [positions, setPositions] = useState([{
       pos: "",
       qty: "",
@@ -16,10 +16,10 @@ const App = () => {
     }]);
   const [subtotal, setSubtotal] = useState(0);
 
-  const handleInputsChange = (e) => {
+  const handleInfosChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setInputs(values => ({...values, [name]: value}))
+    setInfos(values => ({...values, [name]: value}))
   }
 
   const handlePositionsChange = (e, idx) => {
@@ -28,11 +28,11 @@ const App = () => {
     let newArr = [...positions];
     newArr[idx]["pos"] = idx+1
     newArr[idx][name] = value;
+
     const { qty, price } = newArr[idx];
-    
-    if (newArr[idx]["qty"] !== undefined && newArr[idx]["qty"] !== "") { newArr[idx]["qty"] = qty };
-    if (newArr[idx]["price"] !== undefined && newArr[idx]["price"] !== "") { newArr[idx]["price"] = price };
-    
+    if (newArr[idx]["qty"] !== undefined && newArr[idx]["qty"].length !== 0) { newArr[idx]["qty"] = qty };
+    if (newArr[idx]["price"] !== undefined && newArr[idx]["price"].length !== 0) { newArr[idx]["price"] = price };
+
     const q = parseInt(newArr[idx]["qty"]);
     const p = parseFloat(newArr[idx]["price"]).toFixed(2);
     const amount = (isNaN(q) || isNaN((p))) ? 0 : (qty * price);
@@ -43,7 +43,7 @@ const App = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const values = {
-      inputs,
+      infos,
       positions,
       amount: {
         subtotal,
@@ -64,7 +64,7 @@ const App = () => {
     const data = await fetchResponse.blob();
     const link = document.createElement('a');
     link.href = URL.createObjectURL(data);
-    link.download = `Invoice No. ${inputs.inv_number}.pdf`;
+    link.download = `Invoice No. ${infos.inv_number}.pdf`;
     document.body.append(link);
     link.click();
     link.remove();
@@ -80,7 +80,7 @@ const App = () => {
       price: "",
       amount: parseFloat(0).toFixed(2)
     };
-    setPositions(rows => ([...rows, row]));
+    setPositions((rows) => ([...rows, row]));
   }
 
   const handleRemovePosition = (e, idx) => {
@@ -94,7 +94,7 @@ const App = () => {
     const calcSubtotal = () => {
       const amounts = [];
       positions.forEach((position) => {
-        amounts.push(parseInt(position.amount));
+        amounts.push(position.amount);
       })
       return amounts.reduce((prevValue, currentValue) => prevValue + currentValue, 0);
     }
@@ -108,8 +108,8 @@ const App = () => {
         <div className="wrapper">
           <div id="layout" className="page">
             <ContactInfo 
-              inputs={inputs}
-              handleInputsChange={handleInputsChange}
+              infos={infos}
+              handleInfosChange={handleInfosChange}
             />
             <br /><br /><br /><br /><br />
             <InvoicePositions 

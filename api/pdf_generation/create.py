@@ -38,7 +38,7 @@ def create_pdf(data):
   \n
   \n
   \n
-  <u>{data['inputs']['biller_name']}, {data['inputs']['biller_street']}, {data['inputs']['biller_location']}</u>\n
+  <u>{data['infos']['biller_name']}, {data['infos']['biller_street']}, {data['infos']['biller_location']}</u>\n
   """
 
   ba_style = ParagraphStyle('biller_address',
@@ -47,19 +47,14 @@ def create_pdf(data):
                         parent=style['Normal'],
                         alignment=0
                         )
-
-  def check_for_po_number(arg):
-    if 'po_number' in data['inputs']:
-      if len(data['inputs']['po_number']) != 0:
-        if arg == "key":
-          return "PO number" + '\n'
-        else:
-          return data['inputs']['po_number'] + '\n'
-      else: 
-        return '\n'
-    else:
-      return '\n'
     
+  def check_for_existence(key_or_value, name, name_on_pdf=None):
+    if data['infos'].get(name) == None or len(data['infos'][name]) == 0:
+      return '\n'
+    elif key_or_value == "key":
+      return name_on_pdf + '\n'
+    else:
+      return data['infos'][name] + '\n'
 
   biller_key = f"""Biller:\n
   \n
@@ -67,7 +62,7 @@ def create_pdf(data):
   \n
   Date:\n
   Invoice No.:\n
-  {check_for_po_number("key")}
+  {check_for_existence("key", "po_number", "PO number:")}
   """
 
   bk_style = ParagraphStyle('biller_key',
@@ -87,13 +82,13 @@ def create_pdf(data):
                           allowWidows=1
                           )
 
-  biller_value = f"""{data['inputs']['biller_name']}\n
-  {data['inputs']['biller_street']}\n
-  {data['inputs']['biller_location']}\n
+  biller_value = f"""{data['infos']['biller_name']}\n
+  {data['infos']['biller_street']}\n
+  {data['infos']['biller_location']}\n
   \n
-  {datetime.datetime.strptime(data['inputs']['date'], '%Y-%m-%d').strftime('%d.%m.%Y')}\n
-  {data['inputs']['inv_number']}\n
-  {check_for_po_number("value")}
+  {datetime.datetime.strptime(data['infos']['date'], '%Y-%m-%d').strftime('%d.%m.%Y')}\n
+  {data['infos']['inv_number']}\n
+  {check_for_existence("value", "po_number")}
   """
 
   bv_style = ParagraphStyle('biller_value',
@@ -103,20 +98,20 @@ def create_pdf(data):
                           leftIndent=0
                           )
 
-  col_width = [7.3*cm, 6*cm, 4.5*cm]
-  two_para = [
+  col_width_1 = [7.3*cm, 6*cm, 4.5*cm]
+  table_data_1 = [
     [Paragraph(biller_address.replace("\n", "<br />"), style=ba_style),
      Paragraph(biller_key.replace("\n", "<br />"), style=bk_style), 
      Paragraph(biller_value.replace("\n", "<br />"), style=bv_style)]
   ]
 
-  table = Table(two_para, colWidths=col_width)
+  t1 = Table(table_data_1, colWidths=col_width_1)
 
-  Story.append(table)
+  Story.append(t1)
 
-  recipient = f"""{data['inputs']['recipient_name']}\n
-  {data['inputs']['recipient_street']}\n
-  {data['inputs']['recipient_location']}\n
+  recipient = f"""{data['infos']['recipient_name']}\n
+  {data['infos']['recipient_street']}\n
+  {data['infos']['recipient_location']}\n
   """
 
   r_style = ParagraphStyle('recipient',
@@ -131,25 +126,24 @@ def create_pdf(data):
   Story.append(s)
   Story.append(s)
 
-  table_data = [["Pos", "Qty", "Item", "Unit Price", "Amount"]]
+  table_data_2 = [["Pos", "Qty", "Item", "Unit Price", "Amount"]]
   for idx in range(len(data["positions"])):
     arr = []
     for key, value in data["positions"][idx].items():
       if key in ("price", "amount"):
         value = f"€ {format(float(value), '.2f')}"
       arr.append(value)
-    table_data.append(arr)
+    table_data_2.append(arr)
 
-  table_data.append(["", "", "", "", ""])
-  table_data.append(["Subtotal", "", "", "", f"€ {data['amount']['subtotal']:.2f}"])
-  table_data.append(["", "", "", "", ""])
-  table_data.append(["19% Tax", "", "", "", f"€ {data['amount']['tax']:.2f}"])
-  table_data.append(["", "", "", "", ""])
-  table_data.append(["Total", "", "", "", f"€ {data['amount']['total']:.2f}"])
+  table_data_2.append(["", "", "", "", ""])
+  table_data_2.append(["Subtotal", "", "", "", f"€ {data['amount']['subtotal']:.2f}"])
+  table_data_2.append(["", "", "", "", ""])
+  table_data_2.append(["19% Tax", "", "", "", f"€ {data['amount']['tax']:.2f}"])
+  table_data_2.append(["", "", "", "", ""])
+  table_data_2.append(["Total", "", "", "", f"€ {data['amount']['total']:.2f}"])
   
-  c_width = [1.3*cm, 1.5*cm, 10.5*cm, 2.3*cm, 2.1*cm]
-  #c_width = [7.5%, 8.5%, 59%, 14%, 11%]
-  t = Table(table_data, colWidths=c_width)
+  col_width_2 = [1.3*cm, 1.5*cm, 10.5*cm, 2.3*cm, 2.1*cm]
+  t2 = Table(table_data_2, colWidths=col_width_2)
 
   TABLE_STYLE = TableStyle([
     ('FONT', (0,0), (-1,0), 'CMU Bright SemiBold'),
@@ -163,9 +157,9 @@ def create_pdf(data):
   for idx in range(len(data["positions"])):
     TABLE_STYLE.add('LINEBELOW', (0,idx+1), (-1,idx+1), 0.5, '#EEEEEE')
 
-  t.setStyle(TABLE_STYLE)
+  t2.setStyle(TABLE_STYLE)
 
-  Story.append(t)
+  Story.append(t2)
 
   doc.build(Story)
 
