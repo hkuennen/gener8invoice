@@ -1,12 +1,12 @@
 import json
 import datetime
-from flask import Flask, request, send_file, send_from_directory
+from flask import Flask, request, send_file
 from flask_cors import CORS, cross_origin
 from pdf_generation.create import create_pdf
   
 x = datetime.datetime.now()
   
-app = Flask(__name__, static_folder='./build')
+app = Flask(__name__, static_folder='../build', static_url_path='/')
 CORS(app)
 
 @app.route('/api/data', methods = ['GET', 'POST'])
@@ -21,4 +21,4 @@ def index():
 @app.route('/')
 @cross_origin()
 def serve():
-  return send_from_directory(app.static_folder, 'index.html')
+  return app.send_static_file('index.html')
