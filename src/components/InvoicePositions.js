@@ -37,7 +37,7 @@ const InvoicePositions = ({positions, subtotal, handlePositionsChange, handleAdd
           <td></td>
           <td></td>
           <td></td>
-          <td id="subtotal">€ {isNaN(subtotal) ? (0).toFixed(2) : subtotal.toFixed(2)}</td>
+          <td id="subtotal">€ {isNaN(subtotal) ? (0).toFixed(2) : parseFloat(subtotal).toFixed(2)}</td>
         </tr>
         <br />
         <tr>

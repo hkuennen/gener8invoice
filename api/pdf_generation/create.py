@@ -163,5 +163,4 @@ def create_pdf(data):
 
   doc.build(Story)
 
-  print("PDF created successfully")
   return buffer
