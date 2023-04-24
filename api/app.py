@@ -1,6 +1,6 @@
 import json
 from flask import Flask, request, send_file
-from pdf_generation.create import create_pdf
+from api.pdf_generation.create import create_pdf
 
 app = Flask(__name__, static_folder='../build', static_url_path='/')
 
