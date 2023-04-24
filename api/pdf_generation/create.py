@@ -16,8 +16,8 @@ def create_pdf(data):
   
   Story = []
 
-  pdfmetrics.registerFont(TTFont('CMU Bright', 'cmunbmr.ttf' or 'api/pdf_generation/fonts/cmunbmr.ttf'))
-  pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'cmunbsr.ttf' or 'api/pdf_generation/fonts/cmunbsr.ttf'))
+  pdfmetrics.registerFont(TTFont('CMU Bright', 'api/pdf_generation/fonts/cmunbmr.ttf'))
+  pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'api/pdf_generation/fonts/cmunbsr.ttf'))
   s = Spacer(1,90)
 
 
