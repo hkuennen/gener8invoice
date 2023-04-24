@@ -60,7 +60,7 @@ const App = () => {
       },
       body: JSON.stringify(values)
     }
-    const fetchResponse = await fetch("http://inv-gen.herokuapp.com/api/data", settings);
+    const fetchResponse = await fetch("/api/data", settings);
     const data = await fetchResponse.blob();
     const link = document.createElement('a');
     link.href = URL.createObjectURL(data);

@@ -25,5 +25,5 @@ yarn-error.log*
 # server-side
 venv
 __pycache__
-.flaskenv
+ .flaskenv
 *.pdf

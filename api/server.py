@@ -1,10 +1,7 @@
 import json
-import datetime
 from flask import Flask, request, send_file
 from pdf_generation.create import create_pdf
-  
-x = datetime.datetime.now()
-  
+
 app = Flask(__name__, static_folder='../build', static_url_path='/')
 
 @app.route('/api/data', methods = ['GET', 'POST'])
