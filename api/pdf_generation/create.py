@@ -16,8 +16,8 @@ def create_pdf(data):
   
   Story = []
 
-  pdfmetrics.registerFont(TTFont('CMU Bright', 'cmunbmr.ttf'))
-  pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'cmunbsr.ttf'))
+  pdfmetrics.registerFont(TTFont('CMU Bright', 'fonts/cmunbmr.ttf'))
+  pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'fonts/cmunbsr.ttf'))
   s = Spacer(1,30)
 
   header = "INVOICE"
