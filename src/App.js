@@ -111,7 +111,7 @@ const App = () => {
               infos={infos}
               handleInfosChange={handleInfosChange}
             />
-            <br /><br /><br /><br /><br />
+            <br /><br /><br />
             <InvoicePositions 
               positions={positions}
               subtotal={subtotal}
@@ -119,7 +119,6 @@ const App = () => {
               handleAddPosition={handleAddPosition}
               handleRemovePosition={handleRemovePosition}
             />
-            <br /><br /><br /><br /><br />
           </div>
           <div className="button">
             <input type="submit" value="Generate PDF" id="submit" />

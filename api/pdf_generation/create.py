@@ -16,9 +16,10 @@ def create_pdf(data):
   
   Story = []
 
-  pdfmetrics.registerFont(TTFont('CMU Bright', 'api/pdf_generation/fonts/cmunbmr.ttf'))
-  pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'api/pdf_generation/fonts/cmunbsr.ttf'))
-  s = Spacer(1,30)
+  pdfmetrics.registerFont(TTFont('CMU Bright', 'cmunbmr.ttf' or 'api/pdf_generation/fonts/cmunbmr.ttf'))
+  pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'cmunbsr.ttf' or 'api/pdf_generation/fonts/cmunbsr.ttf'))
+  s = Spacer(1,90)
+
 
   header = "INVOICE"
 
@@ -32,18 +33,16 @@ def create_pdf(data):
   p1 = Paragraph(header, h_style)
   Story.append(p1)
 
-  Story.append(s)
-
   biller_address = f"""\n
   \n
   \n
   \n
-  <u>{data['infos']['biller_name']}, {data['infos']['biller_street']}, {data['infos']['biller_location']}</u>\n
+  <u>{data['infos']['biller_name']}, {data['infos']['biller_street']}, {data['infos']['biller_location']}</u>
   """
 
   ba_style = ParagraphStyle('biller_address',
                         fontName="CMU Bright",
-                        fontSize=7,
+                        fontSize=8,
                         parent=style['Normal'],
                         alignment=0
                         )
@@ -67,7 +66,7 @@ def create_pdf(data):
 
   bk_style = ParagraphStyle('biller_key',
                           fontName="CMU Bright SemiBold",
-                          fontSize=9,
+                          fontSize=10,
                           parent=style['Normal'],
                           alignment=2,
                           leading=7,
@@ -123,7 +122,6 @@ def create_pdf(data):
   p3 = Paragraph(recipient.replace("\n", "<br />"), r_style)
   Story.append(p3)
 
-  Story.append(s)
   Story.append(s)
 
   table_data_2 = [["Pos", "Qty", "Item", "Unit Price", "Amount"]]

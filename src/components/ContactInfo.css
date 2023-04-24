@@ -13,7 +13,7 @@ h1 {
 }
 
 .contact-info {
-  padding-top: 20px;
+  padding-top: 90px;
   align-self: center;
   display: block;
   align-content: space-between;
@@ -21,7 +21,7 @@ h1 {
 }
 
 .sender {
-  margin: 50px 0;
+  margin: 10px 0;
 }
 
 .underline {
