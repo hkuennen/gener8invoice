@@ -51,7 +51,6 @@ const App = () => {
         total: (subtotal * 1.19)
       }
     };
-
     const settings = {
       method: "POST",
       headers: {
@@ -59,16 +58,21 @@ const App = () => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(values)
+    };
+    try {
+      const response = await fetch("/api/data", settings);
+      const data = await response.blob();
+      const link = document.createElement('a');
+      
+      link.href = URL.createObjectURL(data);
+      link.download = `Invoice No. ${infos.inv_number}.pdf`;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(link.href), 2000);
+    } catch (error) {
+      alert("Error", error);
     }
-    const fetchResponse = await fetch("/api/data", settings);
-    const data = await fetchResponse.blob();
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(data);
-    link.download = `Invoice No. ${infos.inv_number}.pdf`;
-    document.body.append(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(link.href), 2000);
   }
 
   const handleAddPosition = (e) => {

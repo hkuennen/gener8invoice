@@ -1,5 +1,5 @@
+import datetime, os
 from io import BytesIO
-import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -16,8 +16,13 @@ def create_pdf(data):
   
   Story = []
 
-  pdfmetrics.registerFont(TTFont('CMU Bright', 'api/pdf_generation/fonts/cmunbmr.ttf'))
-  pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'api/pdf_generation/fonts/cmunbsr.ttf'))
+  if os.environ.get('FLASK_ENVIRONMENT') == 'development':
+    pdfmetrics.registerFont(TTFont('CMU Bright', 'cmunbmr.ttf'))
+    pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'cmunbsr.ttf'))
+  else:
+    pdfmetrics.registerFont(TTFont('CMU Bright', 'api/pdf_generation/fonts/cmunbmr.ttf'))
+    pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'api/pdf_generation/fonts/cmunbsr.ttf'))
+
   s = Spacer(1,90)
 
 
