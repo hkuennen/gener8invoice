@@ -1,10 +1,6 @@
-import os, json
+import json
 from flask import Flask, request, send_file
-
-# if os.environ.get('FLASK_ENVIRONMENT') == 'development':
 from pdf_generation.create import create_pdf
-# else:
-#   from api.pdf_generation.create import create_pdf
 
 app = Flask(__name__, static_folder='../build', static_url_path='/')
 
