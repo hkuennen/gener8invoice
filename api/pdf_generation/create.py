@@ -19,12 +19,12 @@ def create_pdf(data):
   cmu_font_path = 'pdf_generation/fonts/cmunbmr.ttf'
   cmu_bold_font_path = 'pdf_generation/fonts/cmunbsr.ttf'
 
-  if os.environ.get('FLASK_ENVIRONMENT') == 'development':
-    pdfmetrics.registerFont(TTFont('CMU Bright', cmu_font_path))
-    pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', cmu_bold_font_path))
-  else:
-    pdfmetrics.registerFont(TTFont('CMU Bright', 'api/' + cmu_font_path))
-    pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'api/' + cmu_bold_font_path))
+  # if os.environ.get('FLASK_ENVIRONMENT') == 'development':
+  pdfmetrics.registerFont(TTFont('CMU Bright', cmu_font_path))
+  pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', cmu_bold_font_path))
+  # else:
+  #   pdfmetrics.registerFont(TTFont('CMU Bright', 'api/' + cmu_font_path))
+  #   pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'api/' + cmu_bold_font_path))
 
   s = Spacer(1,90)
 
