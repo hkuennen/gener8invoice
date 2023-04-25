@@ -16,13 +16,17 @@ def create_pdf(data):
   
   Story = []
 
-  if os.environ.get('FLASK_ENVIRONMENT') == 'development':
-    pdfmetrics.registerFont(TTFont('CMU Bright', 'cmunbmr.ttf'))
-    pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'cmunbsr.ttf'))
-  else:
-    pdfmetrics.registerFont(TTFont('CMU Bright', 'api/pdf_generation/fonts/cmunbmr.ttf'))
-    pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'api/pdf_generation/fonts/cmunbsr.ttf'))
+  print(os.getcwd())
 
+  # if os.environ.get('FLASK_ENVIRONMENT') == 'development':
+  #   pdfmetrics.registerFont(TTFont('CMU Bright', 'pdf_generation/fonts/cmunbmr.ttf'))
+  #   pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'pdf_generation/fonts/cmunbsr.ttf'))
+  # else:
+  #   pdfmetrics.registerFont(TTFont('CMU Bright', 'api/pdf_generation/fonts/cmunbmr.ttf'))
+  #   pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'api/pdf_generation/fonts/cmunbsr.ttf'))
+
+  pdfmetrics.registerFont(TTFont('CMU Bright', 'pdf_generation/fonts/cmunbmr.ttf'))
+  pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'pdf_generation/fonts/cmunbsr.ttf'))
   s = Spacer(1,90)
 
 
