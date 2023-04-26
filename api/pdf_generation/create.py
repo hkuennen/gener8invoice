@@ -137,9 +137,9 @@ def create_pdf(data):
   table_data_2.append(["", "", "", "", ""])
   table_data_2.append(["Subtotal", "", "", "", f"€ {data['amount']['subtotal']:.2f}"])
   table_data_2.append(["", "", "", "", ""])
-  table_data_2.append(["19% Tax", "", "", "", f"€ {data['amount']['tax']:.2f}"])
+  table_data_2.append(["Tax", f"{data['tax']} %", "", "", f"€ {data['amount']['tax']}"])
   table_data_2.append(["", "", "", "", ""])
-  table_data_2.append(["Total", "", "", "", f"€ {data['amount']['total']:.2f}"])
+  table_data_2.append(["Total", "", "", "", f"€ {data['amount']['total']}"])
   
   col_width_2 = [1.3*cm, 1.5*cm, 10.5*cm, 2.3*cm, 2.1*cm]
   t2 = Table(table_data_2, colWidths=col_width_2)

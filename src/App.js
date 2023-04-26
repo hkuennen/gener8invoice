@@ -15,6 +15,7 @@ const App = () => {
       amount: parseFloat(0).toFixed(2)
     }]);
   const [subtotal, setSubtotal] = useState(0);
+  const [tax, setTax] = useState("0.19");
 
   const handleInfosChange = (e) => {
     const name = e.target.name;
@@ -40,17 +41,43 @@ const App = () => {
     setPositions(newArr);
   }
 
+  const handleTaxChange = (e) => {
+    e.preventDefault();
+    setTax(e.target.value);
+  } 
+
+  const handleAddPosition = (e) => {
+    e.preventDefault();
+    const row = {
+      pos: "",
+      qty: "",
+      item: "",
+      price: "",
+      amount: parseFloat(0).toFixed(2)
+    };
+    setPositions((rows) => ([...rows, row]));
+  }
+
+  const handleRemovePosition = (e, idx) => {
+    e.preventDefault();
+    const rows = [...positions];
+    rows.splice(idx, 1);
+    setPositions(() => rows);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const values = {
       infos,
       positions,
+      tax: parseInt(parseFloat(tax) * 100),
       amount: {
         subtotal,
-        tax: (subtotal * 0.19),
-        total: (subtotal * 1.19)
+        tax: (subtotal * parseFloat(tax)).toFixed(2),
+        total: (subtotal * (1 + parseFloat(tax))).toFixed(2)
       }
     };
+    console.log(values.amount.total);
     const settings = {
       method: "POST",
       headers: {
@@ -73,25 +100,6 @@ const App = () => {
     } catch (error) {
       alert("Error", error);
     }
-  }
-
-  const handleAddPosition = (e) => {
-    e.preventDefault();
-    const row = {
-      pos: "",
-      qty: "",
-      item: "",
-      price: "",
-      amount: parseFloat(0).toFixed(2)
-    };
-    setPositions((rows) => ([...rows, row]));
-  }
-
-  const handleRemovePosition = (e, idx) => {
-    e.preventDefault();
-    const rows = [...positions];
-    rows.splice(idx, 1);
-    setPositions(() => rows);
   }
 
   useEffect(() => {
@@ -119,7 +127,9 @@ const App = () => {
             <InvoicePositions 
               positions={positions}
               subtotal={subtotal}
+              tax={tax}
               handlePositionsChange={handlePositionsChange}
+              handleTaxChange={handleTaxChange}
               handleAddPosition={handleAddPosition}
               handleRemovePosition={handleRemovePosition}
             />
