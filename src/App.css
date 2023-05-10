@@ -3,7 +3,9 @@
 }
 
 .wrapper {
-  background-color: #282c34;
+  background-color: #DDDDDD;
+  /* background-color: #7FA4A8; */
+  margin: 9px;
 }
 
 .page {
@@ -12,6 +14,8 @@
   margin: 0 auto;
   padding: 80px;
   background-color: #FFFFFF;
+  border: solid 0.75px #666666;
+  box-shadow: 5px 5px 5px #CCCCCC;
 }
 
 .button {
@@ -24,6 +28,7 @@
   padding: 6px 13px;
   color: white;
   background-color: #04AA6D;
+  /* background-color: #9EC083; */
   border-radius: 2%;
 }
 

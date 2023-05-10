@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ContactInfo from "./components/ContactInfo";
 import InvoicePositions from "./components/InvoicePositions";
+import AccountDetails from "./components/AccountDetails";
 import "./App.css";
 import "./components/ContactInfo.css";
 import "./components/InvoicePositions.css";
+import "./components/AccountDetails.css";
+
 
 const App = () => {
   const [infos, setInfos] = useState({});
@@ -15,11 +18,12 @@ const App = () => {
       amount: parseFloat(0).toFixed(2)
     }]);
   const [subtotal, setSubtotal] = useState(0);
+  const [tax, setTax] = useState("0.19");
 
   const handleInfosChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setInfos(values => ({...values, [name]: value}))
+    setInfos(values => ({...values, [name]: value}));
   }
 
   const handlePositionsChange = (e, idx) => {
@@ -40,17 +44,43 @@ const App = () => {
     setPositions(newArr);
   }
 
+  const handleTaxChange = (e) => {
+    e.preventDefault();
+    setTax(e.target.value);
+  } 
+
+  const handleAddPosition = (e) => {
+    e.preventDefault();
+    const row = {
+      pos: "",
+      qty: "",
+      item: "",
+      price: "",
+      amount: parseFloat(0).toFixed(2)
+    };
+    setPositions((rows) => ([...rows, row]));
+  }
+
+  const handleRemovePosition = (e, idx) => {
+    e.preventDefault();
+    const rows = [...positions];
+    rows.splice(idx, 1);
+    setPositions(() => rows);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const values = {
       infos,
       positions,
+      tax: parseInt(parseFloat(tax) * 100),
       amount: {
         subtotal,
-        tax: (subtotal * 0.19),
-        total: (subtotal * 1.19)
+        tax: (subtotal * parseFloat(tax)).toFixed(2),
+        total: (subtotal * (1 + parseFloat(tax))).toFixed(2)
       }
     };
+    console.log(values.amount.total);
     const settings = {
       method: "POST",
       headers: {
@@ -75,25 +105,6 @@ const App = () => {
     }
   }
 
-  const handleAddPosition = (e) => {
-    e.preventDefault();
-    const row = {
-      pos: "",
-      qty: "",
-      item: "",
-      price: "",
-      amount: parseFloat(0).toFixed(2)
-    };
-    setPositions((rows) => ([...rows, row]));
-  }
-
-  const handleRemovePosition = (e, idx) => {
-    e.preventDefault();
-    const rows = [...positions];
-    rows.splice(idx, 1);
-    setPositions(() => rows);
-  }
-
   useEffect(() => {
     const calcSubtotal = () => {
       const amounts = [];
@@ -115,13 +126,18 @@ const App = () => {
               infos={infos}
               handleInfosChange={handleInfosChange}
             />
-            <br /><br /><br />
+            <br />
             <InvoicePositions 
               positions={positions}
               subtotal={subtotal}
+              tax={tax}
               handlePositionsChange={handlePositionsChange}
+              handleTaxChange={handleTaxChange}
               handleAddPosition={handleAddPosition}
               handleRemovePosition={handleRemovePosition}
+            />
+            <AccountDetails 
+              handleInfosChange={handleInfosChange}
             />
           </div>
           <div className="button">

@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
-const InvoicePositions = ({positions, subtotal, handlePositionsChange, handleAddPosition, handleRemovePosition}) => {
+const InvoicePositions = ({positions, subtotal, tax, handlePositionsChange, handleTaxChange, handleAddPosition, handleRemovePosition}) => {
   return (
     <>
       <table>
@@ -41,11 +41,14 @@ const InvoicePositions = ({positions, subtotal, handlePositionsChange, handleAdd
         </tr>
         <br />
         <tr>
-          <td>19% Tax</td>
+          <td>Tax</td>
+          <td><select name="tax" onChange={(e) => handleTaxChange(e)}>
+            <option value="0.19">19 %</option>
+            <option value="0.07">7 %</option>
+            </select></td>
           <td></td>
           <td></td>
-          <td></td>
-          <td>€ {isNaN(subtotal) ? (0).toFixed(2) : (subtotal * 0.19).toFixed(2)}</td>
+          <td>€ {isNaN(subtotal) ? (0).toFixed(2) : (subtotal * parseFloat(tax)).toFixed(2)}</td>
         </tr>
         <br />
         <tr className="bold">
@@ -53,7 +56,7 @@ const InvoicePositions = ({positions, subtotal, handlePositionsChange, handleAdd
           <td></td>
           <td></td>
           <td></td>
-          <td id="total">€ {isNaN(subtotal) ? (0).toFixed(2) : (subtotal * 1.19).toFixed(2)}</td>
+          <td id="total">€ {isNaN(subtotal) ? (0).toFixed(2) : (subtotal * (1 + parseFloat(tax))).toFixed(2)}</td>
         </tr>
       </table>
     </>

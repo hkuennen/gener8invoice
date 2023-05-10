@@ -1,7 +1,7 @@
 import datetime
 from io import BytesIO
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageTemplate, Frame
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.pdfbase import pdfmetrics
@@ -11,7 +11,7 @@ def create_pdf(data):
   buffer = BytesIO()
   doc = SimpleDocTemplate(buffer, pagesize=A4,
                       rightMargin=1.6*cm, leftMargin=1.6*cm,
-                      topMargin=1.6*cm, bottomMargin=1.6*cm
+                      topMargin=0*cm, bottomMargin=1.6*cm
                       )
   
   Story = []
@@ -19,7 +19,7 @@ def create_pdf(data):
   pdfmetrics.registerFont(TTFont('CMU Bright', 'pdf_generation/fonts/cmunbmr.ttf'))
   pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'pdf_generation/fonts/cmunbsr.ttf'))
 
-  s = Spacer(1,90)
+  s = Spacer(1,60)
 
 
   header = "INVOICE"
@@ -137,9 +137,9 @@ def create_pdf(data):
   table_data_2.append(["", "", "", "", ""])
   table_data_2.append(["Subtotal", "", "", "", f"€ {data['amount']['subtotal']:.2f}"])
   table_data_2.append(["", "", "", "", ""])
-  table_data_2.append(["19% Tax", "", "", "", f"€ {data['amount']['tax']:.2f}"])
+  table_data_2.append(["Tax", f"{data['tax']} %", "", "", f"€ {data['amount']['tax']}"])
   table_data_2.append(["", "", "", "", ""])
-  table_data_2.append(["Total", "", "", "", f"€ {data['amount']['total']:.2f}"])
+  table_data_2.append(["Total", "", "", "", f"€ {data['amount']['total']}"])
   
   col_width_2 = [1.3*cm, 1.5*cm, 10.5*cm, 2.3*cm, 2.1*cm]
   t2 = Table(table_data_2, colWidths=col_width_2)
@@ -159,6 +159,59 @@ def create_pdf(data):
   t2.setStyle(TABLE_STYLE)
 
   Story.append(t2)
+
+  acc_holder_key = f"""
+  Account holder:\n
+  Bank name:\n
+  """
+
+  acc_holder_value = f"""
+  {data['infos']['acc-holder']}\n
+  {data['infos']['bank-name']}\n
+  """
+
+  acc_number_key = f"""
+  IBAN:\n
+  BIC:\n
+  """
+
+  acc_number_value = f"""
+  {data['infos']['iban']}\n
+  {data['infos']['bic']}\n
+  """
+
+  ak_style = ParagraphStyle('acc-key',
+                        parent=bk_style,
+                        fontSize=9,
+                        alignment=0,
+                        leftIndent=0
+                        )
+  
+  av_style = ParagraphStyle('acc-value',
+                        parent=bv_style,
+                        fontSize=9
+                        )
+
+  table_data_3 = [
+    [Paragraph(acc_holder_key.replace("\n", "<br />"), style=ak_style),
+     Paragraph(acc_holder_value.replace("\n", "<br />"), style=av_style),
+     Paragraph("\n\n".replace("\n", "<br />")),
+     Paragraph(acc_number_key.replace("\n", "<br />"), style=ak_style),
+     Paragraph(acc_number_value.replace("\n", "<br />"), style=av_style),
+     ]
+  ]
+
+  col_width_3 = [2.6*cm, 5.7*cm, 2.5*cm, 1.3*cm, 5.7*cm]
+  t3 = Table(table_data_3, colWidths=col_width_3)
+
+  def fixed_position(canvas, doc):
+    t3.wrapOn(canvas, doc.width, doc.height)
+    t3.drawOn(canvas, 1.6*cm, 0.6*cm)
+
+  frame = Frame(1.6*cm, 0, doc.width, doc.height, id='fixed_frame')
+  template = PageTemplate(id='fixed_template', frames=[frame], onPage=fixed_position)
+
+  doc.addPageTemplates([template])
 
   doc.build(Story)
 
