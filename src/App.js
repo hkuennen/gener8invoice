@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ContactInfo from "./components/ContactInfo";
 import InvoicePositions from "./components/InvoicePositions";
+import AccountDetails from "./components/AccountDetails";
 import "./App.css";
 import "./components/ContactInfo.css";
 import "./components/InvoicePositions.css";
+import "./components/AccountDetails.css";
+
 
 const App = () => {
   const [infos, setInfos] = useState({});
@@ -20,7 +23,7 @@ const App = () => {
   const handleInfosChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setInfos(values => ({...values, [name]: value}))
+    setInfos(values => ({...values, [name]: value}));
   }
 
   const handlePositionsChange = (e, idx) => {
@@ -123,7 +126,7 @@ const App = () => {
               infos={infos}
               handleInfosChange={handleInfosChange}
             />
-            <br /><br /><br />
+            <br />
             <InvoicePositions 
               positions={positions}
               subtotal={subtotal}
@@ -132,6 +135,9 @@ const App = () => {
               handleTaxChange={handleTaxChange}
               handleAddPosition={handleAddPosition}
               handleRemovePosition={handleRemovePosition}
+            />
+            <AccountDetails 
+              handleInfosChange={handleInfosChange}
             />
           </div>
           <div className="button">
