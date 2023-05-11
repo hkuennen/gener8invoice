@@ -161,23 +161,23 @@ def create_pdf(data):
   Story.append(t2)
 
   acc_holder_key = f"""
-  Account holder:\n
-  Bank name:\n
+  {check_for_existence("key", "acc-holder", "Account holder:")}\n
+  {check_for_existence("key", "bank-name", "Bank name:")}\n
   """
 
   acc_holder_value = f"""
-  {data['infos']['acc-holder']}\n
-  {data['infos']['bank-name']}\n
+  {check_for_existence("value", "acc-holder")}\n
+  {check_for_existence("value", "bank-name")}\n
   """
 
   acc_number_key = f"""
-  IBAN:\n
-  BIC:\n
+  {check_for_existence("key", "iban", "IBAN:")}\n
+  {check_for_existence("key", "bic", "BIC:")}\n
   """
 
   acc_number_value = f"""
-  {data['infos']['iban']}\n
-  {data['infos']['bic']}\n
+  {check_for_existence("value", "iban")}\n
+  {check_for_existence("value", "bic")}\n
   """
 
   ak_style = ParagraphStyle('acc-key',
