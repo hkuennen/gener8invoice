@@ -1,4 +1,3 @@
-from reportlab.lib.units import cm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -27,7 +26,7 @@ bk_style = ParagraphStyle('biller_key',
                         alignment=2,
                         leading=7,
                         borderPadding=0,
-                        leftIndent=0*cm,
+                        leftIndent=0,
                         rightIndent=0,
                         spaceAfter=0,
                         spaceBefore=0,
@@ -54,11 +53,13 @@ r_style = ParagraphStyle('recipient',
 ak_style = ParagraphStyle('acc-key',
                       parent=bk_style,
                       fontSize=9,
+                      leading=3,
                       alignment=0,
                       leftIndent=0
                       )
 
 av_style = ParagraphStyle('acc-value',
                       parent=bv_style,
-                      fontSize=9
+                      fontSize=9,
+                      leading=3
                       )
