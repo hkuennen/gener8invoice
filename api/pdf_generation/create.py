@@ -1,13 +1,13 @@
 import datetime
 from io import BytesIO
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageTemplate, Frame
+from reportlab.platypus import BaseDocTemplate, Paragraph, Spacer, Table, PageTemplate, Frame, PageBreak
 from reportlab.lib.units import cm
-from pdf_generation.styles import h_style, ba_style, bk_style, bv_style, r_style, ak_style, av_style
+from pdf_generation.styles import h_style, ba_style, bk_style, bv_style, r_style, ak_style, av_style, TABLE_STYLE, TABLE_STYLE_FIRST_PAGE, TABLE_STYLE_SECOND_PAGE
 
 def create_pdf(data):
   buffer = BytesIO()
-  doc = SimpleDocTemplate(buffer, pagesize=A4,
+  doc = BaseDocTemplate(buffer, pagesize=A4,
                       rightMargin=1.6*cm, leftMargin=1.6*cm,
                       topMargin=0*cm, bottomMargin=1.6*cm
                       )
@@ -79,6 +79,8 @@ def create_pdf(data):
   for idx in range(len(data["positions"])):
     arr = []
     for key, value in data["positions"][idx].items():
+      if key == "pos":
+        value = idx+1
       if key in ("price", "amount"):
         value = f"€ {format(float(value), '.2f')}"
       arr.append(value)
@@ -92,23 +94,52 @@ def create_pdf(data):
   table_invoice_positions_data.append(["Total", "", "", "", f"€ {data['amount']['total']}"])
   
   col_widths_invoice_positions = [1.3*cm, 1.5*cm, 10.5*cm, 2.3*cm, 2.1*cm]
-  t_invoice_positions = Table(table_invoice_positions_data, colWidths=col_widths_invoice_positions)
 
-  TABLE_STYLE = TableStyle([
-    ('FONT', (0,0), (-1,0), 'CMU Bright SemiBold'),
-    ('FONT', (0,1), (-1,-1), 'CMU Bright'),
-    ('BACKGROUND', (0,0), (-1,0), '#EEEEEE'),      
-    ('BACKGROUND', (0,-5), (-1,-5), '#EEEEEE'),
-    ('LINEBELOW', (0,-3), (-1,-3), 0.5, '#EEEEEE'),
-    ('FONT', (0,-1), (-1,-1), 'CMU Bright SemiBold'),
-  ])
+  for i in range(len(data["positions"])):
+    TABLE_STYLE.add('LINEBELOW', (0,i+1), (-1,i+1), 0.5, '#EEEEEE')
 
-  for idx in range(len(data["positions"])):
-    TABLE_STYLE.add('LINEBELOW', (0,idx+1), (-1,idx+1), 0.5, '#EEEEEE')
+  flowables = []
+  max_rows_per_page = 21
+  len_of_table_rows = []
+  global rows
 
-  t_invoice_positions.setStyle(TABLE_STYLE)
+  def generate_table(rows):
+    len_of_table_rows.append(len(rows))
+    page_table = Table(rows, colWidths=col_widths_invoice_positions)
+    flowables.append(page_table)
 
-  Story.append(t_invoice_positions)
+  if (len(data["positions"]) + 1) < max_rows_per_page:
+    rows = table_invoice_positions_data
+    generate_table(rows)
+  else:
+    for i in range(0, len(table_invoice_positions_data), max_rows_per_page):
+      rows = table_invoice_positions_data[i:i+max_rows_per_page]
+      generate_table(rows)
+      if i + max_rows_per_page < (len(table_invoice_positions_data)):
+        flowables.append(PageBreak())
+
+  def set_table_style_and_append(i, style):
+    flowables[i].setStyle(style)
+    Story.append(flowables[i])
+  
+  for i in range(len(flowables)):
+    if len(flowables) == 1:
+      set_table_style_and_append(i, TABLE_STYLE)
+    elif len(flowables) > 1:
+      if i == 0:
+        for idx in range(0, len_of_table_rows[0], 1):
+          TABLE_STYLE_FIRST_PAGE.add('LINEBELOW', (0,idx+1), (-1,idx+1), 0.5, '#EEEEEE')
+        set_table_style_and_append(i, TABLE_STYLE_FIRST_PAGE)
+      elif i == 1:
+        Story.append(flowables[i])
+      elif i == 2:
+        for idx in range(0, (len_of_table_rows[1]-7), 1):
+          TABLE_STYLE_SECOND_PAGE.add('LINEBELOW', (0,idx), (-1,idx+1), 0.5, '#EEEEEE')
+        set_table_style_and_append(i, TABLE_STYLE_SECOND_PAGE)
+
+  print(len(flowables))
+  print(flowables)
+  print(len(data["positions"]))
 
   acc_holder_key = f"""
   {check_for_existence("key", "acc-holder", "Account holder:")}\n
