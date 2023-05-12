@@ -1,6 +1,7 @@
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import TableStyle
 
 pdfmetrics.registerFont(TTFont('CMU Bright', 'pdf_generation/fonts/cmunbmr.ttf'))
 pdfmetrics.registerFont(TTFont('CMU Bright SemiBold', 'pdf_generation/fonts/cmunbsr.ttf'))
@@ -53,7 +54,7 @@ r_style = ParagraphStyle('recipient',
 ak_style = ParagraphStyle('acc-key',
                       parent=bk_style,
                       fontSize=9,
-                      leading=3,
+                      leading=4,
                       alignment=0,
                       leftIndent=0
                       )
@@ -61,5 +62,27 @@ ak_style = ParagraphStyle('acc-key',
 av_style = ParagraphStyle('acc-value',
                       parent=bv_style,
                       fontSize=9,
-                      leading=3
+                      leading=4
                       )
+
+TABLE_STYLE = TableStyle([
+  ('FONT', (0,0), (-1,0), 'CMU Bright SemiBold'),
+  ('FONT', (0,1), (-1,-1), 'CMU Bright'),
+  ('BACKGROUND', (0,0), (-1,0), '#EEEEEE'),     
+  ('BACKGROUND', (0,-5), (-1,-5), '#EEEEEE'),
+  ('LINEBELOW', (0,-3), (-1,-3), 0.5, '#EEEEEE'),
+  ('FONT', (0,-1), (-1,-1), 'CMU Bright SemiBold')
+])
+
+TABLE_STYLE_FIRST_PAGE = TableStyle([
+  ('FONT', (0,0), (-1,0), 'CMU Bright SemiBold'),
+  ('FONT', (0,1), (-1,-1), 'CMU Bright'),
+  ('BACKGROUND', (0,0), (-1,0), '#EEEEEE')
+])
+
+TABLE_STYLE_SECOND_PAGE = TableStyle([
+  ('FONT', (0,0), (-1,-1), 'CMU Bright'),
+  ('BACKGROUND', (0,-5), (-1,-5), '#EEEEEE'),
+  ('LINEBELOW', (0,-3), (-1,-3), 0.5, '#EEEEEE'),
+  ('FONT', (0,-1), (-1,-1), 'CMU Bright SemiBold')
+])
