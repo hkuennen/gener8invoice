@@ -65,22 +65,17 @@ av_style = ParagraphStyle('acc-value',
                       leading=4
                       )
 
-TABLE_STYLE = TableStyle([
+TABLE_STYLE_POSITIONS_FIRST_PAGE = TableStyle([
   ('FONT', (0,0), (-1,0), 'CMU Bright SemiBold'),
   ('FONT', (0,1), (-1,-1), 'CMU Bright'),
   ('BACKGROUND', (0,0), (-1,0), '#EEEEEE'),     
-  ('BACKGROUND', (0,-5), (-1,-5), '#EEEEEE'),
-  ('LINEBELOW', (0,-3), (-1,-3), 0.5, '#EEEEEE'),
-  ('FONT', (0,-1), (-1,-1), 'CMU Bright SemiBold')
 ])
 
-TABLE_STYLE_FIRST_PAGE = TableStyle([
-  ('FONT', (0,0), (-1,0), 'CMU Bright SemiBold'),
-  ('FONT', (0,1), (-1,-1), 'CMU Bright'),
-  ('BACKGROUND', (0,0), (-1,0), '#EEEEEE')
+TABLE_STYLE_POSITIONS_OTHER_PAGES = TableStyle([
+  ('FONT', (0,0), (-1,-1), 'CMU Bright')    
 ])
 
-TABLE_STYLE_SECOND_PAGE = TableStyle([
+TABLE_STYLE_SUM = TableStyle([
   ('FONT', (0,0), (-1,-1), 'CMU Bright'),
   ('BACKGROUND', (0,-5), (-1,-5), '#EEEEEE'),
   ('LINEBELOW', (0,-3), (-1,-3), 0.5, '#EEEEEE'),
