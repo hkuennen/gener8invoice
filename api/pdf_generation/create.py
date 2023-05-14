@@ -24,11 +24,13 @@ def create_pdf(data):
 
   s = Spacer(1,60)
 
+  # Title
   title = "INVOICE"
   
   p_title = Paragraph(title, h_style)
   Story.append(p_title)
 
+  # Contact Infos
   biller_address = f"""\n
   \n
   \n
@@ -75,6 +77,7 @@ def create_pdf(data):
 
   Story.append(s)
 
+  # Invoice Positions
   table_invoice_positions_data = [["Pos", "Qty", "Item", "Unit Price", "Amount"]]
   for idx in range(len(data["positions"])):
     arr = []
@@ -92,29 +95,32 @@ def create_pdf(data):
     TABLE_STYLE_POSITIONS_FIRST_PAGE.add('LINEBELOW', (0,i+1), (-1,i+1), 0.5, '#EEEEEE')
     TABLE_STYLE_POSITIONS_OTHER_PAGES.add('LINEBELOW', (0,i), (-1,i), 0.5, '#EEEEEE')
 
-  flowables = []
   max_rows_per_page = 20
-  max_rows_per_page_after_pagebreak = 25
+  max_rows_per_page_with_pagebreak = 25
   global rows
 
-  def generate_table(rows):
+  def generate_table(rows, style):
     page_table = Table(rows, colWidths=col_widths_invoice_positions)
-    flowables.append(page_table)
-
+    page_table.setStyle(style)
+    Story.append(page_table)
+    
   if (len(data["positions"])) <= max_rows_per_page:
     rows = table_invoice_positions_data
-    generate_table(rows)
-  elif ((len(data["positions"])) > max_rows_per_page) and ((len(data["positions"])) <= max_rows_per_page_after_pagebreak):
-    for i in range(0, len(table_invoice_positions_data), max_rows_per_page_after_pagebreak + 1):
-      rows = table_invoice_positions_data[i:i+max_rows_per_page_after_pagebreak + 1]
-      generate_table(rows)
-      flowables.append(PageBreak())
-  elif ((len(data["positions"])) > max_rows_per_page_after_pagebreak):
-    for i in range(0, len(table_invoice_positions_data), max_rows_per_page_after_pagebreak + 1):
-      rows = table_invoice_positions_data[i:i+max_rows_per_page_after_pagebreak + 1]
-      generate_table(rows)
-      if i + max_rows_per_page_after_pagebreak <= (len(table_invoice_positions_data)):
-        flowables.append(PageBreak())
+    generate_table(rows, TABLE_STYLE_POSITIONS_FIRST_PAGE)
+  elif ((len(data["positions"])) > max_rows_per_page) and ((len(data["positions"])) <= max_rows_per_page_with_pagebreak):
+    for i in range(0, len(table_invoice_positions_data), max_rows_per_page_with_pagebreak + 1):
+      rows = table_invoice_positions_data[i:i+max_rows_per_page_with_pagebreak + 1]
+      generate_table(rows, TABLE_STYLE_POSITIONS_FIRST_PAGE)
+      Story.append(PageBreak())
+  elif ((len(data["positions"])) > max_rows_per_page_with_pagebreak):
+    for i in range(0, len(table_invoice_positions_data), max_rows_per_page_with_pagebreak + 1):
+      rows = table_invoice_positions_data[i:i+max_rows_per_page_with_pagebreak + 1]
+      if i == 0:
+        generate_table(rows, TABLE_STYLE_POSITIONS_FIRST_PAGE)
+      else:
+        generate_table(rows, TABLE_STYLE_POSITIONS_OTHER_PAGES)
+      if i + max_rows_per_page_with_pagebreak <= (len(table_invoice_positions_data)):
+        Story.append(PageBreak())
 
   table_invoice_sum_data = []
   table_invoice_sum_data.append(["", "", "", "", ""])
@@ -124,30 +130,9 @@ def create_pdf(data):
   table_invoice_sum_data.append(["", "", "", "", ""])
   table_invoice_sum_data.append(["Total", "", "", "", f"€ {data['amount']['total']}"])
 
-  def set_table_style_and_append(i, style):
-    flowables[i].setStyle(style)
-    Story.append(flowables[i])
-  
-  for i in range(len(flowables)):
-    if len(flowables) == 1:
-      set_table_style_and_append(i, TABLE_STYLE_POSITIONS_FIRST_PAGE)
-    elif len(flowables) == 2:
-      if i == 0:
-        set_table_style_and_append(i, TABLE_STYLE_POSITIONS_FIRST_PAGE)
-      elif i == 1:
-        Story.append(flowables[i])
-    elif len(flowables) == 3:
-      if i == 0:
-        set_table_style_and_append(i, TABLE_STYLE_POSITIONS_FIRST_PAGE)
-      elif i == 1:
-        Story.append(flowables[i])
-      elif i == 2:
-        set_table_style_and_append(i, TABLE_STYLE_POSITIONS_OTHER_PAGES)
+  generate_table(table_invoice_sum_data, TABLE_STYLE_SUM)
 
-  t_invoice_sum = Table(table_invoice_sum_data, colWidths=col_widths_invoice_positions)
-  t_invoice_sum.setStyle(TABLE_STYLE_SUM)
-  Story.append(t_invoice_sum)
-
+  # Account Details
   acc_holder_key = f"""
   {check_for_existence("key", "acc-holder", "Account holder:")}\n
   {check_for_existence("key", "bank-name", "Bank name:")}\n
