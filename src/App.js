@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ContactInfo from "./components/ContactInfo";
 import InvoicePositions from "./components/InvoicePositions";
+import InvoiceSum from "./components/InvoiceSum";
+import InvoicePositionsSecondPage from "./components/InvoicePositionsSecondPage";
 import AccountDetails from "./components/AccountDetails";
 import "./App.css";
 import "./components/ContactInfo.css";
-import "./components/InvoicePositions.css";
 import "./components/AccountDetails.css";
-
 
 const App = () => {
   const [infos, setInfos] = useState({});
@@ -17,8 +17,11 @@ const App = () => {
       price: "",
       amount: parseFloat(0).toFixed(2)
     }]);
+  const [array, setArray] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
   const [tax, setTax] = useState("0.19");
+  const maxRowsPerPage = 20;
+  const maxRowsPerPageWithPagebreak = 25;
 
   const handleInfosChange = (e) => {
     const name = e.target.name;
@@ -80,7 +83,6 @@ const App = () => {
         total: (subtotal * (1 + parseFloat(tax))).toFixed(2)
       }
     };
-    console.log(values.amount.total);
     const settings = {
       method: "POST",
       headers: {
@@ -114,6 +116,20 @@ const App = () => {
       return amounts.reduce((prevValue, currentValue) => prevValue + currentValue, 0);
     }
     setSubtotal(() => calcSubtotal());
+    let newArr = [...positions];
+    let arr = [];
+    if (newArr.length <= maxRowsPerPage) {
+      for (let i = 0; i < newArr.length; i += maxRowsPerPage) {
+        const row = newArr.slice(i, i + maxRowsPerPage);
+        arr.push(row);
+      }
+    } else if (newArr.length > maxRowsPerPage) {
+      for (let i = 0; i < newArr.length; i += maxRowsPerPageWithPagebreak) {
+        const row = newArr.slice(i, i + maxRowsPerPageWithPagebreak);
+        arr.push(row);
+      }
+    } 
+    setArray(arr);
   }, [positions]);
 
   return (
@@ -121,7 +137,8 @@ const App = () => {
       <header className="App-header"></header>
         <form onSubmit={handleSubmit}>
         <div className="wrapper">
-          <div id="layout" className="page">
+          {}
+          <div className="page">
             <ContactInfo 
               infos={infos}
               handleInfosChange={handleInfosChange}
@@ -129,17 +146,49 @@ const App = () => {
             <br />
             <InvoicePositions 
               positions={positions}
-              subtotal={subtotal}
-              tax={tax}
+              maxRowsPerPage={maxRowsPerPage}
+              array={array}
               handlePositionsChange={handlePositionsChange}
-              handleTaxChange={handleTaxChange}
               handleAddPosition={handleAddPosition}
               handleRemovePosition={handleRemovePosition}
             />
+            {positions.length <= maxRowsPerPageWithPagebreak && <button id="add" onClick={(e) => handleAddPosition(e)}>+</button>}
+            {positions.length <= maxRowsPerPage && <>
+              <InvoiceSum 
+                subtotal={subtotal}
+                tax={tax}
+                handleTaxChange={handleTaxChange}
+              />
+            </>
+            }
             <AccountDetails 
               handleInfosChange={handleInfosChange}
             />
           </div>
+          {positions.length > maxRowsPerPage && positions.length <= maxRowsPerPageWithPagebreak && <div className="page">
+            <InvoiceSum 
+              subtotal={subtotal}
+              tax={tax}
+              handleTaxChange={handleTaxChange}
+            />
+          </div>
+          }
+          {positions.length > maxRowsPerPageWithPagebreak && <div className="page">
+            <InvoicePositionsSecondPage 
+              array={array}
+              maxRowsPerPageWithPagebreak={maxRowsPerPageWithPagebreak}
+              handlePositionsChange={handlePositionsChange}
+              handleRemovePosition={handleRemovePosition}
+              handleAddPosition={handleAddPosition}
+            />
+            <button id="add" onClick={(e) => handleAddPosition(e)}>+</button>
+            <InvoiceSum 
+              subtotal={subtotal}
+              tax={tax}
+              handleTaxChange={handleTaxChange}
+            />
+          </div>
+          }
           <div className="button">
             <input type="submit" value="Generate PDF" id="submit" />
           </div>
