@@ -1,4 +1,9 @@
-@import url('https://fonts.cdnfonts.com/css/cmu-bright');
+@font-face {
+  font-family: 'CMU Bright';
+  src: local('cmunbmr.ttf'), url('../api/pdf_generation/fonts/cmunbmr.ttf') format('truetype');
+  font-family: 'CMU Bright SemiBold';
+  src: local('cmunbsr.ttf'), url('../api/pdf_generation/fonts/cmunbsr.ttf') format('truetype');
+}
 
 body {
   margin: 0;

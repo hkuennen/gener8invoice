@@ -134,13 +134,13 @@ def create_pdf(data):
 
   # Account Details
   acc_holder_key = f"""
-  {check_for_existence("key", "acc-holder", "Account holder:")}\n
-  {check_for_existence("key", "bank-name", "Bank name:")}\n
+  {check_for_existence("key", "acc_holder", "Account holder:")}\n
+  {check_for_existence("key", "bank_name", "Bank name:")}\n
   """
 
   acc_holder_value = f"""
-  {check_for_existence("value", "acc-holder")}\n
-  {check_for_existence("value", "bank-name")}\n
+  {check_for_existence("value", "acc_holder")}\n
+  {check_for_existence("value", "bank_name")}\n
   """
 
   acc_number_key = f"""
