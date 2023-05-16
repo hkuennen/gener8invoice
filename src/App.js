@@ -186,7 +186,7 @@ const App = () => {
               handleRemovePosition={handleRemovePosition}
               handleAddPosition={handleAddPosition}
             />
-            <button id="add" onClick={(e) => handleAddPosition(e)} disabled={positions.length >= 50}>+</button>
+            <button id="add" onClick={(e) => handleAddPosition(e)} disabled={positions.length >= 49}>+</button>
             <InvoiceSum 
               subtotal={subtotal}
               tax={tax}
