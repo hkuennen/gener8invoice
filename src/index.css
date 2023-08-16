@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: 'CMU Bright';
   src: local('cmunbmr.ttf'), url('../api/pdf_generation/fonts/cmunbmr.ttf') format('truetype');
