@@ -6,7 +6,6 @@ import InvoicePositionsSecondPage from "./components/InvoicePositionsSecondPage"
 import AccountDetails from "./components/AccountDetails";
 import "./App.css";
 import "./components/ContactInfo.css";
-import "./components/AccountDetails.css";
 
 const App = () => {
   const [infos, setInfos] = useState({});
@@ -137,7 +136,6 @@ const App = () => {
       <header className="App-header"></header>
         <form onSubmit={handleSubmit}>
         <div className="wrapper">
-          {}
           <div className="page">
             <ContactInfo 
               infos={infos}
@@ -152,7 +150,7 @@ const App = () => {
               handleAddPosition={handleAddPosition}
               handleRemovePosition={handleRemovePosition}
             />
-            {positions.length <= maxRowsPerPageWithPagebreak && <button id="add" onClick={(e) => handleAddPosition(e)}>+</button>}
+            {positions.length <= maxRowsPerPageWithPagebreak && <button id="add" className="pointer" onClick={(e) => handleAddPosition(e)}>+</button>}
             {positions.length <= maxRowsPerPage && <>
               <InvoiceSum 
                 subtotal={subtotal}
@@ -186,7 +184,7 @@ const App = () => {
               handleRemovePosition={handleRemovePosition}
               handleAddPosition={handleAddPosition}
             />
-            <button id="add" onClick={(e) => handleAddPosition(e)} disabled={positions.length >= 49}>+</button>
+            <button id="add" className="pointer" onClick={(e) => handleAddPosition(e)} disabled={positions.length >= 49}>+</button>
             <InvoiceSum 
               subtotal={subtotal}
               tax={tax}
@@ -199,7 +197,7 @@ const App = () => {
           </div>
           }
           <div className="button">
-            <input type="submit" value="Download PDF" id="submit" />
+            <input type="submit" value="Download PDF" />
           </div>
         </div>
       </form>

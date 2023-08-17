@@ -4,12 +4,11 @@
 
 .wrapper {
   background-color: #DDDDDD;
-  /* background-color: #7FA4A8; */
 }
 
 .page {
-  width: 794px;
-  height: 1122px;
+  width: 955px;
+  height: 1283px;
   margin: 9px auto;
   padding: 80px;
   background-color: #FFFFFF;
@@ -18,9 +17,10 @@
 }
 
 .button {
-  position: fixed;
-  bottom: 330px;
-  right: 80px;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 40px;
 }
 
 table {
@@ -42,19 +42,19 @@ tr {
 }
 
 .th_qty {
-  width: 9%;
+  width: 13%;
 }
 
 .th_item {
-  width: 60%;
+  width: 52%;
 }
 
 .th_price {
-  width: 15%;
+  width: 17%;
 }
 
 .th_amount {
-  width: 15%;
+  width: 17%;
 }
 
 .td_qty {
@@ -83,20 +83,7 @@ tr {
   border-bottom: 1pt solid #FFFFFF;
 }
 
-#add {
-  padding: 3px 5px;
-  color: white;
-  background-color: #04AA6D;
-  /* background-color: #9EC083; */
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-#add:hover {
-  background-color: #1e7354;
-}
-
-#delete {
+.pointer {
   cursor: pointer;
 }
 
@@ -110,15 +97,12 @@ tr {
   text-decoration-style: double;
 }
 
-#submit {
-  padding: 6px 13px;
-  color: white;
-  background-color: #04AA6D;
-  /* background-color: #9EC083; */
-  border-radius: 2%;
-  cursor: pointer;
-}
-
-#submit:hover {
-  background-color: #1e7354;
+.account-details {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: absolute;
+  top: 1200px;
+  left: 359px;
+  right: 359px;
 }
