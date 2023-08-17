@@ -1,6 +1,6 @@
 .account-details {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
   position: absolute;
   top: 1200px;

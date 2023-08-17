@@ -18,9 +18,10 @@
 }
 
 .button {
-  position: fixed;
-  bottom: 330px;
-  right: 80px;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 40px;
 }
 
 table {
