@@ -6,7 +6,6 @@ import InvoicePositionsSecondPage from "./components/InvoicePositionsSecondPage"
 import AccountDetails from "./components/AccountDetails";
 import "./App.css";
 import "./components/ContactInfo.css";
-import "./components/AccountDetails.css";
 
 const App = () => {
   const [infos, setInfos] = useState({});

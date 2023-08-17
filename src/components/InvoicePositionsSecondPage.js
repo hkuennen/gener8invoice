@@ -26,7 +26,7 @@ const InvoicePositionsSecondPage = ({array, maxRowsPerPageWithPagebreak, handleP
             {parseFloat(row.amount).toFixed(2)}
           </td>
           <td>
-            <button id="delete" onClick={(e) => handleRemovePosition(e, idx+maxRowsPerPageWithPagebreak)}><FontAwesomeIcon icon={faTrashCan} /></button>
+            <button className="pointer" onClick={(e) => handleRemovePosition(e, idx+maxRowsPerPageWithPagebreak)}><FontAwesomeIcon icon={faTrashCan} /></button>
           </td>
         </tr>
         ))}

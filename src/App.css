@@ -4,7 +4,6 @@
 
 .wrapper {
   background-color: #DDDDDD;
-  /* background-color: #7FA4A8; */
 }
 
 .page {
@@ -85,10 +84,6 @@ tr {
 }
 
 .pointer {
-  cursor: pointer;
-}
-
-#delete {
   cursor: pointer;
 }
 
