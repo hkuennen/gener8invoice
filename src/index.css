@@ -26,7 +26,7 @@
     @apply m-5 rounded border-black bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 shadow-lg;
   }
   #add {
-    @apply mx-2 my-1 rounded-lg border-black bg-green-500 hover:bg-green-700 text-white font-bold py-0.5 px-2 shadow-xl;
+    @apply mx-3 my-1 rounded-lg border-black bg-green-500 hover:bg-green-700 text-white font-bold py-0.5 px-2 shadow-xl;
   }
 }
 

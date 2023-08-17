@@ -136,7 +136,6 @@ const App = () => {
       <header className="App-header"></header>
         <form onSubmit={handleSubmit}>
         <div className="wrapper">
-          {}
           <div className="page">
             <ContactInfo 
               infos={infos}

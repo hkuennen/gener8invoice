@@ -7,8 +7,8 @@
 }
 
 .page {
-  width: 794px;
-  height: 1122px;
+  width: 955px;
+  height: 1283px;
   margin: 9px auto;
   padding: 80px;
   background-color: #FFFFFF;
@@ -42,19 +42,19 @@ tr {
 }
 
 .th_qty {
-  width: 9%;
+  width: 13%;
 }
 
 .th_item {
-  width: 60%;
+  width: 52%;
 }
 
 .th_price {
-  width: 15%;
+  width: 17%;
 }
 
 .th_amount {
-  width: 15%;
+  width: 17%;
 }
 
 .td_qty {
