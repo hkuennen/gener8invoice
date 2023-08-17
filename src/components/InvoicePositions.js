@@ -18,7 +18,7 @@ const InvoicePositions = ({positions, maxRowsPerPage, array, handlePositionsChan
           <tr key={idx+1}>
             <td>{idx+1}</td>
             <td><input type="number" name="qty" placeholder="1" className="td_qty" value={row.qty} onChange={(e) => handlePositionsChange(e, idx)} required /></td>
-            <td><input type="textarea" name="item" className="td_item" placeholder="Description of service or product..." value={row.item} onChange={(e) => handlePositionsChange(e, idx)} maxLength="55" required /></td>
+            <td><input type="textarea" name="item" className="td_item h-5 rounded" placeholder="Description of service or product..." value={row.item} onChange={(e) => handlePositionsChange(e, idx)} maxLength="55" required /></td>
             <td>
               <label>€ </label>
               <input type="number" step="0.01" name="price" className="td_price" placeholder="0.00" value={row.price} onFocus={(e) => e.target.value = parseFloat(e.target.value).toFixed(2)} onBlur={(e) => e.target.value = parseFloat(e.target.value).toFixed(2)} onChange={(e) => handlePositionsChange(e, idx)} required />

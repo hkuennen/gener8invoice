@@ -1,3 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  [type='text'],
+  [type='email'],
+  [type='url'],
+  [type='password'],
+  [type='number'],
+  [type='date'],
+  [type='datetime-local'],
+  [type='month'],
+  [type='search'],
+  [type='tel'],
+  [type='time'],
+  [type='week'],
+  [multiple],
+  textarea {
+    @apply h-5 p-0 px-2 w-full rounded border-gray-100 hover:border-gray-500 focus:border-green-500 focus:ring-green-500 shadow-sm;
+  }
+  select {
+    @apply h-6 p-0 px-2 w-20 rounded border-gray-100 hover:border-gray-500 focus:border-green-500 focus:ring-green-500 shadow-sm;;
+  }
+  [type='submit'] {
+    @apply m-5 rounded border-black bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 shadow-lg;
+  }
+  #add {
+    @apply mx-2 my-1 rounded-lg border-black bg-green-500 hover:bg-green-700 text-white font-bold py-0.5 px-2 shadow-xl;
+  }
+}
+
 @font-face {
   font-family: 'CMU Bright';
   src: local('cmunbmr.ttf'), url('../api/pdf_generation/fonts/cmunbmr.ttf') format('truetype');

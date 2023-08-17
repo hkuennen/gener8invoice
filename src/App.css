@@ -83,17 +83,8 @@ tr {
   border-bottom: 1pt solid #FFFFFF;
 }
 
-#add {
-  padding: 3px 5px;
-  color: white;
-  background-color: #04AA6D;
-  /* background-color: #9EC083; */
-  border-radius: 50%;
+.pointer {
   cursor: pointer;
-}
-
-#add:hover {
-  background-color: #1e7354;
 }
 
 #delete {
@@ -108,17 +99,4 @@ tr {
 #total {
   text-decoration-line: underline;
   text-decoration-style: double;
-}
-
-#submit {
-  padding: 6px 13px;
-  color: white;
-  background-color: #04AA6D;
-  /* background-color: #9EC083; */
-  border-radius: 2%;
-  cursor: pointer;
-}
-
-#submit:hover {
-  background-color: #1e7354;
 }
