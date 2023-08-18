@@ -9,7 +9,6 @@ class PDFCreator():
   def __init__(self, data):
     self.data = data
 
-  
   def create_pdf(self):
     buffer = BytesIO()
     doc = BaseDocTemplate(buffer, pagesize=A4,
@@ -37,21 +36,17 @@ class PDFCreator():
 
     # Building document
     doc.build(Story)
-
     return buffer
-  
-  
+   
   def check_for_existence(self, attrs={}):
     name = attrs["name"]
-    name_on_pdf = attrs["name_on_pdf"]
     if self.data['infos'].get(name) == None or len(self.data['infos'][name]) == 0:
       return '\n'
-    elif attrs["key"]:
-      return name_on_pdf + '\n'
+    elif "key" in attrs and "name_on_pdf" in attrs:
+      return attrs["name_on_pdf"] + '\n'
     else:
       return self.data['infos'][name] + '\n'
     
-
   def generate_table(self, rows, style, Story):
     col_widths = [1.3*cm, 1.5*cm, 10.5*cm, 2.3*cm, 2.1*cm]
     page_table = Table(rows, colWidths=col_widths)
@@ -59,7 +54,6 @@ class PDFCreator():
     Story.append(page_table)
     return Story
     
-  
   def generate_contact_infos(self, Story):
     biller_address = f"""\n
     \n
@@ -104,10 +98,8 @@ class PDFCreator():
 
     p_recipient = Paragraph(recipient.replace("\n", "<br />"), r_style)
     Story.append(p_recipient)
-
     return Story
   
-
   def generate_invoice_positions(self, Story):
     table_invoice_positions_data = [["Pos", "Qty", "Item", "Unit Price", "Amount"]]
     for idx in range(len(self.data["positions"])):
@@ -155,10 +147,8 @@ class PDFCreator():
     table_invoice_sum_data.append(["Total", "", "", "", f"€ {self.data['amount']['total']}"])
 
     self.generate_table(table_invoice_sum_data, TABLE_STYLE_SUM, Story)
-
     return Story
   
-
   def generate_account_details(self, doc):
     acc_holder_key = f"""
     {self.check_for_existence({"key": True, "name": "acc_holder", "name_on_pdf": "Account holder:"})}\n
@@ -200,5 +190,4 @@ class PDFCreator():
     template = PageTemplate(id='fixed_template', frames=[frame], onPage=fixed_position)
 
     doc.addPageTemplates([template])
-
     return doc
