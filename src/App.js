@@ -197,7 +197,7 @@ const App = () => {
           </div>
           }
           <div className="button">
-            <input type="submit" value="Download PDF" />
+            <input type="submit" className="pointer" value="Download PDF" />
           </div>
         </div>
       </form>
