@@ -38,14 +38,16 @@ class PDFCreator():
     doc.build(Story)
     return buffer
    
-  def check_for_existence(self, attrs={}):
-    name = attrs["name"]
-    if self.data['infos'].get(name) == None or len(self.data['infos'][name]) == 0:
+  def check_for_existence(self, **kwargs):
+    name = kwargs["name"]
+
+    if not self.data['infos'].get(name):
       return '\n'
-    elif "key" in attrs and "name_on_pdf" in attrs:
-      return attrs["name_on_pdf"] + '\n'
-    else:
-      return self.data['infos'][name] + '\n'
+    
+    if "name_on_pdf" in kwargs:
+      return kwargs["name_on_pdf"] + '\n'
+    
+    return self.data['infos'][name] + '\n'
     
   def generate_table(self, rows, style, Story):
     col_widths = [1.3*cm, 1.5*cm, 10.5*cm, 2.3*cm, 2.1*cm]
@@ -68,7 +70,7 @@ class PDFCreator():
     \n
     Date:\n
     Invoice No.:\n
-    {self.check_for_existence({"key": True, "name": "po_number", "name_on_pdf": "PO number:"})}
+    {self.check_for_existence(name = "po_number", name_on_pdf = "PO number:")}
     """
 
     biller_value = f"""{self.data['infos']['biller_name']}\n
@@ -77,7 +79,7 @@ class PDFCreator():
     \n
     {datetime.datetime.strptime(self.data['infos']['date'], '%Y-%m-%d').strftime('%d.%m.%Y')}\n
     {self.data['infos']['inv_number']}\n
-    {self.check_for_existence({"value": True, "name": "po_number"})}
+    {self.check_for_existence(name = "po_number")}
     """
 
     col_widths_contact_infos = [7.3*cm, 6*cm, 4.5*cm]
@@ -151,23 +153,23 @@ class PDFCreator():
   
   def generate_account_details(self, doc):
     acc_holder_key = f"""
-    {self.check_for_existence({"key": True, "name": "acc_holder", "name_on_pdf": "Account holder:"})}\n
-    {self.check_for_existence({"key": True, "name": "bank_name", "name_on_pdf": "Bank name:"})}\n
+    {self.check_for_existence(name = "acc_holder", name_on_pdf = "Account holder:")}\n
+    {self.check_for_existence(name = "bank_name", name_on_pdf = "Bank name:")}\n
     """
 
     acc_holder_value = f"""
-    {self.check_for_existence({"value": True, "name": "acc_holder"})}\n
-    {self.check_for_existence({"value": True, "name": "bank_name"})}\n
+    {self.check_for_existence(name = "acc_holder")}\n
+    {self.check_for_existence(name = "bank_name")}\n
     """
 
     acc_number_key = f"""
-    {self.check_for_existence({"key": True, "name": "iban", "name_on_pdf": "IBAN:"})}\n
-    {self.check_for_existence({"key": True, "name": "bic", "name_on_pdf": "BIC:"})}\n
+    {self.check_for_existence(name = "iban", name_on_pdf = "IBAN:")}\n
+    {self.check_for_existence(name = "bic", name_on_pdf = "BIC:")}\n
     """
 
     acc_number_value = f"""
-    {self.check_for_existence({"value": True, "name": "iban"})}\n
-    {self.check_for_existence({"value": True, "name": "bic"})}\n
+    {self.check_for_existence(name = "iban")}\n
+    {self.check_for_existence(name = "bic")}\n
     """
 
     table_account_details_data = [
