@@ -7,6 +7,7 @@
 }
 
 .page {
+  position: relative;
   width: 955px;
   height: 1283px;
   margin: 9px auto;
@@ -16,11 +17,39 @@
   box-shadow: 5px 5px 5px #CCCCCC;
 }
 
-.button {
+h1 {
+  padding-bottom: 20px;
+  font-size: 18pt;
+}
+
+.two-col {
   display: flex;
-  justify-content: center;
-  margin-top: 30px;
-  margin-bottom: 40px;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 250px;
+  width: auto;
+  margin-bottom: 50px;
+}
+
+.contact-info {
+  padding-top: 90px;
+  align-self: center;
+  display: block;
+  align-content: space-between;
+  line-height: 1.3em;
+}
+
+.sender {
+  margin: 10px 0;
+}
+
+.underline {
+  text-decoration: underline;
+  font-size: 9pt;
+}
+
+.invoice-info {
+  line-height: 1.3em;
 }
 
 table {
@@ -33,7 +62,7 @@ tr {
   line-height: 24px;
 }
 
-#no-bottom-border {
+.no-bottom-border {
   border-bottom: 1pt solid #FFFFFF;
 }
 
@@ -97,12 +126,20 @@ tr {
   text-decoration-style: double;
 }
 
+.button {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 40px;
+}
+
 .account-details {
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  position: absolute;
-  top: 1200px;
-  left: 359px;
-  right: 359px;
+  gap: 12px;
+  top: 1208px;
+  left: 120px;
+  right: 120px;
 }

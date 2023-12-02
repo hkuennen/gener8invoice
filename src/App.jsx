@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import ContactInfo from "./components/ContactInfo";
-import InvoicePositions from "./components/InvoicePositions";
+import InvoicePositionsFirstPage from "./components/InvoicePositionsFirstPage";
+import InvoicePositionsOtherPages from "./components/InvoicePositionsOtherPages";
 import InvoiceSum from "./components/InvoiceSum";
-import InvoicePositionsSecondPage from "./components/InvoicePositionsSecondPage";
 import AccountDetails from "./components/AccountDetails";
 import "./App.css";
-import "./components/ContactInfo.css";
 
 const App = () => {
   const [infos, setInfos] = useState({});
@@ -131,71 +130,88 @@ const App = () => {
     setArray(arr);
   }, [positions]);
 
+  const contactInfo = (
+    <ContactInfo 
+      infos={infos}
+      handleInfosChange={handleInfosChange}
+    />
+  );
+
+  const invoicePositionsFirstPage = (
+    <InvoicePositionsFirstPage 
+      positions={positions}
+      maxRowsPerPage={maxRowsPerPage}
+      array={array}
+      handlePositionsChange={handlePositionsChange}
+      handleRemovePosition={handleRemovePosition}
+    />
+  );
+
+  const invoicePositionsOtherPages = (
+    <InvoicePositionsOtherPages
+      maxRowsPerPageWithPagebreak={maxRowsPerPageWithPagebreak}
+      array={array}
+      handlePositionsChange={handlePositionsChange}
+      handleRemovePosition={handleRemovePosition}
+    />
+  );
+
+  const invoiceSum = (
+    <InvoiceSum 
+      subtotal={subtotal}
+      tax={tax}
+      handleTaxChange={handleTaxChange}
+    />
+  );
+
+  const accountDetails = (
+    <AccountDetails 
+      infos={infos}
+      handleInfosChange={handleInfosChange}
+    />
+  );
+
+  const addButton = (
+      <button className="add pointer" onClick={(e) => handleAddPosition(e)} disabled={positions.length >= 49}>+</button>
+    );
+
+  const firstPage = (
+    <div className="page">
+      {contactInfo}
+      <br />
+      {invoicePositionsFirstPage}
+      {positions.length <= maxRowsPerPageWithPagebreak && addButton}
+      {positions.length <= maxRowsPerPage && invoiceSum}
+      {accountDetails}
+    </div>
+  );
+
+  const pagebreak = (
+    <div className="page">
+      {invoiceSum}
+      {accountDetails}
+    </div>
+  );
+
+  const otherPages = (
+    <div className="page">
+      {invoicePositionsOtherPages}
+      {addButton}
+      {invoiceSum}
+      {accountDetails}
+    </div>
+  );
+
   return (
     <div className="App">
       <header className="App-header"></header>
         <form onSubmit={handleSubmit}>
         <div className="wrapper">
-          <div className="page">
-            <ContactInfo 
-              infos={infos}
-              handleInfosChange={handleInfosChange}
-            />
-            <br />
-            <InvoicePositions 
-              positions={positions}
-              maxRowsPerPage={maxRowsPerPage}
-              array={array}
-              handlePositionsChange={handlePositionsChange}
-              handleAddPosition={handleAddPosition}
-              handleRemovePosition={handleRemovePosition}
-            />
-            {positions.length <= maxRowsPerPageWithPagebreak && <button id="add" className="pointer" onClick={(e) => handleAddPosition(e)}>+</button>}
-            {positions.length <= maxRowsPerPage && <>
-              <InvoiceSum 
-                subtotal={subtotal}
-                tax={tax}
-                handleTaxChange={handleTaxChange}
-              />
-            </>
-            }
-            <AccountDetails 
-              infos={infos}
-              handleInfosChange={handleInfosChange}
-            />
-          </div>
-          {positions.length > maxRowsPerPage && positions.length <= maxRowsPerPageWithPagebreak && <div className="page">
-            <InvoiceSum 
-              subtotal={subtotal}
-              tax={tax}
-              handleTaxChange={handleTaxChange}
-            />
-            <AccountDetails 
-              infos={infos}
-              handleInfosChange={handleInfosChange}
-            />
-          </div>
-          }
-          {positions.length > maxRowsPerPageWithPagebreak && <div className="page">
-            <InvoicePositionsSecondPage 
-              array={array}
-              maxRowsPerPageWithPagebreak={maxRowsPerPageWithPagebreak}
-              handlePositionsChange={handlePositionsChange}
-              handleRemovePosition={handleRemovePosition}
-              handleAddPosition={handleAddPosition}
-            />
-            <button id="add" className="pointer" onClick={(e) => handleAddPosition(e)} disabled={positions.length >= 49}>+</button>
-            <InvoiceSum 
-              subtotal={subtotal}
-              tax={tax}
-              handleTaxChange={handleTaxChange}
-            />
-            <AccountDetails 
-              infos={infos}
-              handleInfosChange={handleInfosChange}
-            />
-          </div>
-          }
+          {firstPage}
+          {positions.length > maxRowsPerPage && positions.length <= maxRowsPerPageWithPagebreak && 
+          pagebreak}
+          {positions.length > maxRowsPerPageWithPagebreak && 
+          otherPages}
           <div className="button">
             <input type="submit" className="pointer" value="Download PDF" />
           </div>
