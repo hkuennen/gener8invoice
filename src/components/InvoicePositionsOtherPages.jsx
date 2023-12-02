@@ -3,8 +3,15 @@ import { generateTableHeader, generateTableBody } from "../utils/TableSkeletons"
 const InvoicePositionsOtherPages = ({maxRowsPerPageWithPagebreak, array, handlePositionsChange, handleRemovePosition}) => {
   const otherPages = array[1] ? (
     <>
-      {generateTableHeader(false)}
-      {generateTableBody(array[1], maxRowsPerPageWithPagebreak, handlePositionsChange, handleRemovePosition)}
+      {generateTableHeader({
+        isFirstPage: false
+      })}
+      {generateTableBody({
+        positions: array[1],
+        idxRows: maxRowsPerPageWithPagebreak,
+        handlePositionsChange,
+        handleRemovePosition
+      })}
     </>
   ) : 
     undefined;

@@ -3,14 +3,28 @@ import { generateTableHeader, generateTableBody } from "../utils/TableSkeletons"
 const InvoicePositionsFirstPage = ({positions, maxRowsPerPage, array, handlePositionsChange, handleRemovePosition}) => {
   const firstPage = (
     <>
-      {generateTableHeader(true)}
-      {generateTableBody(positions, 0, handlePositionsChange, handleRemovePosition)}
+      {generateTableHeader({
+        isFirstPage: true
+      })}
+      {generateTableBody({
+        positions,
+        idxRows: 0,
+        handlePositionsChange,
+        handleRemovePosition
+      })}
     </>
     );
   const firstPageWithPagebreak = array[0] ? (
     <>
-      {generateTableHeader(true)}
-      {generateTableBody(array[0], 0, handlePositionsChange, handleRemovePosition)}
+      {generateTableHeader({
+        isFirstPage: true
+      })}
+      {generateTableBody({
+        positions: array[0],
+        idxRows: 0,
+        handlePositionsChange,
+        handleRemovePosition
+      })}
     </>
     ) : 
     undefined;
