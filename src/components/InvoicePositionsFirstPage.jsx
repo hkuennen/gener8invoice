@@ -14,7 +14,7 @@ const InvoicePositionsFirstPage = ({positions, maxRowsPerPage, array, handlePosi
       })}
     </>
     );
-  const firstPageWithPagebreak = array[0] ? (
+  const firstPageWithPagebreak = array[0] && (
     <>
       {generateTableHeader({
         isFirstPage: true
@@ -26,8 +26,7 @@ const InvoicePositionsFirstPage = ({positions, maxRowsPerPage, array, handlePosi
         handleRemovePosition
       })}
     </>
-    ) : 
-    undefined;
+    );
 
   return (
     <>

@@ -28,3 +28,5 @@ yarn-error.log*
 venv
 __pycache__
 .flaskenv
+seed.py
+instance
