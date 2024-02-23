@@ -81,7 +81,7 @@ const App = () => {
         total: (subtotal * (1 + parseFloat(tax))).toFixed(2)
       }
     };
-    const settings = {
+    const request = {
       method: "POST",
       headers: {
         "Accept": "application/json",
@@ -90,7 +90,7 @@ const App = () => {
       body: JSON.stringify(values)
     };
     try {
-      const response = await fetch("/api/data", settings);
+      const response = await fetch("/api/data", request);
       const data = await response.blob();
       const link = document.createElement('a');
       
@@ -107,11 +107,8 @@ const App = () => {
 
   useEffect(() => {
     const calcSubtotal = () => {
-      const amounts = [];
-      positions.forEach((position) => {
-        amounts.push(position.amount);
-      })
-      return amounts.reduce((prevValue, currentValue) => prevValue + currentValue, 0);
+      const amounts = positions.map((position) => position.amount);
+      return amounts.reduce((sum, amount) => sum + amount, 0);
     }
     setSubtotal(() => calcSubtotal());
     let newArr = [...positions];

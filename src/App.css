@@ -23,10 +23,9 @@ h1 {
   font-size: 18pt;
 }
 
-.two-col {
+.container {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
   height: 250px;
   width: auto;
   margin-bottom: 50px;
@@ -35,8 +34,10 @@ h1 {
 .contact-info {
   padding-top: 90px;
   align-self: center;
-  display: block;
-  align-content: space-between;
+  line-height: 1.3em;
+}
+
+.invoice-info {
   line-height: 1.3em;
 }
 
@@ -47,10 +48,6 @@ h1 {
 .underline {
   text-decoration: underline;
   font-size: 9pt;
-}
-
-.invoice-info {
-  line-height: 1.3em;
 }
 
 table {

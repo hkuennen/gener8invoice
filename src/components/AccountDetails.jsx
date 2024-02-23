@@ -6,7 +6,7 @@ const AccountDetails = ({infos, handleInfosChange}) => {
           <input 
             type="text" 
             name="acc_holder" 
-            value={infos.acc_holder || null} 
+            value={infos.acc_holder ?? ""} 
             placeholder="Account holder (optional)" 
             size="50" 
             onChange={(e) => handleInfosChange(e)} 
@@ -15,7 +15,7 @@ const AccountDetails = ({infos, handleInfosChange}) => {
           <input 
             type="text" 
             name="bank_name" 
-            value={infos.bank_name || null} 
+            value={infos.bank_name ?? ""} 
             placeholder="Bank name (optional)" 
             size="50" 
             onChange={(e) => handleInfosChange(e)} 
@@ -26,7 +26,7 @@ const AccountDetails = ({infos, handleInfosChange}) => {
           <input 
             type="text" 
             name="iban" 
-            value={infos.iban || null} 
+            value={infos.iban ?? ""} 
             placeholder="IBAN (optional)" 
             size="50" 
             onChange={(e) => handleInfosChange(e)} 
@@ -35,7 +35,7 @@ const AccountDetails = ({infos, handleInfosChange}) => {
           <input 
             type="text" 
             name="bic" 
-            value={ infos.bic || null} 
+            value={ infos.bic ?? ""} 
             placeholder="BIC (optional)" 
             size="50" 
             onChange={(e) => handleInfosChange(e)} 

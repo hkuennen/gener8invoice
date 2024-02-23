@@ -6,7 +6,7 @@ const ContactInfo = ({infos, handleInfosChange}) => {
   return (
     <>
       <h1>{"Invoice".toUpperCase()}</h1>
-      <div className="two-col">
+      <div className="container">
         <div className="contact-info">
           <div className="sender">
             <p className="underline">
