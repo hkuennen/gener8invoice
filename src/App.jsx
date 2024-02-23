@@ -4,6 +4,10 @@ import InvoicePositionsFirstPage from "./components/InvoicePositionsFirstPage";
 import InvoicePositionsOtherPages from "./components/InvoicePositionsOtherPages";
 import InvoiceSum from "./components/InvoiceSum";
 import AccountDetails from "./components/AccountDetails";
+import sendPostRequestAndDownloadFile from "./utils/PostRequest";
+import calcArrayForPageBreak from "./utils/PageBreak";
+import calcArrayForPositionChange from "./utils/PositionChange";
+import calcSubtotal from "./utils/Subtotal";
 import "./App.css";
 
 const App = () => {
@@ -30,19 +34,8 @@ const App = () => {
   const handlePositionsChange = (e, idx) => {
     const name = e.target.name;
     const value = e.target.value;
-    let newArr = [...positions];
-    newArr[idx]["pos"] = idx+1
-    newArr[idx][name] = value;
-
-    const { qty, price } = newArr[idx];
-    if (newArr[idx]["qty"] !== undefined && newArr[idx]["qty"].length !== 0) { newArr[idx]["qty"] = qty };
-    if (newArr[idx]["price"] !== undefined && newArr[idx]["price"].length !== 0) { newArr[idx]["price"] = price };
-
-    const q = parseInt(newArr[idx]["qty"]);
-    const p = parseFloat(newArr[idx]["price"]).toFixed(2);
-    const amount = (isNaN(q) || isNaN((p))) ? 0 : (qty * price);
-    newArr[idx]["amount"] = amount;
-    setPositions(newArr);
+    const arr = calcArrayForPositionChange(positions, idx, name, value);
+    setPositions(arr);
   }
 
   const handleTaxChange = (e) => {
@@ -69,7 +62,7 @@ const App = () => {
     setPositions(() => rows);
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const values = {
       infos,
@@ -81,49 +74,13 @@ const App = () => {
         total: (subtotal * (1 + parseFloat(tax))).toFixed(2)
       }
     };
-    const request = {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(values)
-    };
-    try {
-      const response = await fetch("/api/data", request);
-      const data = await response.blob();
-      const link = document.createElement('a');
-      
-      link.href = URL.createObjectURL(data);
-      link.download = `Invoice No. ${infos.inv_number}.pdf`;
-      document.body.append(link);
-      link.click();
-      link.remove();
-      setTimeout(() => URL.revokeObjectURL(link.href), 2000);
-    } catch (error) {
-      alert("Error", error);
-    }
+    sendPostRequestAndDownloadFile(values);
   }
 
   useEffect(() => {
-    const calcSubtotal = () => {
-      const amounts = positions.map((position) => position.amount);
-      return amounts.reduce((sum, amount) => sum + amount, 0);
-    }
-    setSubtotal(() => calcSubtotal());
-    let newArr = [...positions];
-    let arr = [];
-    if (newArr.length <= maxRowsPerPage) {
-      for (let i = 0; i < newArr.length; i += maxRowsPerPage) {
-        const row = newArr.slice(i, i + maxRowsPerPage);
-        arr.push(row);
-      }
-    } else if (newArr.length > maxRowsPerPage) {
-      for (let i = 0; i < newArr.length; i += maxRowsPerPageWithPagebreak) {
-        const row = newArr.slice(i, i + maxRowsPerPageWithPagebreak);
-        arr.push(row);
-      }
-    } 
+    const subtotal = calcSubtotal(positions);
+    setSubtotal(() => subtotal);
+    const arr = calcArrayForPageBreak(positions, maxRowsPerPage, maxRowsPerPageWithPagebreak);
     setArray(arr);
   }, [positions]);
 
