@@ -4,9 +4,10 @@ import InvoicePositionsFirstPage from "./components/InvoicePositionsFirstPage";
 import InvoicePositionsOtherPages from "./components/InvoicePositionsOtherPages";
 import InvoiceSum from "./components/InvoiceSum";
 import AccountDetails from "./components/AccountDetails";
+
 import sendPostRequestAndDownloadFile from "./utils/PostRequest";
-import calcArrayForPageBreak from "./utils/PageBreak";
-import calcArrayForPositionChange from "./utils/PositionChange";
+import calcPositionsPerPage from "./utils/PageBreak";
+import calcNewPosition from "./utils/PositionsChange";
 import calcSubtotal from "./utils/Subtotal";
 import "./App.css";
 
@@ -19,7 +20,7 @@ const App = () => {
       price: "",
       amount: parseFloat(0).toFixed(2)
     }]);
-  const [array, setArray] = useState([]);
+  const [positionsPerPage, setPositionsPerPage] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
   const [tax, setTax] = useState("0.19");
   const maxRowsPerPage = 20;
@@ -34,8 +35,8 @@ const App = () => {
   const handlePositionsChange = (e, idx) => {
     const name = e.target.name;
     const value = e.target.value;
-    const arr = calcArrayForPositionChange(positions, idx, name, value);
-    setPositions(arr);
+    const newPosition = calcNewPosition(positions, idx, name, value);
+    setPositions(newPosition);
   }
 
   const handleTaxChange = (e) => {
@@ -80,8 +81,8 @@ const App = () => {
   useEffect(() => {
     const subtotal = calcSubtotal(positions);
     setSubtotal(() => subtotal);
-    const arr = calcArrayForPageBreak(positions, maxRowsPerPage, maxRowsPerPageWithPagebreak);
-    setArray(arr);
+    const listOfPositionsPerPage = calcPositionsPerPage(positions, maxRowsPerPage, maxRowsPerPageWithPagebreak);
+    setPositionsPerPage(listOfPositionsPerPage);
   }, [positions]);
 
   const contactInfo = (
@@ -95,7 +96,7 @@ const App = () => {
     <InvoicePositionsFirstPage 
       positions={positions}
       maxRowsPerPage={maxRowsPerPage}
-      array={array}
+      positionsPerPage={positionsPerPage}
       handlePositionsChange={handlePositionsChange}
       handleRemovePosition={handleRemovePosition}
     />
@@ -104,7 +105,7 @@ const App = () => {
   const invoicePositionsOtherPages = (
     <InvoicePositionsOtherPages
       maxRowsPerPageWithPagebreak={maxRowsPerPageWithPagebreak}
-      array={array}
+      positionsPerPage={positionsPerPage}
       handlePositionsChange={handlePositionsChange}
       handleRemovePosition={handleRemovePosition}
     />

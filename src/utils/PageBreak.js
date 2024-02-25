@@ -1,18 +1,18 @@
-const calcArrayForPageBreak = (positions, maxRowsPerPage, maxRowsPerPageWithPagebreak) => {
-  let newArr = [...positions];
-  let arr = [];
-  if (newArr.length <= maxRowsPerPage) {
-    for (let i = 0; i < newArr.length; i += maxRowsPerPage) {
-      const row = newArr.slice(i, i + maxRowsPerPage);
-      arr.push(row);
+const calcPositionsPerPage = (positions, maxRowsPerPage, maxRowsPerPageWithPagebreak) => {
+  let copyOfPositions = [...positions];
+  let listOfPositionsPerPage = [];
+  if (copyOfPositions.length <= maxRowsPerPage) {
+    for (let i = 0; i < copyOfPositions.length; i += maxRowsPerPage) {
+      const row = copyOfPositions.slice(i, i + maxRowsPerPage);
+      listOfPositionsPerPage.push(row);
     }
-  } else if (newArr.length > maxRowsPerPage) {
-    for (let i = 0; i < newArr.length; i += maxRowsPerPageWithPagebreak) {
-      const row = newArr.slice(i, i + maxRowsPerPageWithPagebreak);
-      arr.push(row);
+  } else if (copyOfPositions.length > maxRowsPerPage) {
+    for (let i = 0; i < copyOfPositions.length; i += maxRowsPerPageWithPagebreak) {
+      const row = copyOfPositions.slice(i, i + maxRowsPerPageWithPagebreak);
+      listOfPositionsPerPage.push(row);
     }
   }
-  return arr;
+  return listOfPositionsPerPage;
 }
 
-export default calcArrayForPageBreak;
+export default calcPositionsPerPage;

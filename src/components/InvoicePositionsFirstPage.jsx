@@ -1,6 +1,6 @@
 import { generateTableHeader, generateTableBody } from "../utils/TableSkeletons";
 
-const InvoicePositionsFirstPage = ({positions, maxRowsPerPage, array, handlePositionsChange, handleRemovePosition}) => {
+const InvoicePositionsFirstPage = ({positions, maxRowsPerPage, positionsPerPage, handlePositionsChange, handleRemovePosition}) => {
   const firstPage = (
     <>
       {generateTableHeader({
@@ -14,13 +14,13 @@ const InvoicePositionsFirstPage = ({positions, maxRowsPerPage, array, handlePosi
       })}
     </>
     );
-  const firstPageWithPagebreak = array[0] && (
+  const firstPageWithPagebreak = positionsPerPage[0] && (
     <>
       {generateTableHeader({
         isFirstPage: true
       })}
       {generateTableBody({
-        positions: array[0],
+        positions: positionsPerPage[0],
         idxRows: 0,
         handlePositionsChange,
         handleRemovePosition
