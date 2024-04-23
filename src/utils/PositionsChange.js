@@ -1,4 +1,4 @@
-const calcNewPosition = (positions, idx, name, value) => {
+const calcNewPosition = ({ positions, idx, name, value }) => {
   let newPosition = [...positions];
   newPosition[idx]["pos"] = idx + 1
   newPosition[idx][name] = value;

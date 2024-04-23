@@ -13,7 +13,7 @@ export const generateTableHeader = ({isFirstPage}) => {
   );
 }
 
-export const generateTableBody = ({positions, idxRows, handlePositionsChange, handleRemovePosition}) => {
+export const generateTableBody = ({ positions, idxRows, handlePositionsChange, handleRemovePosition }) => {
   return (
     <>
       {positions.map((row, idx) => (

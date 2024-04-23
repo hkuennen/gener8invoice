@@ -1,4 +1,4 @@
-const InvoiceSum = ({subtotal, tax, handleTaxChange}) => {
+const InvoiceSum = ({ subtotal, tax, handleTaxChange }) => {
   return (
     <>
       <table>

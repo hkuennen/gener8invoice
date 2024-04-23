@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-const ContactInfo = ({infos, handleInfosChange}) => {
+const ContactInfo = ({ infos, handleInfosChange }) => {
   const refDate = useRef();
 
   return (

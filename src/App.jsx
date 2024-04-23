@@ -35,7 +35,7 @@ const App = () => {
   const handlePositionsChange = (e, idx) => {
     const name = e.target.name;
     const value = e.target.value;
-    const newPosition = calcNewPosition(positions, idx, name, value);
+    const newPosition = calcNewPosition({ positions, idx, name, value });
     setPositions(newPosition);
   }
 
@@ -81,7 +81,9 @@ const App = () => {
   useEffect(() => {
     const subtotal = calcSubtotal(positions);
     setSubtotal(() => subtotal);
-    const listOfPositionsPerPage = calcPositionsPerPage(positions, maxRowsPerPage, maxRowsPerPageWithPagebreak);
+    const listOfPositionsPerPage = calcPositionsPerPage({
+      positions, maxRowsPerPage, maxRowsPerPageWithPagebreak
+    });
     setPositionsPerPage(listOfPositionsPerPage);
   }, [positions]);
 
@@ -127,7 +129,13 @@ const App = () => {
   );
 
   const addButton = (
-      <button className="add pointer" onClick={(e) => handleAddPosition(e)} disabled={positions.length >= 49}>+</button>
+      <button
+        className="add pointer"
+        onClick={(e) => handleAddPosition(e)}
+        disabled={positions.length >= 49}
+      >
+        +
+      </button>
     );
 
   const firstPage = (
@@ -163,10 +171,11 @@ const App = () => {
         <form onSubmit={handleSubmit}>
         <div className="wrapper">
           {firstPage}
-          {positions.length > maxRowsPerPage && positions.length <= maxRowsPerPageWithPagebreak && 
-          pagebreak}
+          {positions.length > maxRowsPerPage &&
+           positions.length <= maxRowsPerPageWithPagebreak && 
+           pagebreak}
           {positions.length > maxRowsPerPageWithPagebreak && 
-          otherPages}
+           otherPages}
           <div className="button">
             <input type="submit" className="pointer" value="Download PDF" />
           </div>

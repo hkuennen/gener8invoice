@@ -1,4 +1,4 @@
-const calcPositionsPerPage = (positions, maxRowsPerPage, maxRowsPerPageWithPagebreak) => {
+const calcPositionsPerPage = ({ positions, maxRowsPerPage, maxRowsPerPageWithPagebreak }) => {
   let copyOfPositions = [...positions];
   let listOfPositionsPerPage = [];
   if (copyOfPositions.length <= maxRowsPerPage) {

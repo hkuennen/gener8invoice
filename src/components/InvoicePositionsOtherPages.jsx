@@ -1,6 +1,11 @@
 import { generateTableHeader, generateTableBody } from "../utils/TableSkeletons";
 
-const InvoicePositionsOtherPages = ({maxRowsPerPageWithPagebreak, positionsPerPage, handlePositionsChange, handleRemovePosition}) => {
+const InvoicePositionsOtherPages = ({
+  maxRowsPerPageWithPagebreak,
+  positionsPerPage,
+  handlePositionsChange,
+  handleRemovePosition
+}) => {
   const otherPages = positionsPerPage[1] && (
     <>
       {generateTableHeader({

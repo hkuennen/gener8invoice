@@ -1,4 +1,4 @@
-const AccountDetails = ({infos, handleInfosChange}) => {
+const AccountDetails = ({ infos, handleInfosChange }) => {
   return (
     <>
       <div className="account-details">
