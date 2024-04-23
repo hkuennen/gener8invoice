@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
-export const generateTableHeader = ({isFirstPage}) => {
+export const generateTableHeader = ({ isFirstPage }) => {
   return (
     <tr className={isFirstPage ? "grey" : "no-bottom-border"}>
       <th className="th_pos">{isFirstPage && "Pos"}</th>
