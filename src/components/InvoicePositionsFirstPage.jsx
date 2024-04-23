@@ -1,7 +1,11 @@
 import { generateTableHeader, generateTableBody } from "../utils/TableSkeletons";
 
 const InvoicePositionsFirstPage = ({
-  positions, maxRowsPerPage, positionsPerPage, handlePositionsChange, handleRemovePosition
+  positions,
+  maxRowsPerPage,
+  positionsPerPage,
+  handlePositionsChange,
+  handleRemovePosition
 }) => {
   const firstPage = (
     <>
