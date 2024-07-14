@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
+
 import ContactInfo from "./components/ContactInfo";
 import InvoicePositionsFirstPage from "./components/InvoicePositionsFirstPage";
 import InvoicePositionsOtherPages from "./components/InvoicePositionsOtherPages";
@@ -25,6 +27,15 @@ const App = () => {
   const [tax, setTax] = useState("0.19");
   const maxRowsPerPage = 20;
   const maxRowsPerPageWithPagebreak = 25;
+
+  useEffect(() => {
+    fetch("/api/csrf/")
+    .then((response) => response.json())
+    .then((data) => {
+      Cookies.set('csrftoken', data.csrfToken, { sameSite: 'None' });
+    })
+    .catch((error) => console.error("error:", error))
+  }, []);
 
   const handleInfosChange = (e) => {
     const name = e.target.name;
