@@ -1,1 +1,1 @@
-https://inv-gen.herokuapp.com/
+# invoice generator
