@@ -3,11 +3,11 @@ const InvoiceSum = ({ subtotal, tax, handleTaxChange }) => {
     <>
       <table>
         <tr className="grey">
-          <th className="th_pos"></th>
-          <th className="th_qty"></th>
-          <th className="th_item"></th>
-          <th className="th_price"></th>
-          <th className="th_amount"></th>
+          <th className="th_pos w-5p"></th>
+          <th className="th_qty w-13p"></th>
+          <th className="th_item w-52p"></th>
+          <th className="th_price w-17p"></th>
+          <th className="th_amount w-17p"></th>
         </tr>
         <tr className="grey">
           <td>Subtotal</td>
