@@ -1,21 +1,32 @@
+$border-color: #666;
+$shadow-color: #CCC;
+$background-color: #EEE;
+$text-light: #FFF;
+$a4-format-width: 955px;
+$a4-format-height: 1283px;
+
+$a4-size: 976px;
+$tablet: 768px;
+$mobile: 480px;
+
 .App {
   text-align: left;
 }
 
 .wrapper {
-  background-color: #EEEEEE;
+  background-color: $background-color;
   margin-top: 40px;
 }
 
 .page {
   position: relative;
-  width: 955px;
-  height: 1283px;
+  width: $a4-format-width;
+  height: $a4-format-height;
   margin: 9px auto;
   padding: 80px;
-  background-color: #FFFFFF;
-  border: solid 0.75px #666666;
-  box-shadow: 5px 5px 5px #CCCCCC;
+  background-color: $text-light;
+  border: solid 0.75px $border-color;
+  box-shadow: 5px 5px 5px $shadow-color;
 }
 
 h1 {
@@ -23,7 +34,7 @@ h1 {
   font-size: 18pt;
 }
 
-.container {
+.address-container {
   display: flex;
   justify-content: space-between;
   height: 250px;
@@ -56,58 +67,22 @@ table {
 }
 
 tr {
-  border-bottom: 1pt solid #EEEEEE;
+  border-bottom: 1pt solid $background-color;
   line-height: 24px;
 }
 
 .no-bottom-border {
-  border-bottom: 1pt solid #FFFFFF;
-}
-
-.th_pos {
-  width: 5%;
-}
-
-.th_qty {
-  width: 13%;
-}
-
-.th_item {
-  width: 52%;
-}
-
-.th_price {
-  width: 17%;
-}
-
-.th_amount {
-  width: 17%;
-}
-
-.td_qty {
-  width: 50%;
-}
-
-.td_item {
-  width: 95%;
-}
-
-.td_price {
-  width: 60%;
-}
-
-.td_amount {
-  width: 70%;
+  border-bottom: 1pt solid $text-light;
 }
 
 .grey {
-  background-color: #EEEEEE;
-  border-bottom: 1pt solid #FFFFFF;
+  background-color: $background-color;
+  border-bottom: 1pt solid $text-light;
 }
 
 .bold {
   font-weight: 600;
-  border-bottom: 1pt solid #FFFFFF;
+  border-bottom: 1pt solid $text-light;
 }
 
 .pointer {
@@ -140,4 +115,22 @@ tr {
   top: 1208px;
   left: 120px;
   right: 120px;
+}
+
+// Responsive Styles
+
+// A4 size and smaller screens
+@media (max-width: $a4-size) {
+  .page {
+    width: 90%;
+  }
+}
+// Tablet and smaller screens
+@media (max-width: $tablet) {
+
+}
+
+// Mobile and smaller screens
+@media (max-width: $mobile) {
+
 }

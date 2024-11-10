@@ -27,6 +27,9 @@
   .add {
     @apply mx-3 my-1 rounded-lg border-black bg-green-500 hover:bg-green-700 text-white font-bold py-0.5 px-2 shadow-xl;
   }
+  .td_price {
+    @apply h-5 py-0 pl-6 pr-2 w-full rounded border-gray-100 hover:border-gray-500 focus:border-green-500 focus:ring-green-500 shadow-sm;
+  }
 }
 
 @font-face {

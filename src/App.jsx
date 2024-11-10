@@ -11,7 +11,7 @@ import sendPostRequestAndDownloadFile from "./utils/PostRequest";
 import calcPositionsPerPage from "./utils/PageBreak";
 import calcNewPosition from "./utils/PositionsChange";
 import calcSubtotal from "./utils/Subtotal";
-import "./App.css";
+import "./App.scss";
 
 const App = () => {
   const [infos, setInfos] = useState({});

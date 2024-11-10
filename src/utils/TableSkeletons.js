@@ -4,11 +4,11 @@ import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 export const generateTableHeader = ({ isFirstPage }) => {
   return (
     <tr className={isFirstPage ? "grey" : "no-bottom-border"}>
-      <th className="th_pos">{isFirstPage && "Pos"}</th>
-      <th className="th_qty">{isFirstPage && "Qty"}</th>
-      <th className="th_item">{isFirstPage && "Item"}</th>
-      <th className="th_price">{isFirstPage && "Unit price"}</th>
-      <th className="th_amount">{isFirstPage && "Amount"}</th>
+      <th className="th_pos w-5p">{isFirstPage && "Pos"}</th>
+      <th className="th_qty w-13p">{isFirstPage && "Qty"}</th>
+      <th className="th_item w-52p">{isFirstPage && "Item"}</th>
+      <th className="th_price w-17p">{isFirstPage && "Unit price"}</th>
+      <th className="th_amount w-17p">{isFirstPage && "Amount"}</th>
     </tr>
   );
 }
@@ -24,7 +24,7 @@ export const generateTableBody = ({ positions, idxRows, handlePositionsChange, h
             type="number" 
             name="qty" 
             placeholder="#" 
-            className="td_qty" 
+            className="td_qty w-50p" 
             value={row.qty} 
             onChange={(e) => handlePositionsChange(e, idx+idxRows)} 
             required 
@@ -34,7 +34,7 @@ export const generateTableBody = ({ positions, idxRows, handlePositionsChange, h
           <input 
             type="text" 
             name="item" 
-            className="td_item" 
+            className="td_item w-95p" 
             placeholder="Description of service or product..." 
             value={row.item} 
             onChange={(e) => handlePositionsChange(e, idx+idxRows)} 
@@ -43,21 +43,23 @@ export const generateTableBody = ({ positions, idxRows, handlePositionsChange, h
           />
           </td>
         <td>
-          <label>€ </label>
-          <input 
-            type="number" 
-            step="0.01" 
-            name="price" 
-            className="td_price" 
-            placeholder="0.00" 
-            value={row.price} 
-            onFocus={(e) => e.target.value = parseFloat(e.target.value).toFixed(2)} 
-            onBlur={(e) => e.target.value = parseFloat(e.target.value).toFixed(2)} 
-            onChange={(e) => handlePositionsChange(e, idx+idxRows)} 
-            required 
-          />
+          <div class="relative">            
+            <p class="absolute left-1.5 text-slate-500">€ </p>
+            <input 
+              type="number" 
+              step="0.01" 
+              name="price"
+              className="td_price w-80p"
+              placeholder="0.00" 
+              value={row.price} 
+              onFocus={(e) => e.target.value = parseFloat(e.target.value).toFixed(2)} 
+              onBlur={(e) => e.target.value = parseFloat(e.target.value).toFixed(2)} 
+              onChange={(e) => handlePositionsChange(e, idx+idxRows)} 
+              required 
+            />
+          </div>
         </td>
-        <td className="td_amount">
+        <td className="td_amount w-70p">
           <label>€ </label>
           {parseFloat(row.amount).toFixed(2)}
         </td>
