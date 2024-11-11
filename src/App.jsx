@@ -37,9 +37,18 @@ const App = () => {
     .catch((error) => console.error("error:", error))
   }, []);
 
+  const formatIban = (value) => {
+    const rawIban = value.replace(/\W/gi, '');
+    return rawIban.replace(/(.{4})/g, '$1 ').trim();
+  }
+
   const handleInfosChange = (e) => {
     const name = e.target.name;
-    const value = e.target.value;
+    let value = e.target.value;
+
+    if (name === "iban") {
+      value = formatIban(value);
+    }
     setInfos(values => ({...values, [name]: value}));
   }
 
