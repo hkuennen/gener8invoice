@@ -22,7 +22,7 @@ BUILD_DIR = os.path.join(os.path.dirname(BASE_DIR), "build")
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY_APP = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY_APP")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
