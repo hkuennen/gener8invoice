@@ -6,17 +6,17 @@ const sendPostRequestAndDownloadFile = async (values) => {
   const request = {
     method: "POST",
     headers: {
-      "Accept": "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json",
-      "X-CSRFToken": csrftoken,
+      "X-CSRFToken": csrftoken
     },
     body: JSON.stringify(values)
   };
   try {
     const response = await fetch("/api/data/", request);
     const data = await response.blob();
-    const link = document.createElement('a');
-    
+    const link = document.createElement("a");
+
     link.href = URL.createObjectURL(data);
     link.download = `Invoice No. ${values.infos.inv_number}.pdf`;
     document.body.append(link);

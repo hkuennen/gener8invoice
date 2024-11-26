@@ -3,62 +3,66 @@
 @tailwind utilities;
 
 @layer base {
-  [type='text'],
-  [type='email'],
-  [type='url'],
-  [type='password'],
-  [type='number'],
-  [type='date'],
-  [type='datetime-local'],
-  [type='month'],
-  [type='search'],
-  [type='tel'],
-  [type='time'],
-  [type='week'],
+  h1 {
+    @apply text-2xl;
+  }
+  [type="text"],
+  [type="email"],
+  [type="url"],
+  [type="password"],
+  [type="number"],
+  [type="date"],
+  [type="datetime-local"],
+  [type="month"],
+  [type="search"],
+  [type="tel"],
+  [type="time"],
+  [type="week"],
   [multiple] {
     @apply h-5 p-0 px-2 w-full rounded border-gray-100 hover:border-gray-500 focus:border-green-500 focus:ring-green-500 shadow-sm;
   }
   select {
-    @apply h-6 p-0 px-2 w-20 rounded border-gray-100 hover:border-gray-500 focus:border-green-500 focus:ring-green-500 shadow-sm;;
+    @apply h-6 p-0 px-2 w-20 rounded border-gray-100 hover:border-gray-500 focus:border-green-500 focus:ring-green-500 shadow-sm;
   }
-  [type='submit'] {
+  [type="submit"] {
     @apply m-5 rounded border-black bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 shadow-lg;
   }
   .add {
     @apply mx-3 my-1 rounded-lg border-black bg-green-500 hover:bg-green-700 text-white font-bold py-0.5 px-2 shadow-xl;
   }
+  .td_price {
+    @apply h-5 py-0 pl-6 pr-2 w-full rounded border-gray-100 hover:border-gray-500 focus:border-green-500 focus:ring-green-500 shadow-sm;
+  }
 }
 
 @font-face {
-  font-family: 'CMU Bright';
-  src: local('cmunbmr.ttf'), url('../api/pdf_generation/fonts/cmunbmr.ttf') format('truetype');
+  font-family: "CMU Bright";
+  src: local("cmunbmr.ttf"), url("../api/pdf_generation/fonts/cmunbmr.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'CMU Bright SemiBold';
-  src: local('cmunbsr.ttf'), url('../api/pdf_generation/fonts/cmunbsr.ttf') format('truetype');
+  font-family: "CMU Bright SemiBold";
+  src: local("cmunbsr.ttf"), url("../api/pdf_generation/fonts/cmunbsr.ttf") format("truetype");
 }
 
 body {
   margin: 0;
-  background-color: #EEEEEE;
-  font-family: 'CMU Bright', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  background-color: #eeeeee;
+  font-family: "CMU Bright", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 * {
- font-family: 'CMU Bright';
- font-size: 12pt;
- margin: 0;
- padding: 0;
+  font-family: "CMU Bright";
+  font-size: 12pt;
+  margin: 0;
+  padding: 0;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -69,6 +73,6 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
