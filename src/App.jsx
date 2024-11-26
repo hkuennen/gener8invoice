@@ -2,45 +2,48 @@ import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
 import ContactInfo from "./components/ContactInfo";
-import InvoicePositionsFirstPage from "./components/InvoicePositionsFirstPage";
-import InvoicePositionsOtherPages from "./components/InvoicePositionsOtherPages";
 import InvoiceSum from "./components/InvoiceSum";
 import AccountDetails from "./components/AccountDetails";
+import PageBuilder from "./components/PageBuilder";
 
-import sendPostRequestAndDownloadFile from "./utils/PostRequest";
-import calcPositionsPerPage from "./utils/PageBreak";
-import calcNewPosition from "./utils/PositionsChange";
-import calcSubtotal from "./utils/Subtotal";
+import sendPostRequestAndDownloadFile from "./utils/postRequest";
+import PositionManager from "./utils/PositionManager";
+import {
+  MAX_ROWS_PER_FIRST_PAGE_BEFORE_PAGINATION,
+  MAX_ROWS_PER_FIRST_PAGE_AFTER_PAGINATION,
+  MAX_ROWS_PER_OTHER_PAGES_BEFORE_PAGINATION,
+  MAX_ROWS_PER_OTHER_PAGES_AFTER_PAGINATION
+} from "./utils/constants";
 import "./App.scss";
 
 const App = () => {
   const [infos, setInfos] = useState({});
-  const [positions, setPositions] = useState([{
+  const [positions, setPositions] = useState([
+    {
       pos: "",
       qty: "",
       item: "",
       price: "",
       amount: parseFloat(0).toFixed(2)
-    }]);
-  const [positionsPerPage, setPositionsPerPage] = useState([]);
+    }
+  ]);
+  const [positionsPerPage, setPositionsPerPage] = useState([positions]);
   const [subtotal, setSubtotal] = useState(0);
   const [tax, setTax] = useState("0.19");
-  const maxRowsPerPage = 20;
-  const maxRowsPerPageWithPagebreak = 25;
 
   useEffect(() => {
     fetch("/api/csrf/")
-    .then((response) => response.json())
-    .then((data) => {
-      Cookies.set('csrftoken', data.csrfToken, { sameSite: 'None' });
-    })
-    .catch((error) => console.error("error:", error))
+      .then((response) => response.json())
+      .then((data) => {
+        Cookies.set("csrftoken", data.csrfToken, { sameSite: "None" });
+      })
+      .catch((error) => console.error("error:", error));
   }, []);
 
   const formatIban = (value) => {
-    const rawIban = value.replace(/\W/gi, '');
-    return rawIban.replace(/(.{4})/g, '$1 ').trim();
-  }
+    const rawIban = value.replace(/\W/gi, "");
+    return rawIban.replace(/(.{4})/g, "$1 ").trim();
+  };
 
   const handleInfosChange = (e) => {
     const name = e.target.name;
@@ -49,20 +52,21 @@ const App = () => {
     if (name === "iban") {
       value = formatIban(value);
     }
-    setInfos(values => ({...values, [name]: value}));
-  }
+    setInfos((values) => ({ ...values, [name]: value }));
+  };
 
   const handlePositionsChange = (e, idx) => {
     const name = e.target.name;
     const value = e.target.value;
-    const newPosition = calcNewPosition({ positions, idx, name, value });
+    const manager = new PositionManager(positions);
+    const newPosition = manager.calcNewPosition({ idx, name, value });
     setPositions(newPosition);
-  }
+  };
 
   const handleTaxChange = (e) => {
     e.preventDefault();
     setTax(e.target.value);
-  } 
+  };
 
   const handleAddPosition = (e) => {
     e.preventDefault();
@@ -73,21 +77,27 @@ const App = () => {
       price: "",
       amount: parseFloat(0).toFixed(2)
     };
-    setPositions((rows) => ([...rows, row]));
-  }
+    setPositions((rows) => [...rows, row]);
+  };
 
   const handleRemovePosition = (e, idx) => {
     e.preventDefault();
     const rows = [...positions];
     rows.splice(idx, 1);
     setPositions(() => rows);
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const values = {
       infos,
       positions,
+      maxPositionsPerPage: {
+        firstPageBeforePagination: MAX_ROWS_PER_FIRST_PAGE_BEFORE_PAGINATION,
+        firstPageAfterPagination: MAX_ROWS_PER_FIRST_PAGE_AFTER_PAGINATION,
+        otherPagesBeforePagination: MAX_ROWS_PER_OTHER_PAGES_BEFORE_PAGINATION,
+        otherPagesAfterPagination: MAX_ROWS_PER_OTHER_PAGES_AFTER_PAGINATION
+      },
       tax: parseInt(parseFloat(tax) * 100),
       amount: {
         subtotal,
@@ -96,106 +106,40 @@ const App = () => {
       }
     };
     sendPostRequestAndDownloadFile(values);
-  }
+  };
 
   useEffect(() => {
-    const subtotal = calcSubtotal(positions);
+    const manager = new PositionManager(positions);
+    const subtotal = manager.calcSubtotal(positions);
+    const paginatedPositions = manager.paginate();
     setSubtotal(() => subtotal);
-    const listOfPositionsPerPage = calcPositionsPerPage({
-      positions, maxRowsPerPage, maxRowsPerPageWithPagebreak
-    });
-    setPositionsPerPage(listOfPositionsPerPage);
+    setPositionsPerPage(paginatedPositions);
   }, [positions]);
 
-  const contactInfo = (
-    <ContactInfo 
-      infos={infos}
-      handleInfosChange={handleInfosChange}
-    />
-  );
+  const contactInfo = <ContactInfo infos={infos} handleInfosChange={handleInfosChange} />;
 
-  const invoicePositionsFirstPage = (
-    <InvoicePositionsFirstPage 
-      positions={positions}
-      maxRowsPerPage={maxRowsPerPage}
+  const invoiceSum = <InvoiceSum subtotal={subtotal} tax={tax} handleTaxChange={handleTaxChange} />;
+
+  const accountDetails = <AccountDetails infos={infos} handleInfosChange={handleInfosChange} />;
+
+  const pageBuilder = (
+    <PageBuilder
       positionsPerPage={positionsPerPage}
+      handleAddPosition={handleAddPosition}
       handlePositionsChange={handlePositionsChange}
       handleRemovePosition={handleRemovePosition}
+      contactInfo={contactInfo}
+      invoiceSum={invoiceSum}
+      accountDetails={accountDetails}
     />
-  );
-
-  const invoicePositionsOtherPages = (
-    <InvoicePositionsOtherPages
-      maxRowsPerPageWithPagebreak={maxRowsPerPageWithPagebreak}
-      positionsPerPage={positionsPerPage}
-      handlePositionsChange={handlePositionsChange}
-      handleRemovePosition={handleRemovePosition}
-    />
-  );
-
-  const invoiceSum = (
-    <InvoiceSum 
-      subtotal={subtotal}
-      tax={tax}
-      handleTaxChange={handleTaxChange}
-    />
-  );
-
-  const accountDetails = (
-    <AccountDetails 
-      infos={infos}
-      handleInfosChange={handleInfosChange}
-    />
-  );
-
-  const addButton = (
-      <button
-        className="add pointer"
-        onClick={(e) => handleAddPosition(e)}
-        disabled={positions.length >= 49}
-      >
-        +
-      </button>
-    );
-
-  const firstPage = (
-    <div className="page">
-      {contactInfo}
-      <br />
-      {invoicePositionsFirstPage}
-      {positions.length <= maxRowsPerPageWithPagebreak && addButton}
-      {positions.length <= maxRowsPerPage && invoiceSum}
-      {accountDetails}
-    </div>
-  );
-
-  const pagebreak = (
-    <div className="page">
-      {invoiceSum}
-      {accountDetails}
-    </div>
-  );
-
-  const otherPages = (
-    <div className="page">
-      {invoicePositionsOtherPages}
-      {addButton}
-      {invoiceSum}
-      {accountDetails}
-    </div>
   );
 
   return (
     <div className="App">
       <header className="App-header"></header>
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div className="wrapper">
-          {firstPage}
-          {positions.length > maxRowsPerPage &&
-           positions.length <= maxRowsPerPageWithPagebreak && 
-           pagebreak}
-          {positions.length > maxRowsPerPageWithPagebreak && 
-           otherPages}
+          {pageBuilder}
           <div className="button">
             <input type="submit" className="pointer" value="Download PDF" />
           </div>
@@ -203,6 +147,6 @@ const App = () => {
       </form>
     </div>
   );
-}
+};
 
 export default App;

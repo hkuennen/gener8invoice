@@ -1,7 +1,7 @@
 $border-color: #666;
-$shadow-color: #CCC;
-$background-color: #EEE;
-$text-light: #FFF;
+$shadow-color: #ccc;
+$background-color: #eee;
+$text-light: #fff;
 $a4-format-width: 955px;
 $a4-format-height: 1283px;
 
@@ -31,7 +31,6 @@ $mobile: 480px;
 
 h1 {
   padding-bottom: 20px;
-  font-size: 18pt;
 }
 
 .address-container {
@@ -127,10 +126,8 @@ tr {
 }
 // Tablet and smaller screens
 @media (max-width: $tablet) {
-
 }
 
 // Mobile and smaller screens
 @media (max-width: $mobile) {
-
 }
