@@ -3,22 +3,28 @@
 # dependencies
 /node_modules
 
+# testing
+/coverage
+
 # production
 /build
 
 # database
 db.sqlite3
 
+#misc
 .DS_Store
+.env
 npm-debug.log*
 package-lock.json
 
+#vscode
 /.vscode
 .prettierignore
 .prettierrc
+.flake8
 pyproject.toml
 
 # server-side
 venv
-.env
 __pycache__

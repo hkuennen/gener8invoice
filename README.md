@@ -1,1 +1,1 @@
-# invoice-generator
+# gener8invoice
