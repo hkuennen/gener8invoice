@@ -9,14 +9,14 @@
 # database
 db.sqlite3
 
-# misc
 .DS_Store
-
 npm-debug.log*
 package-lock.json
 
 /.vscode
+.prettierignore
 .prettierrc
+pyproject.toml
 
 # server-side
 venv

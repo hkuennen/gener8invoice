@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie";
 
 import ContactInfo from "./components/ContactInfo";
 import InvoiceSum from "./components/InvoiceSum";
@@ -30,15 +29,6 @@ const App = () => {
   const [positionsPerPage, setPositionsPerPage] = useState([positions]);
   const [subtotal, setSubtotal] = useState(0);
   const [tax, setTax] = useState("0.19");
-
-  useEffect(() => {
-    fetch("/api/csrf/")
-      .then((response) => response.json())
-      .then((data) => {
-        Cookies.set("csrftoken", data.csrfToken, { sameSite: "None" });
-      })
-      .catch((error) => console.error("error:", error));
-  }, []);
 
   const formatIban = (value) => {
     const rawIban = value.replace(/\W/gi, "");

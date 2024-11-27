@@ -2,7 +2,6 @@ import Cookies from "js-cookie";
 
 const sendPostRequestAndDownloadFile = async (values) => {
   const csrftoken = Cookies.get("csrftoken");
-  console.log("CSRF Token:", csrftoken);
   const request = {
     method: "POST",
     headers: {
