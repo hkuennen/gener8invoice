@@ -21,10 +21,14 @@ export const generateTableBody = ({
   handlePositionsChange,
   handleRemovePosition
 }) => {
+  const formatPrice = (e) => {
+    const { value } = e.target;
+    e.target.value = parseFloat(value).toFixed(2);
+  };
   return (
     <>
-      {positions.map((row, idx) => (
-        <tbody>
+      <tbody key={"body"}>
+        {positions.map((row, idx) => (
           <tr key={idx + idxRows + 1}>
             <td>{idx + idxRows + 1}</td>
             <td>
@@ -60,8 +64,7 @@ export const generateTableBody = ({
                   className="td_price w-80p"
                   placeholder="0.00"
                   value={row.price}
-                  onFocus={(e) => (e.target.value = parseFloat(e.target.value).toFixed(2))}
-                  onBlur={(e) => (e.target.value = parseFloat(e.target.value).toFixed(2))}
+                  onBlur={(e) => formatPrice(e)}
                   onChange={(e) => handlePositionsChange(e, idx + idxRows)}
                   required
                 />
@@ -77,8 +80,8 @@ export const generateTableBody = ({
               </button>
             </td>
           </tr>
-        </tbody>
-      ))}
+        ))}
+      </tbody>
     </>
   );
 };

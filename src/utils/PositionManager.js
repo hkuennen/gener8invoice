@@ -15,16 +15,16 @@ class PositionManager {
 
     const { qty, price } = newPosition[idx];
     if (newPosition[idx]["qty"] !== undefined && newPosition[idx]["qty"].length !== 0) {
-      newPosition[idx]["qty"] = qty;
+      newPosition[idx]["qty"] = parseInt(qty).toFixed(0) * 1;
     }
     if (newPosition[idx]["price"] !== undefined && newPosition[idx]["price"].length !== 0) {
-      newPosition[idx]["price"] = price;
+      newPosition[idx]["price"] = parseFloat(price).toFixed(2) * 1;
     }
 
-    const q = parseInt(newPosition[idx]["qty"]);
+    const q = parseInt(newPosition[idx]["qty"]).toFixed(0);
     const p = parseFloat(newPosition[idx]["price"]).toFixed(2);
     const amount = isNaN(q) || isNaN(p) ? 0 : qty * price;
-    newPosition[idx]["amount"] = amount;
+    newPosition[idx]["amount"] = parseFloat(amount).toFixed(2) * 1;
 
     return newPosition;
   }

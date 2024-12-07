@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import ContactInfo from "./components/ContactInfo";
 import InvoiceSum from "./components/InvoiceSum";
@@ -46,8 +46,7 @@ const App = () => {
   };
 
   const handlePositionsChange = (e, idx) => {
-    const name = e.target.name;
-    const value = e.target.value;
+    const { name, value } = e.target;
     const manager = new PositionManager(positions);
     const newPosition = manager.calcNewPosition({ idx, name, value });
     setPositions(newPosition);

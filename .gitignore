@@ -18,13 +18,6 @@ db.sqlite3
 npm-debug.log*
 package-lock.json
 
-#vscode
-/.vscode
-.prettierignore
-.prettierrc
-.flake8
-pyproject.toml
-
 # server-side
 venv
 __pycache__

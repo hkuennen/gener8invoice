@@ -21,7 +21,7 @@ const InvoiceSum = ({ subtotal, tax, handleTaxChange }) => {
               € {isNaN(subtotal) ? (0).toFixed(2) : parseFloat(subtotal).toFixed(2)}
             </td>
           </tr>
-          <br />
+          <tr className="distancer" />
           <tr>
             <td>Tax</td>
             <td>
@@ -34,7 +34,7 @@ const InvoiceSum = ({ subtotal, tax, handleTaxChange }) => {
             <td></td>
             <td>€ {isNaN(subtotal) ? (0).toFixed(2) : (subtotal * parseFloat(tax)).toFixed(2)}</td>
           </tr>
-          <br />
+          <tr className="distancer" />
           <tr className="bold">
             <td>Total</td>
             <td></td>
