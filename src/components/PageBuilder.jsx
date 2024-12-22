@@ -6,6 +6,19 @@ import {
   MAX_ROWS_PER_OTHER_PAGES_AFTER_PAGINATION
 } from "../utils/constants";
 
+/**
+ * PageBuilder component for rendering invoice pages.
+ * Handles the layout and pagination of invoice positions.
+ *
+ * @param {Object} props - Component properties.
+ * @param {Array} props.positionsPerPage - Array of positions for each page.
+ * @param {Function} props.handleAddPosition - Function to handle adding a new position.
+ * @param {Function} props.handlePositionsChange - Function to handle changes in positions.
+ * @param {Function} props.handleRemovePosition - Function to handle removing a position.
+ * @param {JSX.Element} props.contactInfo - Contact information component.
+ * @param {JSX.Element} props.invoiceSum - Invoice summary component.
+ * @param {JSX.Element} props.accountDetails - Account details component.
+ */
 const PageBuilder = ({
   positionsPerPage,
   handleAddPosition,

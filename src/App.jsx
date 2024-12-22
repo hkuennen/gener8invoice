@@ -15,6 +15,10 @@ import {
 } from "./utils/constants";
 import "./App.scss";
 
+/**
+ * Main application component for generating invoices.
+ * Handles state management, form submission, and rendering of child components.
+ */
 const App = () => {
   const [infos, setInfos] = useState({});
   const [positions, setPositions] = useState([
@@ -90,8 +94,8 @@ const App = () => {
       tax: parseInt(parseFloat(tax) * 100),
       amount: {
         subtotal,
-        tax: (subtotal * parseFloat(tax)).toFixed(2),
-        total: (subtotal * (1 + parseFloat(tax))).toFixed(2)
+        tax: (subtotal * parseFloat(tax)).toFixed(2) * 1,
+        total: (subtotal * (1 + parseFloat(tax))).toFixed(2) * 1
       }
     };
     sendPostRequestAndDownloadFile(values);
@@ -104,6 +108,17 @@ const App = () => {
     setSubtotal(() => subtotal);
     setPositionsPerPage(paginatedPositions);
   }, [positions]);
+
+  useEffect(() => {
+    const initializeCSRF = async () => {
+      await fetch("/api/csrf/", {
+        method: "GET",
+        credentials: "include"
+      });
+    };
+
+    initializeCSRF();
+  }, []);
 
   const contactInfo = <ContactInfo infos={infos} handleInfosChange={handleInfosChange} />;
 

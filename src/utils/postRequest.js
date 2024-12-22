@@ -5,7 +5,7 @@ const sendPostRequestAndDownloadFile = async (values) => {
   const request = {
     method: "POST",
     headers: {
-      Accept: "application/json",
+      Accept: "Accept: application/xhtml+xml",
       "Content-Type": "application/json",
       "X-CSRFToken": csrftoken
     },
@@ -13,6 +13,9 @@ const sendPostRequestAndDownloadFile = async (values) => {
   };
   try {
     const response = await fetch("/api/data/", request);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     const data = await response.blob();
     const link = document.createElement("a");
 

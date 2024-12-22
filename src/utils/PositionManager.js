@@ -3,11 +3,25 @@ import {
   MAX_ROWS_PER_OTHER_PAGES_AFTER_PAGINATION
 } from "./constants";
 
+/**
+ * Class to manage invoice positions.
+ * Provides methods to calculate new positions, subtotal, and paginate positions.
+ */
 class PositionManager {
   constructor(positions) {
     this.positions = positions;
   }
 
+  /**
+   * Calculates a new position based on the given index, name, and value.
+   * Updates the position's quantity, price, and amount.
+   *
+   * @param {Object} param - Parameters for calculating the new position.
+   * @param {number} param.idx - Index of the position to update.
+   * @param {string} param.name - Name of the field to update.
+   * @param {string} param.value - New value for the field.
+   * @returns {Array} Updated positions array.
+   */
   calcNewPosition({ idx, name, value }) {
     let newPosition = [...this.positions];
     newPosition[idx]["pos"] = idx + 1;
@@ -29,11 +43,22 @@ class PositionManager {
     return newPosition;
   }
 
+  /**
+   * Calculates the subtotal of all positions.
+   *
+   * @param {Array} positions - Array of positions.
+   * @returns {number} Subtotal amount.
+   */
   calcSubtotal(positions) {
     const amounts = positions.map((position) => position.amount * 1);
     return amounts.reduce((sum, amount) => sum + amount, 0);
   }
 
+  /**
+   * Paginates the positions into pages based on the maximum rows per page.
+   *
+   * @returns {Array} Array of positions per page.
+   */
   paginate() {
     const copyOfPositions = [...this.positions];
     const positionsPerPage = [];

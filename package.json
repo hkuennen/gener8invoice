@@ -1,8 +1,31 @@
 {
   "name": "gener8invoice",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "An Electron app built with React",
   "private": true,
   "proxy": "http://127.0.0.1:8000",
+  "main": "public/electron.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "server:dev": "source venv/bin/activate && cd api && python3 manage.py runserver",
+    "server": "source venv/bin/activate && cd api && gunicorn -b 0.0.0.0:8000 api.wsgi:application",
+    "static": "source venv/bin/activate && cd api && python3 manage.py collectstatic",
+    "electron": "electron .",
+    "electron:build": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "autoprefixer": "^10.4.15",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "node-gyp": "^11.0.0",
+    "postcss": "^8.4.28",
+    "tailwindcss": "^3.3.3"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
@@ -20,12 +43,33 @@
     "sass": "^1.80.6",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "server": "source venv/bin/activate && cd api && python3 manage.py runserver",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "build": {
+    "appId": "com.gener8invoice.app",
+    "productName": "Gener8Invoice",
+    "directories": {
+      "output": "dist",
+      "buildResources": "public"
+    },
+    "asar": true,
+    "files": [
+      "api/**/*",
+      "venv/**/*",
+      "public/**/*",
+      "package.json",
+      "requirements.txt",
+      "!dist/**/*",
+      "!**/*.map",
+      "!node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   },
   "eslintConfig": {
     "extends": [
@@ -44,11 +88,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "autoprefixer": "^10.4.15",
-    "postcss": "^8.4.28",
-    "tailwindcss": "^3.3.3"
   }
 }
