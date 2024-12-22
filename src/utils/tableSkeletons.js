@@ -1,6 +1,13 @@
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+/**
+ * Generates the table header for the invoice positions table.
+ *
+ * @param {Object} param - Parameters for generating the table header.
+ * @param {boolean} param.isFirstPage - Indicates if the table is on the first page.
+ * @returns {JSX.Element} Table header element.
+ */
 export const generateTableHeader = ({ isFirstPage }) => {
   return (
     <thead>
@@ -15,6 +22,16 @@ export const generateTableHeader = ({ isFirstPage }) => {
   );
 };
 
+/**
+ * Generates the table body for the invoice positions table.
+ *
+ * @param {Object} param - Parameters for generating the table body.
+ * @param {Array} param.positions - Array of positions to display in the table.
+ * @param {number} param.idxRows - Index of the first row in the table.
+ * @param {Function} param.handlePositionsChange - Function to handle changes in positions.
+ * @param {Function} param.handleRemovePosition - Function to handle removing a position.
+ * @returns {JSX.Element} Table body element.
+ */
 export const generateTableBody = ({
   positions,
   idxRows,
