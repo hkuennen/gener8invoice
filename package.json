@@ -50,11 +50,12 @@
       "output": "dist",
       "buildResources": "public"
     },
-    "asar": true,
+    "asar": false,
     "files": [
       "api/**/*",
       "venv/**/*",
       "public/**/*",
+      "build/**/*",
       "package.json",
       "requirements.txt",
       "!dist/**/*",

@@ -7,6 +7,7 @@ const { spawn } = require("child_process");
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const http = require("http");
+const fs = require("fs");
 
 // Keep a reference to the main window to prevent garbage collection
 let mainWindow;
@@ -21,7 +22,6 @@ const createMainWindow = () => {
     width: 1000,
     height: 800,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
       webSecurity: true,
       credentials: "include"
     }
@@ -47,88 +47,122 @@ const checkServerRunning = () => {
     };
 
     const request = http.request(options, (res) => {
-      if (res.statusCode === 200) {
-        resolve();
-      } else {
-        reject();
-      }
+      let data = "";
+
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+
+      res.on("end", () => {
+        if (res.statusCode === 200) {
+          resolve();
+        } else {
+          reject(new Error(`Server responded with status code ${res.statusCode}: ${data}`));
+        }
+      });
     });
 
-    request.on("error", reject);
+    request.on("error", (err) => {
+      reject(new Error(`HTTP request error: ${err.message}`));
+    });
     request.end();
   });
 };
 
-app.whenReady().then(() => {
-  const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
-  const activateVenvCommand =
-    process.platform === "win32" ? "venv\\Scripts\\activate" : "source venv/bin/activate";
-  // const pipCommand = process.platform === "win32" ? "venv\\Scripts\\pip" : "venv/bin/pip";
+app
+  .whenReady()
+  .then(() => {
+    const activateVenvCommand =
+      process.platform === "win32" ? "venv\\Scripts\\activate" : "source venv/bin/activate";
+    const startServerCommand = "cd api && gunicorn -b 0.0.0.0:8000 api.wsgi:application";
 
-  /**
-   * Spawns a child process to activate a virtual environment and install requirements.
-   *
-   * This function uses the `spawn` method to run a shell command that activates a Python virtual environment
-   * and installs the necessary requirements from a `requirements.txt` file. The command is executed in the
-   * virtual environment directory.
-   *
-   * @constant {ChildProcess} installRequirements - The spawned child process.
-   * @param {string} activateVenvCommand - The command to activate the virtual environment.
-   * @param {string} pipCommand - The command to run pip for installing requirements.
-   * @property {string} cwd - The current working directory where the command is executed.
-   * @property {boolean} shell - Indicates that the command should be run in a shell.
-   */
-  const installRequirements = spawn(
-    `${activateVenvCommand}`, // && ${pipCommand} install -r requirements.txt`,
-    {
-      cwd: path.join(__dirname, ".."),
-      shell: true
+    // Check if the virtual environment exists in the app folder
+    const appPath = path.join(process.resourcesPath, "app");
+    if (!fs.existsSync(appPath)) {
+      console.error("Virtual environment not found:", appPath);
+      app.quit();
+      return;
     }
-  );
 
-  installRequirements.stdout.on("data", (data) => {
-    console.log(`Pip: ${data.toString()}`);
+    /**
+     * Spawns a child process to activate a virtual environment and install requirements.
+     *
+     * This function uses the `spawn` method to run a shell command that activates a Python virtual environment
+     * and installs the necessary requirements from a `requirements.txt` file. The command is executed in the
+     * virtual environment directory.
+     *
+     * @constant {ChildProcess} installRequirements - The spawned child process.
+     * @param {string} activateVenvCommand - The command to activate the virtual environment.
+     * @param {string} pipCommand - The command to run pip for installing requirements.
+     * @property {string} cwd - The current working directory where the command is executed.
+     * @property {boolean} shell - Indicates that the command should be run in a shell.
+     */
+    const installRequirements = spawn(`${activateVenvCommand}`, {
+      cwd: appPath,
+      shell: true,
+      env: {
+        ...process.env,
+        VIRTUAL_ENV: path.join(appPath, "venv"),
+        PATH: `${path.join(appPath, "venv", "bin")}:${process.env.PATH}`
+      }
+    });
+
+    installRequirements.stdout.on("data", (data) => {
+      console.log(`Pip: ${data.toString()}`);
+    });
+
+    installRequirements.stderr.on("data", (data) => {
+      console.error(`Pip Error: ${data.toString()}`); // Error logs for installRequirements
+    });
+
+    installRequirements.on("close", (code) => {
+      if (code === 0) {
+        console.log("Virtual environment activated successfully.");
+        console.log("Starting server...");
+        serverProcess = spawn(`${activateVenvCommand} && ${startServerCommand}`, {
+          cwd: appPath,
+          shell: true,
+          env: {
+            ...process.env,
+            VIRTUAL_ENV: path.join(appPath, "venv"),
+            PATH: `${path.join(appPath, "venv", "bin")}:${process.env.PATH}`
+          }
+        });
+
+        serverProcess.stdout.on("data", (data) => {
+          console.log(`Server: ${data.toString()}`);
+        });
+
+        serverProcess.stderr.on("data", (data) => {
+          console.error(`Server Error: ${data.toString()}`); // Error logs for serverProcess
+        });
+
+        serverProcess.on("close", (code) => {
+          console.log(`Server process exited with code ${code}`);
+        });
+
+        // Poll the server until it is running, then create the main window
+        const pollServer = () => {
+          checkServerRunning()
+            .then(() => {
+              console.log("Server is running.");
+              createMainWindow();
+            })
+            .catch((err) => {
+              console.error(`Error checking server: ${err.message}`);
+              setTimeout(pollServer, 1000);
+            });
+        };
+
+        pollServer();
+      } else {
+        console.error(`Failed to install requirements with code ${code}`);
+      }
+    });
+  })
+  .catch((err) => {
+    console.error(`Error during app initialization: ${err.message}`);
   });
-
-  installRequirements.stderr.on("data", (data) => {
-    console.error(`Pip Error: ${data.toString()}`); // Error logs for installRequirements
-  });
-
-  installRequirements.on("close", (code) => {
-    if (code === 0) {
-      // Start the server after installing requirements
-      serverProcess = spawn(npmCommand, ["run", "server"], {
-        cwd: path.join(__dirname),
-        shell: true
-      });
-
-      serverProcess.stdout.on("data", (data) => {
-        console.log(`Server: ${data.toString()}`);
-      });
-
-      serverProcess.stderr.on("data", (data) => {
-        console.error(`Server Error: ${data.toString()}`); // Error logs for serverProcess
-      });
-
-      serverProcess.on("close", (code) => {
-        console.log(`Server process exited with code ${code}`);
-      });
-
-      // Poll the server until it is running, then create the main window
-      const pollServer = () => {
-        checkServerRunning()
-          .then(createMainWindow)
-          .catch(() => {
-            setTimeout(pollServer, 1000);
-          });
-      };
-
-      pollServer();
-    } else {
-      console.error(`Failed to install requirements with code ${code}`);
-    }
-  });
-});
 
 /**
  * Event listener for when all windows are closed.
@@ -136,10 +170,6 @@ app.whenReady().then(() => {
  */
 app.on("window-all-closed", () => {
   // Quit the app unless on macOS
-  if (serverProcess) {
-    serverProcess.kill(); // Gracefully terminate the server
-  }
-
   if (process.platform !== "darwin") {
     app.quit();
   }
@@ -152,5 +182,15 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   if (mainWindow === null) {
     createMainWindow();
+  }
+});
+
+/**
+ * Event listener for when the application is about to quit.
+ * Terminates the server process before quitting.
+ */
+app.on("before-quit", () => {
+  if (serverProcess) {
+    serverProcess.kill(); // Gracefully terminate the server
   }
 });
