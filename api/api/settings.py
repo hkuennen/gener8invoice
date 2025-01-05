@@ -99,7 +99,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "https://gener8invoice.onrender.com",
-    "http://gener8invoice.com/",
+    "https://gener8invoice.com/",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
