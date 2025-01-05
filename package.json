@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "An Electron app built with React",
   "private": true,
-  "proxy": "http://127.0.0.1:8000",
+  "proxy": "https://gener8invoice.onrender.com",
   "main": "public/electron.js",
   "scripts": {
     "start": "react-scripts start",
