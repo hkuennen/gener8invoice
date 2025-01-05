@@ -10,9 +10,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server:dev": "source venv/bin/activate && cd api && python3 manage.py runserver",
     "server": "source venv/bin/activate && cd api && gunicorn -b 0.0.0.0:8000 api.wsgi:application",
-    "static": "source venv/bin/activate && cd api && python3 manage.py collectstatic",
+    "server:dev": "source venv/bin/activate && cd api && python3 manage.py runserver",
+    "collectstatic": "source venv/bin/activate && cd api && python3 manage.py collectstatic",
     "electron": "electron .",
     "electron:build": "electron-builder",
     "postinstall": "electron-builder install-app-deps"
@@ -41,6 +41,7 @@
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
     "sass": "^1.80.6",
+    "tree-kill": "^1.2.2",
     "web-vitals": "^2.1.4"
   },
   "build": {
@@ -53,14 +54,15 @@
     "asar": false,
     "files": [
       "api/**/*",
-      "venv/**/*",
+      "venv_dist/**/*",
       "public/**/*",
       "build/**/*",
       "package.json",
       "requirements.txt",
       "!dist/**/*",
       "!**/*.map",
-      "!node_modules/**/*"
+      "!node_modules/**/*",
+      "node_modules/tree-kill/*"
     ],
     "win": {
       "target": "nsis"

@@ -8,10 +8,12 @@ const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const http = require("http");
 const fs = require("fs");
+const kill = require("tree-kill");
 
 // Keep a reference to the main window to prevent garbage collection
 let mainWindow;
 let serverProcess;
+let isQuitting = false;
 
 /**
  * Creates the main application window.
@@ -73,7 +75,10 @@ app
   .whenReady()
   .then(() => {
     const activateVenvCommand =
-      process.platform === "win32" ? "venv\\Scripts\\activate" : "source venv/bin/activate";
+      process.platform === "win32"
+        ? "venv_dist\\Scripts\\activate"
+        : "source venv_dist/bin/activate";
+    const pipInstallCommand = "pip install -r requirements.txt";
     const startServerCommand = "cd api && gunicorn -b 0.0.0.0:8000 api.wsgi:application";
 
     // Check if the virtual environment exists in the app folder
@@ -96,14 +101,15 @@ app
      * @param {string} pipCommand - The command to run pip for installing requirements.
      * @property {string} cwd - The current working directory where the command is executed.
      * @property {boolean} shell - Indicates that the command should be run in a shell.
+     * @property {object} env - The environment variables to set for the command.
      */
-    const installRequirements = spawn(`${activateVenvCommand}`, {
+    const installRequirements = spawn(`${activateVenvCommand} && ${pipInstallCommand}`, {
       cwd: appPath,
       shell: true,
       env: {
         ...process.env,
-        VIRTUAL_ENV: path.join(appPath, "venv"),
-        PATH: `${path.join(appPath, "venv", "bin")}:${process.env.PATH}`
+        VIRTUAL_ENV: path.join(appPath, "venv_dist"),
+        PATH: `${path.join(appPath, "venv_dist", "bin")}:${process.env.PATH}`
       }
     });
 
@@ -117,15 +123,14 @@ app
 
     installRequirements.on("close", (code) => {
       if (code === 0) {
-        console.log("Virtual environment activated successfully.");
-        console.log("Starting server...");
-        serverProcess = spawn(`${activateVenvCommand} && ${startServerCommand}`, {
+        console.log("Requirements installed successfully.");
+        serverProcess = spawn(startServerCommand, {
           cwd: appPath,
           shell: true,
           env: {
             ...process.env,
-            VIRTUAL_ENV: path.join(appPath, "venv"),
-            PATH: `${path.join(appPath, "venv", "bin")}:${process.env.PATH}`
+            VIRTUAL_ENV: path.join(appPath, "venv_dist"),
+            PATH: `${path.join(appPath, "venv_dist", "bin")}:${process.env.PATH}`
           }
         });
 
@@ -189,8 +194,24 @@ app.on("activate", () => {
  * Event listener for when the application is about to quit.
  * Terminates the server process before quitting.
  */
-app.on("before-quit", () => {
+app.on("before-quit", (e) => {
+  if (isQuitting) {
+    return; // Prevent re-entry
+  }
+
+  isQuitting = true;
+  console.log("Terminating server process...");
+
   if (serverProcess) {
-    serverProcess.kill(); // Gracefully terminate the server
+    e.preventDefault(); // Prevent immediate app quit
+
+    kill(serverProcess.pid, "SIGKILL", (err) => {
+      if (err) {
+        console.error("Error terminating server process tree:", err);
+      } else {
+        console.log("Server process tree terminated successfully.");
+      }
+      app.quit(); // Resume quitting the app after killing the server process
+    });
   }
 });

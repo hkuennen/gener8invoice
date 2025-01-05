@@ -21,4 +21,5 @@ package-lock.json
 
 # server-side
 venv
+venv_dist
 __pycache__
