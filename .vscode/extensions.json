@@ -2,6 +2,7 @@
   "recommendations": [
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
-    "mike-co.import-sorter"
+    "mike-co.import-sorter",
+    "charliermarsh.ruff",
   ]
 }

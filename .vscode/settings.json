@@ -3,10 +3,17 @@
   "editor.formatOnPaste": false,
   "editor.formatOnSave": true,
   "editor.renderWhitespace": "boundary",
-  "files.autoSave": "off",
   "editor.codeActionsOnSave": {
     "source.fixAll": "always",
-    "source.fixAll.tslint": "always"
+    "source.fixAll.tslint": "always",
+    "source.organizeImports": "explicit"
+  },
+  "files.autoSave": "off",
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnType": true,
+    "editor.formatOnSave": true
   },
   "explorer.autoRevealExclude": {
     "**/node modules": false

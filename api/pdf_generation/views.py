@@ -1,8 +1,10 @@
 import json
-from django.shortcuts import render
+
 from django.http import HttpResponse, JsonResponse
-from pdf_generation.create import PDFCreator
 from django.middleware.csrf import get_token
+from django.shortcuts import render
+
+from pdf_generation.create import PDFCreator
 
 
 def index(request):

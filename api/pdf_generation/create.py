@@ -1,27 +1,29 @@
 import datetime
 from io import BytesIO
+
 from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import cm
 from reportlab.platypus import (
     BaseDocTemplate,
+    Frame,
+    PageBreak,
+    PageTemplate,
     Paragraph,
     Spacer,
     Table,
-    PageTemplate,
-    Frame,
-    PageBreak,
 )
-from reportlab.lib.units import cm
+
 from pdf_generation.styles import (
-    h_style,
-    ba_style,
-    bk_style,
-    bv_style,
-    r_style,
-    ak_style,
-    av_style,
     TABLE_STYLE_POSITIONS_FIRST_PAGE,
     TABLE_STYLE_POSITIONS_OTHER_PAGES,
     TABLE_STYLE_SUM,
+    ak_style,
+    av_style,
+    ba_style,
+    bk_style,
+    bv_style,
+    h_style,
+    r_style,
 )
 
 
@@ -67,7 +69,7 @@ class PDFCreator:
         \n
         \n
         \n
-        <u>{self.data['infos']['biller_name']}, {self.data['infos']['biller_street']}, {self.data['infos']['biller_location']}</u>
+        <u>{self.data["infos"]["biller_name"]}, {self.data["infos"]["biller_street"]}, {self.data["infos"]["biller_location"]}</u>
         """
 
         biller_key = f"""Biller:\n
@@ -79,12 +81,12 @@ class PDFCreator:
         {self.check_for_existence(name="po_number", name_on_pdf="PO number:")}
         """
 
-        biller_value = f"""{self.data['infos']['biller_name']}\n
-        {self.data['infos']['biller_street']}\n
-        {self.data['infos']['biller_location']}\n
+        biller_value = f"""{self.data["infos"]["biller_name"]}\n
+        {self.data["infos"]["biller_street"]}\n
+        {self.data["infos"]["biller_location"]}\n
         \n
-        {datetime.datetime.strptime(self.data['infos']['date'], '%Y-%m-%d').strftime('%d.%m.%Y')}\n
-        {self.data['infos']['inv_number']}\n
+        {datetime.datetime.strptime(self.data["infos"]["date"], "%Y-%m-%d").strftime("%d.%m.%Y")}\n
+        {self.data["infos"]["inv_number"]}\n
         {self.check_for_existence(name="po_number")}
         """
 
@@ -103,9 +105,9 @@ class PDFCreator:
 
         Story.append(t_contact_infos)
 
-        recipient = f"""{self.data['infos']['recipient_name']}\n
-        {self.data['infos']['recipient_street']}\n
-        {self.data['infos']['recipient_location']}\n
+        recipient = f"""{self.data["infos"]["recipient_name"]}\n
+        {self.data["infos"]["recipient_street"]}\n
+        {self.data["infos"]["recipient_location"]}\n
         """
 
         p_recipient = Paragraph(recipient.replace("\n", "<br />"), r_style)
