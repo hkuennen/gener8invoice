@@ -79,3 +79,7 @@ npm run electron
 ```sh
 npm run electron:build
 ```
+
+## Web App
+
+[![Gener8Invoice](src/assets/thumbnail.png)](https://www.gener8invoice.com)
