@@ -1,84 +1,26 @@
 # Gener8Invoice
 
-Gener8Invoice is a web and desktop application built with React, Django, and Electron. It allows users to generate and download invoices in PDF format. The application leverages a Django backend to handle invoice generation and a React frontend for the user interface.
+## Philosophy
 
-## Features
+Gener8Invoice builds upon [simpleinv](https://github.com/hkuennen/simpleinv), addressing its limitations while maintaining a lightweight and efficient approach. The original terminal-based app lacked the ability to interact with PDFs, making it less flexible for real-world invoicing needs.
 
-- Generate invoices with detailed information.
-- Download invoices as PDF files.
-- Modern user interface with React.
-- Robust server-side processing with Django.
-- Desktop application with Electron.
-- Integration with Tailwind CSS for styling.
-- Uses FontAwesome for icons.
+With Gener8Invoice, users can now create dynamic invoices with multiple line items—just as they would expect from a WYSIWYG application.
 
-## Getting Started
+This app provides a simple, efficient, and cross-platform solution for generating invoices. Many existing invoicing tools are either too complex, require subscriptions, or lack offline functionality. Gener8Invoice offers a streamlined, user-friendly experience by integrating a robust Django backend with a modern React frontend, while also supporting a desktop version via Electron.
 
-### Prerequisites
+## Description
 
-- Node.js
-- npm
-- Python 3
-- virtualenv
+Gener8Invoice is a web and desktop application designed to help users quickly generate and download invoices in PDF format. It combines a robust Django backend for invoice generation with a sleek React-powered frontend to ensure a smooth user experience.
 
-### Installation
+### Key Features:
 
-Clone the repository:
+- **Invoice Generation** – Create invoices with detailed information.
+- **PDF Export** – Download invoices in a professional PDF format.
+- **Modern UI** – Built with React and styled using Tailwind CSS for a clean and intuitive interface.
+- **Server-Side Processing** – Utilizes Django for handling invoice data and processing.
+- **Cross-Platform Support** – Available as a web app and a desktop application using Electron.
 
-```sh
-git clone https://github.com/hkuennen/gener8invoice.git
-cd gener8invoice
-```
-
-Install Node.js dependencies:
-
-```sh
-npm install
-```
-
-Set up the Python virtual environment and install dependencies:
-
-On macOS/Linux:
-
-```sh
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-
-On Windows:
-
-```sh
-python -m venv venv
-.\venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-Build the React frontend:
-
-```sh
-npm run build
-```
-
-### Running the Application
-
-Start the Django server:
-
-```sh
-npm run server
-```
-
-Start the Electron application:
-
-```sh
-npm run electron
-```
-
-### Building the Electron Application
-
-```sh
-npm run electron:build
-```
+Gener8Invoice is designed for freelancers, small businesses, and anyone in need of a free and open-source invoicing solution without unnecessary complexity.
 
 ## Web App
 
