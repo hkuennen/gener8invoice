@@ -2,7 +2,7 @@
 
 ## Philosophy
 
-Gener8Invoice builds upon [simpleinv](https://github.com/hkuennen/simpleinv), addressing its limitations while maintaining a lightweight and efficient approach. The original terminal-based app lacked the ability to interact with PDFs, making it less flexible for real-world invoicing needs.
+Gener8Invoice builds upon [simple-invoice-cli](https://github.com/hkuennen/simple-invoice-cli), addressing its limitations while maintaining a lightweight and efficient approach. The original terminal-based app lacked the ability to interact with PDFs, making it less flexible for real-world invoicing needs.
 
 With Gener8Invoice, users can now create dynamic invoices with multiple line items—just as they would expect from a WYSIWYG application.
 
