@@ -1,7 +1,7 @@
 {
   "name": "gener8invoice",
   "version": "1.0.0",
-  "description": "An Electron app built with React",
+  "description": "An Electron app built with Django and React",
   "private": true,
   "proxy": "http://127.0.0.1:8000",
   "main": "public/electron.js",
@@ -10,7 +10,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "source venv/bin/activate && cd api && gunicorn -b 0.0.0.0:8000 api.wsgi:application",
+    "server": "source venv/bin/activate && cd api && waitress --port=8000 api.wsgi:application",
     "server:dev": "source venv/bin/activate && cd api && python3 manage.py runserver",
     "collectstatic": "source venv/bin/activate && cd api && python3 manage.py collectstatic",
     "electron": "electron .",
@@ -22,7 +22,7 @@
     "autoprefixer": "^10.4.15",
     "electron": "^33.2.1",
     "electron-builder": "^25.1.8",
-    "node-gyp": "^11.0.0",
+    "node-gyp": "^11.2.0",
     "postcss": "^8.4.28",
     "tailwindcss": "^3.3.3"
   },
@@ -54,9 +54,9 @@
     "asar": false,
     "files": [
       "api/**/*",
-      "venv_dist/**/*",
       "public/**/*",
       "build/**/*",
+      "venv_dist/**/*",
       "package.json",
       "requirements.txt",
       "!dist/**/*",

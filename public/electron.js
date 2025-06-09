@@ -71,23 +71,51 @@ const checkServerRunning = () => {
   });
 };
 
+const quitServer = (e) => {
+  if (isQuitting) {
+    return; // Prevent re-entry
+  }
+
+  isQuitting = true;
+  console.log("Terminating server process...");
+
+  if (serverProcess) {
+    e.preventDefault(); // Prevent immediate app quit
+
+    kill(serverProcess.pid, "SIGKILL", (err) => {
+      if (err) {
+        console.error("Error terminating server process tree:", err);
+      } else {
+        console.log("Server process tree terminated successfully.");
+      }
+      app.quit(); // Resume quitting the app after killing the server process
+    });
+  }
+};
+
 app
   .whenReady()
   .then(() => {
-    const activateVenvCommand =
-      process.platform === "win32"
-        ? "venv_dist\\Scripts\\activate"
-        : "source venv_dist/bin/activate";
-    const pipInstallCommand = "pip install -r requirements.txt";
-    const startServerCommand = "cd api && gunicorn -b 0.0.0.0:8000 api.wsgi:application";
+    const isWindows = process.platform === "win32";
+    const appPath = path.join(process.resourcesPath, "app");
 
     // Check if the virtual environment exists in the app folder
-    const appPath = path.join(process.resourcesPath, "app");
     if (!fs.existsSync(appPath)) {
       console.error("Virtual environment not found:", appPath);
       app.quit();
       return;
     }
+
+    const activateVenvCommand = isWindows
+      ? "venv_dist\\Scripts\\activate"
+      : "source venv_dist/bin/activate";
+
+    const venvPath = path.join(appPath, "venv_dist");
+    const venvBin = path.join(venvPath, isWindows ? "Scripts" : "bin");
+    const envPath = `${venvBin}${path.delimiter}${process.env.PATH}`;
+
+    const pipInstallCommand = "pip install -r requirements.txt";
+    const startServerCommand = "cd api && python -m waitress --port=8000 api.wsgi:application";
 
     /**
      * Spawns a child process to activate a virtual environment and install requirements.
@@ -108,8 +136,8 @@ app
       shell: true,
       env: {
         ...process.env,
-        VIRTUAL_ENV: path.join(appPath, "venv_dist"),
-        PATH: `${path.join(appPath, "venv_dist", "bin")}:${process.env.PATH}`
+        VIRTUAL_ENV: venvPath,
+        PATH: envPath
       }
     });
 
@@ -129,8 +157,8 @@ app
           shell: true,
           env: {
             ...process.env,
-            VIRTUAL_ENV: path.join(appPath, "venv_dist"),
-            PATH: `${path.join(appPath, "venv_dist", "bin")}:${process.env.PATH}`
+            VIRTUAL_ENV: venvPath,
+            PATH: envPath
           }
         });
 
@@ -195,23 +223,5 @@ app.on("activate", () => {
  * Terminates the server process before quitting.
  */
 app.on("before-quit", (e) => {
-  if (isQuitting) {
-    return; // Prevent re-entry
-  }
-
-  isQuitting = true;
-  console.log("Terminating server process...");
-
-  if (serverProcess) {
-    e.preventDefault(); // Prevent immediate app quit
-
-    kill(serverProcess.pid, "SIGKILL", (err) => {
-      if (err) {
-        console.error("Error terminating server process tree:", err);
-      } else {
-        console.log("Server process tree terminated successfully.");
-      }
-      app.quit(); // Resume quitting the app after killing the server process
-    });
-  }
+  quitServer(e);
 });
