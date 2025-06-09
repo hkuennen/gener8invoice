@@ -87,8 +87,8 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3000",
-    "https://gener8invoice.com/",
-    "https://www.gener8invoice.com/",
+    "https://gener8invoice.com",
+    "https://www.gener8invoice.com",
     "https://gener8invoice.onrender.com",
 ]
 
