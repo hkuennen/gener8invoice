@@ -16,10 +16,10 @@ db.sqlite3
 #misc
 .DS_Store
 .env
-npm-debug.log*
+.env.production
+*.log*
 package-lock.json
 
 # server-side
 venv
-venv_dist
-__pycache__
+__pycache__/

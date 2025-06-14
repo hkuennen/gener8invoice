@@ -93,109 +93,61 @@ const quitServer = (e) => {
   }
 };
 
-app
-  .whenReady()
-  .then(() => {
-    const isWindows = process.platform === "win32";
-    const appPath = path.join(process.resourcesPath, "app");
+app.whenReady().then(() => {
+  const isWindows = process.platform === "win32";
+  const appPath = path.join(process.resourcesPath, "app");
 
-    // Check if the virtual environment exists in the app folder
-    if (!fs.existsSync(appPath)) {
-      console.error("Virtual environment not found:", appPath);
-      app.quit();
-      return;
+  // Check if the virtual environment exists in the app folder
+  if (!fs.existsSync(appPath)) {
+    console.error("Virtual environment not found:", appPath);
+    app.quit();
+    return;
+  }
+
+  const venvPath = path.join(appPath, "venv");
+  const venvBin = path.join(venvPath, isWindows ? "Scripts" : "bin");
+  const envPath = `${venvBin}${path.delimiter}${process.env.PATH}`;
+
+  const startServerCommand = "cd api && python -m waitress --port=8000 api.wsgi:application";
+
+  // Start the server by spawning a child process
+  serverProcess = spawn(startServerCommand, {
+    cwd: appPath,
+    shell: true,
+    env: {
+      ...process.env,
+      VIRTUAL_ENV: venvPath,
+      PATH: envPath
     }
-
-    const activateVenvCommand = isWindows
-      ? "venv_dist\\Scripts\\activate"
-      : "source venv_dist/bin/activate";
-
-    const venvPath = path.join(appPath, "venv_dist");
-    const venvBin = path.join(venvPath, isWindows ? "Scripts" : "bin");
-    const envPath = `${venvBin}${path.delimiter}${process.env.PATH}`;
-
-    const pipInstallCommand = "pip install -r requirements.txt";
-    const startServerCommand = "cd api && python -m waitress --port=8000 api.wsgi:application";
-
-    /**
-     * Spawns a child process to activate a virtual environment and install requirements.
-     *
-     * This function uses the `spawn` method to run a shell command that activates a Python virtual environment
-     * and installs the necessary requirements from a `requirements.txt` file. The command is executed in the
-     * virtual environment directory.
-     *
-     * @constant {ChildProcess} installRequirements - The spawned child process.
-     * @param {string} activateVenvCommand - The command to activate the virtual environment.
-     * @param {string} pipCommand - The command to run pip for installing requirements.
-     * @property {string} cwd - The current working directory where the command is executed.
-     * @property {boolean} shell - Indicates that the command should be run in a shell.
-     * @property {object} env - The environment variables to set for the command.
-     */
-    const installRequirements = spawn(`${activateVenvCommand} && ${pipInstallCommand}`, {
-      cwd: appPath,
-      shell: true,
-      env: {
-        ...process.env,
-        VIRTUAL_ENV: venvPath,
-        PATH: envPath
-      }
-    });
-
-    installRequirements.stdout.on("data", (data) => {
-      console.log(`Pip: ${data.toString()}`);
-    });
-
-    installRequirements.stderr.on("data", (data) => {
-      console.error(`Pip Error: ${data.toString()}`); // Error logs for installRequirements
-    });
-
-    installRequirements.on("close", (code) => {
-      if (code === 0) {
-        console.log("Requirements installed successfully.");
-        serverProcess = spawn(startServerCommand, {
-          cwd: appPath,
-          shell: true,
-          env: {
-            ...process.env,
-            VIRTUAL_ENV: venvPath,
-            PATH: envPath
-          }
-        });
-
-        serverProcess.stdout.on("data", (data) => {
-          console.log(`Server: ${data.toString()}`);
-        });
-
-        serverProcess.stderr.on("data", (data) => {
-          console.error(`Server Error: ${data.toString()}`); // Error logs for serverProcess
-        });
-
-        serverProcess.on("close", (code) => {
-          console.log(`Server process exited with code ${code}`);
-        });
-
-        // Poll the server until it is running, then create the main window
-        const pollServer = () => {
-          checkServerRunning()
-            .then(() => {
-              console.log("Server is running.");
-              createMainWindow();
-            })
-            .catch((err) => {
-              console.error(`Error checking server: ${err.message}`);
-              setTimeout(pollServer, 1000);
-            });
-        };
-
-        pollServer();
-      } else {
-        console.error(`Failed to install requirements with code ${code}`);
-      }
-    });
-  })
-  .catch((err) => {
-    console.error(`Error during app initialization: ${err.message}`);
   });
+
+  serverProcess.stdout.on("data", (data) => {
+    console.log(`Server: ${data.toString()}`);
+  });
+
+  serverProcess.stderr.on("data", (data) => {
+    console.error(`Server Error: ${data.toString()}`); // Error logs for serverProcess
+  });
+
+  serverProcess.on("close", (code) => {
+    console.log(`Server process exited with code ${code}`);
+  });
+
+  // Poll the server until it is running, then create the main window
+  const pollServer = () => {
+    checkServerRunning()
+      .then(() => {
+        console.log("Server is running.");
+        createMainWindow();
+      })
+      .catch((err) => {
+        console.error(`Error checking server: ${err.message}`);
+        setTimeout(pollServer, 1000);
+      });
+  };
+
+  pollServer();
+});
 
 /**
  * Event listener for when all windows are closed.
