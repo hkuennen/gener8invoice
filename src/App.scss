@@ -61,7 +61,6 @@ h1 {
 }
 
 table {
-  width: 100%;
   border-collapse: collapse;
 }
 
@@ -82,6 +81,55 @@ tr {
 .bold {
   font-weight: 600;
   border-bottom: 1pt solid $text-light;
+}
+
+.w-5p {
+  width: 5%;
+}
+
+.w-7p {
+  width: 7%;
+}
+
+.w-13p {
+  width: 13%;
+}
+
+.w-17p {
+  width: 17%;
+}
+
+.w-26p {
+  width: 26%;
+}
+
+.w-30p {
+  width: 30%;
+}
+
+.w-50p {
+  width: 50%;
+}
+
+.w-52p {
+  width: 52%;
+}
+
+.w-70p {
+  width: 70%;
+}
+
+.w-80p {
+  width: 80%;
+}
+
+.w-95p {
+  width: 95%;
+}
+
+.space-left {
+  margin-left: 55%;
+  width: calc(45% - 14px);
 }
 
 .pointer {

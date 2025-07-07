@@ -12,11 +12,11 @@ export const generateTableHeader = ({ isFirstPage }) => {
   return (
     <thead>
       <tr className={isFirstPage ? "bg-grey" : "no-bottom-border"}>
-        <th className="th_pos w-5p">{isFirstPage && "Pos"}</th>
-        <th className="th_qty w-13p">{isFirstPage && "Qty"}</th>
-        <th className="th_item w-52p">{isFirstPage && "Item"}</th>
-        <th className="th_price w-17p">{isFirstPage && "Unit price"}</th>
-        <th className="th_amount w-17p">{isFirstPage && "Amount"}</th>
+        <th className="w-5p">{isFirstPage && "Pos"}</th>
+        <th className="w-13p">{isFirstPage && "Qty"}</th>
+        <th className="w-52p">{isFirstPage && "Item"}</th>
+        <th className="w-17p">{isFirstPage && "Unit price"}</th>
+        <th className="w-17p">{isFirstPage && "Amount"}</th>
       </tr>
     </thead>
   );
@@ -53,7 +53,7 @@ export const generateTableBody = ({
                 type="number"
                 name="qty"
                 placeholder="#"
-                className="td_qty w-50p"
+                className="w-50p"
                 value={row.qty}
                 onChange={(e) => handlePositionsChange(e, idx + idxRows)}
                 required
@@ -63,7 +63,7 @@ export const generateTableBody = ({
               <input
                 type="text"
                 name="item"
-                className="td_item w-95p"
+                className="w-95p"
                 placeholder="Description of service or product..."
                 value={row.item}
                 onChange={(e) => handlePositionsChange(e, idx + idxRows)}
@@ -71,14 +71,14 @@ export const generateTableBody = ({
                 required
               />
             </td>
-            <td>
+            <td className="w-17">
               <div className="relative">
                 <p className="absolute left-1.5 text-slate-500">€ </p>
                 <input
                   type="number"
                   step="0.01"
                   name="price"
-                  className="td_price w-80p"
+                  className="w-80p"
                   placeholder="0.00"
                   value={row.price}
                   onBlur={(e) => formatPrice(e)}
@@ -87,7 +87,7 @@ export const generateTableBody = ({
                 />
               </div>
             </td>
-            <td className="td_amount w-70p">
+            <td>
               <label>€ </label>
               {parseFloat(row.amount).toFixed(2)}
             </td>
